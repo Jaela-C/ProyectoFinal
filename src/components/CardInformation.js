@@ -57,11 +57,6 @@ export default function NestedGrid() {
                         </Typography>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions>
-                        <Button size="small" color="primary">
-                        Leer más
-                        </Button>
-                    </CardActions>
                 </Card>
             </Grid>
             <Grid item xs={4}>
@@ -81,11 +76,6 @@ export default function NestedGrid() {
                         </Typography>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions>
-                        <Button size="small" color="primary">
-                        Leer más
-                        </Button>
-                    </CardActions>
                 </Card>
             </Grid>
             <Grid item xs={4}>
@@ -105,11 +95,6 @@ export default function NestedGrid() {
                         </Typography>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions>
-                        <Button size="small" color="primary">
-                        Leer más
-                        </Button>
-                    </CardActions>
                 </Card>
             </Grid>
           </Grid>
