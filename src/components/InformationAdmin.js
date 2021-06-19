@@ -65,7 +65,7 @@ export default function InformationAdmin() {
           <Grid container item xs={12} >
             <Paper className={classes.paper}>
               <Typography variant="h2" className={classes.paperTitle} >
-                PERFIL DE ADMINISTRADOR
+              ADMINISTRADOR
               </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm container spacing={2} className={classes.container}>
