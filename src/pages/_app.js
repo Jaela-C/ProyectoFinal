@@ -4,10 +4,12 @@ import Footer from "@/components/Footer";
 import Head from "next/head";
 import {ThemeProvider } from "@material-ui/core";
 import theme from "./theme";
+import { AuthProvider } from '../hocs/useAuth';
 
 function App({ Component, pageProps }) {
   return (
     <>
+      <AuthProvider>
         <Head>
           <title>Proyecto Final</title>
           <meta
@@ -19,9 +21,10 @@ function App({ Component, pageProps }) {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <MainMenu />
-          <Component {...pageProps} />
+            <Component {...pageProps} />
           <Footer />
         </ThemeProvider>
+      </AuthProvider>
     </>
   );
 }

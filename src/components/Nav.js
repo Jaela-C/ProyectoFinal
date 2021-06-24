@@ -30,10 +30,10 @@ export default function MainMenu() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Logo
+            {"Logo"}
           </Typography>
-          <Link color="inherit" className={classes.nav}>Iniciar Sesión</Link>
-          <Link color="inherit">Registrarse</Link>
+          <Link href="/login" color="inherit" className={classes.nav}>{"Iniciar Sesión"}</Link>
+          <Link href="/type" color="inherit">{"Registrarse"}</Link>
         </Toolbar>
       </AppBar>
     </div>
