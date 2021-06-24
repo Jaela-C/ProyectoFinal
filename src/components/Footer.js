@@ -12,7 +12,7 @@ function Copyright() {
   return (
     <Typography variant="body2" align="center">
        {"Copyright © "} Ecuador | Todos los derechos reservados
-      <Link href="https://material-ui.com/"></Link> {new Date().getFullYear()}
+      <Link href="https://material-ui.com/">{''}</Link>{new Date().getFullYear()}
     </Typography>
   );
 }
@@ -44,7 +44,7 @@ export default function Footer() {
     <div className={classes.footer}>
       <Grid
         container
-        direction="col"
+        direction="column"
         justify="space-around"
         alignItems="center"
         spacing={2}

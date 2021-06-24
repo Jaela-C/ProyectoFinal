@@ -2,11 +2,14 @@
 const publicRoutes = {
     LOGIN: "/login",
     REGISTER: "/register",
-    INFORMATION: "/information",
+    TYPE: "/type",
+    REGISTERUSER: "/registeruser",
+    REGISTERADMIN: "/registeradmin"
   };
   
   const privateRoutes = {
     HOME: "/",
+    PUBLICATIONS: "/publications"
   };
   
   const Routes = {
