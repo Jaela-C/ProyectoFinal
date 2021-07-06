@@ -3,6 +3,7 @@ import { auth, db } from '../../firebase/initFirebase'
 import cookie from "js-cookie";
 import translateMessage from "../constants/messages";
 import { useRouter } from 'next/router'
+import { setUserCookie, removeUserCookie, getUserFromCookie, } from '../../firebase/userCookies'
 
 export const AuthContext = createContext(null);
 
@@ -23,23 +24,34 @@ function useAuthProvider() {
     const [user, setUser] = useState(null);
     const router = useRouter();
 
-    const handleUser = (user) => {
-        if (user) {
-            //sesión activa
-            setUser(user);
-            console.log('sesión activa')
-            cookie.set('auth', true, {
-                expires: 1, //día
-            });
-            return user;
-        } else {
-            //sin sesión activa
-            setUser(false);
-            cookie.remove('auth');
-            console.log('sin sesión activa')
-            return false;
+    useEffect(() => {
+        // Firebase updates the id token every hour, this
+        // makes sure the react state and the cookie are
+        // both kept up to date
+        const cancelAuthListener = auth.onIdTokenChanged((user) => {
+            if (user) {
+                setUserCookie(user)
+                setUser(user)
+                console.log('sesión iniciada')
+                console.log('user', user)
+            } else {
+                removeUserCookie()
+                setUser()
+                console.log('sesión inactiva')
+            }
+        })
+
+        const userFromCookie = getUserFromCookie()
+        if (!userFromCookie) {
+            router.push('/')
+            return
         }
-      };
+        setUser(userFromCookie)
+
+        return () => {
+            cancelAuthListener()
+        }
+    }, [])
 
       const registerUser = async (value) => {
         console.log(value.email, value.password)
@@ -71,7 +83,7 @@ function useAuthProvider() {
         const userUid = auth.currentUser;
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
-            await db.collection('requests').doc(userUid.uid).set({
+            await db.collection('foundations').doc(userUid.uid).set({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
@@ -99,7 +111,6 @@ function useAuthProvider() {
         .signInWithEmailAndPassword(value.email, value.password)
         .then((response) => {
             console.log('response', response)
-            handleUser(response.user)
             console.log('value.response', value.response)
             console.log('response.value', response.user)
             router.push('/publications')
@@ -116,7 +127,6 @@ function useAuthProvider() {
         .signOut()
         .then(() => {
             // Sign-out successful.
-            handleUser(false);
             router.push('/home')
         })
         .catch((e) => {
@@ -124,26 +134,6 @@ function useAuthProvider() {
         })
     }
 
-    const getAuthenticatedUser = async () => {
-        const userUid = auth.currentUser;
-        if(userUid != null){
-            console.log('userUid.uid', userUid.displayName)
-            handleUser(userUid.uid)
-        } else {
-            handleUser(false)
-            console.log('error')
-        }
-    }
-
-    useEffect(() => {
-        console.log('RENDER AUTH', user);
-        try {
-            getAuthenticatedUser();
-        } catch (error) {
-            console.log('No existe el usuario')
-        }
-    }, []);
-    
     return {
         user,
         registerUser,

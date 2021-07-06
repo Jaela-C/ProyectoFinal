@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CardPublication from "@/components/CardPublication";
 import Paper from '@material-ui/core/Paper';
@@ -20,26 +20,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const publications = () =>{
-    const classes = useStyles();
-
+    const classes = useStyles();    
     return(
         <div className={classes.root}>
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <CardPublication/>
                 </Grid>
-                <Grid item xs={6}>
-                    <CardPublication/>
-                </Grid>
-                <Grid item xs={6}>
-                    <CardPublication/>
-                </Grid>
-                <Grid item xs={6}>
-                    <CardPublication/>
-                </Grid>
             </Grid>
         </div>
-
     );
 }
 export default publications;
