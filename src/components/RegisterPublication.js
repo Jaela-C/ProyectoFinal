@@ -219,7 +219,7 @@ const RegisterPublication = () => {
                         id="date_ex"
                         {...register('date_ex', { required: true })}
                         label="Fecha de expiracion"
-                        type="date_ex"
+                        type="date"
                         required
                         defaultValue="2017-05-24"
                         className={classes.textFieldDate}
