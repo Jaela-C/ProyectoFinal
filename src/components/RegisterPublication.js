@@ -1,6 +1,6 @@
 import React from "react";
 import {useForm} from "react-hook-form";
-import {useAuth} from "../hocs/useAuth";
+import { publications } from "../lib/publications";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from '@material-ui/core/Button';
@@ -17,21 +17,21 @@ const schema = yup.object().shape({
     title: yup
         .string()
         .required("Ingrese un título"),
-    responsable: yup
+    name: yup
         .string()
         .required("Ingrese el nombre del responsable")
         .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
-    apellidoresponsable: yup
+    last_name: yup
         .string()
         .required("Ingrese el apellido del responsable")
         .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
-    contacto: yup
+    phone: yup
         .number()
         .typeError("Solo use números")
         .positive("Ingrese solo números positivos")
         .integer("Ingrese solo números enteros")
         .required('Ingrese el número de contacto'),
-    descripcion: yup
+    description: yup
         .string()
         .required("Ingrese una descripción"),
 });
@@ -106,27 +106,11 @@ const useStyles = makeStyles((theme) => ({
 const RegisterPublication = () => {
 
     const classes = useStyles();
-    const {login} = useAuth();
+    const {registerPublication: doRegister} = publications();
 
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
     });
-
-    const onSubmit = async (value) => {
-        await login(value)
-    };
-
-    const handleChange = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
-    };
-
-    const handleClickShowPassword = () => {
-        setValues({...values, showPassword: !values.showPassword});
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
 
     const [values, setValues] = React.useState({
         amount: '',
@@ -135,7 +119,36 @@ const RegisterPublication = () => {
         weightRange: '',
         showPassword: false,
     });
+    const onSubmit = async (data) => {
+        console.log("data", data);
 
+        const newPublication = {
+            date_ex: data.date_ex,
+            description: data.description,
+            image: data.image,
+            last_name: data.last_name,
+            name: data.name,
+            phone: data.phone,
+            title: data.title,
+        };
+        console.log("Nueva publicación", newPublication);
+
+        try {
+            const dataPublication = await doRegister(data);
+
+            console.log("dataPublication", dataPublication);
+
+        } catch (error) {
+            if (error.response) {
+                console.error(error.response);
+            } else if (error.request) {
+                console.error(error.request);
+            } else {
+                console.error("Error", error.message);
+            }
+            console.error(error.config);
+        }
+    };
     return (
         <Container component="main" maxWidth="xs" className={classes.container}>
             <CssBaseline/>
@@ -165,10 +178,10 @@ const RegisterPublication = () => {
                         margin="normal"
                         required
                         fullWidth
-                        id="responsable"
-                        {...register('responsable', { required: true })}
+                        id="name"
+                        {...register('name', { required: true })}
                         label="Ingrese el nombre del responsable"
-                        name="responsable"
+                        name="name"
                         autoComplete="text"
                         autoFocus
                         error={!!errors.responsable}
@@ -179,10 +192,10 @@ const RegisterPublication = () => {
                         margin="normal"
                         required
                         fullWidth
-                        id="apellidoresponsable"
-                        {...register('apellidoresponsable', { required: true })}
+                        id="last_name"
+                        {...register('last_name', { required: true })}
                         label="Ingrese el apellido del responsable"
-                        name="apellidoresponsable"
+                        name="last_name"
                         autoComplete="text"
                         autoFocus
                         error={!!errors.apellidoresponsable}
@@ -193,17 +206,18 @@ const RegisterPublication = () => {
                         margin="normal"
                         required
                         fullWidth
-                        id="contacto"
-                        {...register('contacto', { required: true })}
+                        id="phone"
+                        {...register('phone', { required: true })}
                         label="Ingrese el numero del contacto"
-                        name="contacto"
+                        name="phone"
                         type="numeric"
                         autoFocus
                         error={!!errors.contacto}
                         helperText={errors.contacto?.message}
                     />
                     <TextField
-                        id="date"
+                        id="date_ex"
+                        {...register('date_ex', { required: true })}
                         label="Fecha de expiracion"
                         type="date"
                         required
@@ -215,15 +229,15 @@ const RegisterPublication = () => {
                     />
 
                     <TextField
-                        id="descripcion"
+                        id="description"
                         label="Ingrese una descripción"
                         multiline
                         required
                         rows={3}
                         variant="outlined"
                         fullWidth
-                        name="descripcion"
-                        {...register('descripcion', { required: true })}
+                        name="description"
+                        {...register('description', { required: true })}
                         error={!!errors.descripcion}
                         helperText={errors.descripcion?.message}
                     />

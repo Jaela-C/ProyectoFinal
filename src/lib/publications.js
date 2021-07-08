@@ -1,29 +1,39 @@
-import { db, auth } from '../../firebase/initFirebase'
-import { useUser } from '../../firebase/useUser'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { auth, db } from '../../firebase/initFirebase'
 
-const ReadDataFromCloudFirestore = () => {
-    const [dataPublications, setDataPublications] = useState();
-    const userUid = auth.currentUser;
-    const readData = () => {
-        try {
-            db
-            .collection('foundations').doc(userUid.uid)
-            .collection('publications')
-            .onSnapshot(publication => {
-              const publications = [];
-              publication.forEach(doc => {
-                publications.push({ id: doc.id, ...doc.data()})
-              });
-              setDataPublications(publications);
-              console.log('Publicaciones', publications)
-              console.log('Usuario', useUser)
+import { useRouter } from 'next/router'
+
+export const publications = () => {
+    const [user, setUser] = useState(null);
+    const router = useRouter();
+
+    const registerPublication = async (value) => {
+        const user = await auth.currentUser;
+        try{
+            await db.collection('foundations').doc(`${user.uid}`).collection('publications').doc().set({
+                date_ex: value.date_ex,
+                description: value.description,
+                image: 'image.png',
+                last_name: value.last_name,
+                name: value.name,
+                phone: value.phone,
+                title: value.title
             })
-        } catch (error) {
-            console.log(error)
+            .then(
+                alert('Los datos se guardaron correctamente'),
+                router.push('/publications')
+            )
+        } catch(e) {
+            console.log(e.code)
+            if(e.code){
+                return e
+            }
+            return e
         }
     }
-    return { readData };
+    
+    return {
+        user,
+        registerPublication,
+    };
 }
-
-export { ReadDataFromCloudFirestore }

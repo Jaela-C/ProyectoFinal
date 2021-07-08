@@ -44,10 +44,11 @@ export default function CardPublication(){
             await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
                 publication.forEach(doc => {
                     const dataPublication = {
-                        attendant: doc.data().attendant,
                         date_ex: doc.data().date_ex,
                         description: doc.data().description,
                         image: doc.data().image,
+                        last_name: doc.data().last_name,
+                        name: doc.data().name,
                         phone: doc.data().phone,
                         title: doc.data().title,
                     };
@@ -70,7 +71,7 @@ export default function CardPublication(){
                             <ListItemAvatar>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                             </ListItemAvatar>
-                            <ListItemText primary={data.attendant} secondary={data.phone} />
+                            <ListItemText primary={data.name} secondary={data.phone} />
                         </ListItem>
                         </CardContent>
                         <CardActionArea>
