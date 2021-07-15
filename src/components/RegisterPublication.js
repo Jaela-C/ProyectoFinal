@@ -119,6 +119,11 @@ const RegisterPublication = () => {
         weightRange: '',
         showPassword: false,
     });
+
+    const onCancel = async () => {
+        alert('Los datos no se guardaron')
+    };
+
     const onSubmit = async (data) => {
         console.log("data", data);
 
@@ -158,7 +163,7 @@ const RegisterPublication = () => {
                         Registrar Publicación
                     </Typography>
                 </Grid>
-                <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)} style={{paddingBottom: "30px"}}>
+                <form className={classes.form} noValidate style={{paddingBottom: "30px"}} onSubmit={handleSubmit(onSubmit)}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -184,8 +189,8 @@ const RegisterPublication = () => {
                         name="name"
                         autoComplete="text"
                         autoFocus
-                        error={!!errors.responsable}
-                        helperText={errors.responsable?.message}
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
                     />
                     <TextField
                         variant="outlined"
@@ -198,8 +203,8 @@ const RegisterPublication = () => {
                         name="last_name"
                         autoComplete="text"
                         autoFocus
-                        error={!!errors.apellidoresponsable}
-                        helperText={errors.apellidoresponsable?.message}
+                        error={!!errors.last_name}
+                        helperText={errors.last_name?.message}
                     />
                     <TextField
                         variant="outlined"
@@ -212,8 +217,8 @@ const RegisterPublication = () => {
                         name="phone"
                         type="numeric"
                         autoFocus
-                        error={!!errors.contacto}
-                        helperText={errors.contacto?.message}
+                        error={!!errors.phone}
+                        helperText={errors.phone?.message}
                     />
                     <TextField
                         id="date_ex"
@@ -238,8 +243,8 @@ const RegisterPublication = () => {
                         fullWidth
                         name="description"
                         {...register('description', { required: true })}
-                        error={!!errors.descripcion}
-                        helperText={errors.descripcion?.message}
+                        error={!!errors.description}
+                        helperText={errors.description?.message}
                     />
                     <div className={classes.root1}>
                         <TextField
@@ -265,7 +270,7 @@ const RegisterPublication = () => {
                         Guardar
                     </Button>
                     <Button
-                        type="submit"
+                        onSubmit={handleSubmit(onCancel)}
                         fullWidth
                         variant="contained"
                         className={classes.cancel}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useAuth} from "../hocs/useAuth";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -80,7 +80,8 @@ const useStyles = makeStyles((theme) => ({
 const LoginForm = () => {
 
     const classes = useStyles();
-    const { login } = useAuth();
+    const { login, onAuth } = useAuth();
+    const [user, setUser] = useState(null)
 
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
@@ -88,6 +89,7 @@ const LoginForm = () => {
 
     const onSubmit = async (value) => {
         await login(value)
+        setUser(value)
     };
 
     const handleChange = (prop) => (event) => {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { auth, db } from '../../firebase/initFirebase'
+import { db } from '../../firebase/initFirebase';
+import Link from "@material-ui/core/Link";
 import CardContent from "@material-ui/core/CardContent";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -12,10 +13,9 @@ import CardActions from "@material-ui/core/CardActions";
 import Card from "@material-ui/core/Card";
 import {makeStyles} from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import { date } from 'yup/lib/locale';
+import { useAuth } from '../hocs/useAuth'
 
 const useStyles = makeStyles({
     root: {
@@ -34,36 +34,41 @@ const useStyles = makeStyles({
 
 export default function CardPublication(){
     const classes = useStyles();
-
+    const { user, onAuth } = useAuth();
     const listPublications = [];
     const [dataPublications, setDataPublications] = useState([]);
+    
+    const getPublications = async () => {
+        await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
+            publication.forEach(doc => {
+                const dataPublication = {
+                    date_ex: doc.data().date_ex,
+                    description: doc.data().description,
+                    image: doc.data().image,
+                    last_name: doc.data().last_name,
+                    name: doc.data().name,
+                    phone: doc.data().phone,
+                    title: doc.data().title,
+                };
+                listPublications.push({ id: doc.id, ...dataPublication});
+          });
+          setDataPublications(listPublications);
+        })
+    };
 
+    console.log('lista publicaciones', dataPublications)
     useEffect(()=>{
-        const getPublications = async () => {
-            const user = await auth.currentUser;
-            await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
-                publication.forEach(doc => {
-                    const dataPublication = {
-                        date_ex: doc.data().date_ex,
-                        description: doc.data().description,
-                        image: doc.data().image,
-                        last_name: doc.data().last_name,
-                        name: doc.data().name,
-                        phone: doc.data().phone,
-                        title: doc.data().title,
-                    };
-                    listPublications.push({ id: doc.id, ...dataPublication});
-              });
-              setDataPublications(listPublications);
-            })
-        };
-        getPublications();
-    },[]);
+        onAuth()
+        if(user){
+            getPublications();
+        }
+    },[user]);
 
     return(
         <Card className={classes.root} >
             {
                 dataPublications.map((data) => {
+                    console.log('data', data)
                     return (
                         <>
                         <CardContent key={data.id}>
@@ -90,12 +95,14 @@ export default function CardPublication(){
                             </CardContent>
                         </CardActionArea>
                         <CardActions className={classes.button}>
+                        <Link href={`publications/foundations/update/${data.id}`}>
                             <IconButton aria-label="add to favorites">
                                 <RemoveRedEyeIcon/>
                             </IconButton>
                             <IconButton aria-label="add to favorites">
                                 <WhatsAppIcon/>
                             </IconButton>
+                        </Link>
                         </CardActions>
                         </>
                     );
@@ -103,5 +110,4 @@ export default function CardPublication(){
             }                    
         </Card>
     );
-
 }

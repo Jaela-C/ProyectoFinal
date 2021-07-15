@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {useForm} from "react-hook-form";
-import {useAuth} from "../hocs/useAuth";
+import { db } from '../../firebase/initFirebase'
+import { publications } from "../lib/publications";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from '@material-ui/core/Button';
@@ -12,26 +13,27 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import { useAuth } from '../hocs/useAuth'
 
 const schema = yup.object().shape({
     title: yup
         .string()
         .required("Ingrese un título"),
-    responsable: yup
+    name: yup
         .string()
         .required("Ingrese el nombre del responsable")
         .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
-    apellidoresponsable: yup
+    last_name: yup
         .string()
         .required("Ingrese el apellido del responsable")
         .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
-    contacto: yup
+    phone: yup
         .number()
         .typeError("Solo use números")
         .positive("Ingrese solo números positivos")
         .integer("Ingrese solo números enteros")
         .required('Ingrese el número de contacto'),
-    descripcion: yup
+    description: yup
         .string()
         .required("Ingrese una descripción"),
 });
@@ -103,31 +105,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const EditionPublication = () => {
+const EditionPublication = (props) => {
 
     const classes = useStyles();
-    const {login} = useAuth();
+    const { user, onAuth } = useAuth();
+    console.log('ID en edit', props.id)
+    const [dataPublication, setDataPublication] = useState()
+    const {updatePublication: doUpdate} = publications();
 
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
     });
-
-    const onSubmit = async (value) => {
-        await login(value)
-    };
-
-    const handleChange = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
-    };
-
-    const handleClickShowPassword = () => {
-        setValues({...values, showPassword: !values.showPassword});
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
+    
+    const viewPublication = () => {
+        db.collection('foundations').doc(`${user.uid}`).collection('publications').doc(props.id).onSnapshot(function (doc) {
+            console.log('datos de publicación', doc.data())
+            setDataPublication(doc.data())
+        })
+    }
+    useEffect(()=>{
+        onAuth()
+        if(user){
+            viewPublication();
+        }
+    },[user]);
+    
     const [values, setValues] = React.useState({
         amount: '',
         password: '',
@@ -136,16 +138,49 @@ const EditionPublication = () => {
         showPassword: false,
     });
 
+    const onSubmit = async (data) => {
+        console.log("data", data);
+
+        const updatePublication = {
+            date_ex: data.date_ex,
+            description: data.description,
+            image: data.image,
+            last_name: data.last_name,
+            name: data.name,
+            phone: data.phone,
+            title: data.title,
+        };
+        console.log("Publicación editada", updatePublication);
+
+        try {
+            const dataPublication = await doUpdate(data, props.id);
+
+            console.log("dataPublication", dataPublication);
+
+        } catch (error) {
+            if (error.response) {
+                console.error(error.response);
+            } else if (error.request) {
+                console.error(error.request);
+            } else {
+                console.error("Error", error.message);
+            }
+            console.error(error.config);
+        }
+    };
     return (
         <Container component="main" maxWidth="xs" className={classes.container}>
-            <CssBaseline/>
+            {
+                dataPublication ?
+                <>
+                <CssBaseline/>
             <div className={classes.paper}>
                 <Grid style={{paddingTop: "30px"}}>
                     <Typography component="h1" variant="h5" className={classes.login}>
                         Editar Publicación
                     </Typography>
                 </Grid>
-                <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)} style={{paddingBottom: "30px"}}>
+                <form className={classes.form} noValidate style={{paddingBottom: "30px"}} onSubmit={handleSubmit(onSubmit)}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -153,8 +188,9 @@ const EditionPublication = () => {
                         fullWidth
                         id="title"
                         {...register('title', { required: true })}
-                        label="Título"
+                        label="Ingrese un título"
                         name="title"
+                        defaultValue={dataPublication.title}
                         autoComplete="text"
                         autoFocus
                         error={!!errors.title}
@@ -165,49 +201,53 @@ const EditionPublication = () => {
                         margin="normal"
                         required
                         fullWidth
-                        id="responsable"
-                        {...register('responsable', { required: true })}
-                        label="Nombre del responsable"
-                        name="responsable"
+                        id="name"
+                        {...register('name', { required: true })}
+                        label="Ingrese el nombre del responsable"
+                        name="name"
+                        defaultValue={dataPublication.name}
                         autoComplete="text"
                         autoFocus
-                        error={!!errors.responsable}
-                        helperText={errors.responsable?.message}
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
                     />
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="apellidoresponsable"
-                        {...register('apellidoresponsable', { required: true })}
-                        label="Apellido del responsable"
-                        name="apellidoresponsable"
+                        id="last_name"
+                        {...register('last_name', { required: true })}
+                        label="Ingrese el apellido del responsable"
+                        name="last_name"
+                        defaultValue={dataPublication.last_name}
                         autoComplete="text"
                         autoFocus
-                        error={!!errors.apellidoresponsable}
-                        helperText={errors.apellidoresponsable?.message}
+                        error={!!errors.last_name}
+                        helperText={errors.last_name?.message}
                     />
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="contacto"
-                        {...register('contacto', { required: true })}
-                        label="Número de contacto"
-                        name="contacto"
+                        id="phone"
+                        {...register('phone', { required: true })}
+                        label="Ingrese el numero del contacto"
+                        name="phone"
+                        defaultValue={`${dataPublication.phone}`}
                         type="numeric"
                         autoFocus
-                        error={!!errors.contacto}
-                        helperText={errors.contacto?.message}
+                        error={!!errors.phone}
+                        helperText={errors.phone?.message}
                     />
                     <TextField
-                        id="date"
+                        id="date_ex"
+                        {...register('date_ex', { required: true })}
                         label="Fecha de expiracion"
                         type="date"
                         required
-                        defaultValue="2017-05-24"
+                        defaultValue="2021-07-15"
                         className={classes.textFieldDate}
                         InputLabelProps={{
                             shrink: true,
@@ -215,24 +255,25 @@ const EditionPublication = () => {
                     />
 
                     <TextField
-                        id="descripcion"
-                        label="Descripción"
+                        id="description"
+                        label="Ingrese una descripción"
                         multiline
                         required
                         rows={3}
                         variant="outlined"
                         fullWidth
-                        name="descripcion"
-                        {...register('descripcion', { required: true })}
-                        error={!!errors.descripcion}
-                        helperText={errors.descripcion?.message}
+                        name="description"
+                        defaultValue={dataPublication.description}
+                        {...register('description', { required: true })}
+                        error={!!errors.description}
+                        helperText={errors.description?.message}
                     />
                     <div className={classes.root1}>
                         <TextField
                             variant="outlined"
                             disabled
                             id="standard-disabled"
-                            defaultValue="Inserte nueva imagen"
+                            defaultValue="Inserte una imagen"
                             fullWidth
                         />
                         <input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
@@ -251,7 +292,6 @@ const EditionPublication = () => {
                         Guardar
                     </Button>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         className={classes.cancel}
@@ -260,6 +300,9 @@ const EditionPublication = () => {
                     </Button>
                 </form>
             </div>
+            </>
+            : "No existe la publicación"
+            }
         </Container>
     )
 };
