@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import React, {createContext, useContext, useEffect, useState} from "react";
 import { auth, db } from '../../firebase/initFirebase'
 import cookie from "js-cookie";
 import translateMessage from "../constants/messages";
 import { useRouter } from 'next/router'
-import { setUserCookie, removeUserCookie, getUserFromCookie, } from '../../firebase/userCookies'
 
 export const AuthContext = createContext(null);
 
@@ -24,36 +23,23 @@ function useAuthProvider() {
     const [user, setUser] = useState(null);
     const router = useRouter();
 
-    useEffect(() => {
-        // Firebase updates the id token every hour, this
-        // makes sure the react state and the cookie are
-        // both kept up to date
-        const cancelAuthListener = auth.onIdTokenChanged((user) => {
-            if (user) {
-                setUserCookie(user)
-                setUser(user)
-                console.log('sesión iniciada')
-                console.log('user', user)
-            } else {
-                removeUserCookie()
-                setUser()
-                console.log('sesión inactiva')
-            }
-        })
-
-        const userFromCookie = getUserFromCookie()
-        if (!userFromCookie) {
-            router.push('/')
-            return
+    const handleUser = (user) => {
+        if (user) {
+            // si tengo sesión activa
+            setUser(user);
+            cookie.set("auth", true, {
+                expires: 1/24, // 1 hora
+            });
+            console.log('sesión iniciada', user)
+            return user;
+        } else {
+            setUser(false);
+            cookie.remove("auth");
+            return false;
         }
-        setUser(userFromCookie)
+    };
 
-        return () => {
-            cancelAuthListener()
-        }
-    }, [])
-
-      const registerUser = async (value) => {
+    const registerUser = async (value) => {
         console.log(value.email, value.password)
         const userUid = auth.currentUser;
         try{
@@ -83,7 +69,7 @@ function useAuthProvider() {
         const userUid = auth.currentUser;
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
-            await db.collection('foundations').doc(userUid.uid).set({
+            await db.collection('requests').doc(userUid.uid).set({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
@@ -105,28 +91,35 @@ function useAuthProvider() {
         }
     }
 
-    const login = async (value) => {
-        console.log(value.email, value.password)
-        return auth
-        .signInWithEmailAndPassword(value.email, value.password)
-        .then((response) => {
-            console.log('response', response)
-            console.log('value.response', value.response)
-            console.log('response.value', response.user)
+    async function login(data) {
+        try {
+            const response = await auth.signInWithEmailAndPassword(data.email, data.password);
+            console.log('response login-response', response)
+            console.log('response login', response.user)
             router.push('/publications')
-            return response
-        })
-        .catch((e) => {
-            console.log(e)
-            return e
-        })
+            return response;
+        } catch (error) {
+            if (error.response) {
+                alert(translateMessage(error.response.data.message));
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                return error.response;
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        }
     }
 
-    const logout = async () => {
+    async function logout() {
         auth
         .signOut()
         .then(() => {
             // Sign-out successful.
+            handleUser(false);
             router.push('/home')
         })
         .catch((e) => {
@@ -134,11 +127,18 @@ function useAuthProvider() {
         })
     }
 
+    const onAuth = () => {
+        return auth.onAuthStateChanged(user => {
+            console.log('user onAuth', user)
+            handleUser(user)
+        });
+    }
+
     return {
         user,
         registerUser,
         registerAdmin,
         login,
-        logout,
+        logout, onAuth
     };
 }

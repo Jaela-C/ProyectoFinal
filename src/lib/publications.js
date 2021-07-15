@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { auth, db } from '../../firebase/initFirebase'
-
+import { db } from '../../firebase/initFirebase'
+import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
 
 export const publications = () => {
-    const [user, setUser] = useState(null);
     const router = useRouter();
+    const { user, onAuth } = useAuth();
 
+    onAuth()
+    console.log('user publication', user)
     const registerPublication = async (value) => {
-        const user = await auth.currentUser;
         try{
             await db.collection('foundations').doc(`${user.uid}`).collection('publications').doc().set({
                 date_ex: value.date_ex,
@@ -32,8 +33,32 @@ export const publications = () => {
         }
     }
     
+    const updatePublication = async (value, id) => {
+        try{
+            await db.collection('foundations').doc(`${user.uid}`).collection('publications').doc(id).update({
+                date_ex: value.date_ex,
+                description: value.description,
+                image: 'image.png',
+                last_name: value.last_name,
+                name: value.name,
+                phone: value.phone,
+                title: value.title
+            })
+            .then(
+                alert('Los datos se modificaron correctamente'),
+                router.push('/publications')
+            )
+        } catch(e) {
+            console.log(e.code)
+            if(e.code){
+                return e
+            }
+            return e
+        }
+    }
+
     return {
-        user,
         registerPublication,
+        updatePublication
     };
 }
