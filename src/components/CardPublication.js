@@ -15,6 +15,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import { publications } from "../lib/publications";
 import { useAuth } from '../hocs/useAuth'
 
 const useStyles = makeStyles({
@@ -37,7 +38,22 @@ export default function CardPublication(){
     const { user, onAuth } = useAuth();
     const listPublications = [];
     const [dataPublications, setDataPublications] = useState([]);
-    
+    const {deletePublication: doDelete} = publications();
+    const handleDelete = async(id) => {
+        try {
+            await doDelete(id);
+        } catch (error) {
+            if (error.response) {
+                console.error(error.response);
+            } else if (error.request) {
+                console.error(error.request);
+            } else {
+                console.error("Error", error.message);
+            }
+            console.error(error.config);
+        }
+    }
+
     const getPublications = async () => {
         await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
             publication.forEach(doc => {
@@ -99,10 +115,10 @@ export default function CardPublication(){
                             <IconButton aria-label="add to favorites">
                                 <RemoveRedEyeIcon/>
                             </IconButton>
-                            <IconButton aria-label="add to favorites">
+                        </Link>
+                            <IconButton aria-label="add to favorites" onClick={() => {handleDelete(data.id)}}>
                                 <WhatsAppIcon/>
                             </IconButton>
-                        </Link>
                         </CardActions>
                         </>
                     );

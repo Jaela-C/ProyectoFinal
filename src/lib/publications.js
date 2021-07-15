@@ -57,8 +57,25 @@ export const publications = () => {
         }
     }
 
+    const deletePublication = async (id) => {
+        try{
+            await db.collection('foundations').doc(`${user.uid}`).collection('publications').doc(id).delete()
+            .then(
+                alert('La publicación fue eliminada'),
+                router.push('/publications')
+            )
+        } catch(e) {
+            console.log(e.code)
+            if(e.code){
+                return e
+            }
+            return e
+        }
+    }
+
     return {
         registerPublication,
-        updatePublication
+        updatePublication,
+        deletePublication
     };
 }
