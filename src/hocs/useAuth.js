@@ -71,7 +71,8 @@ function useAuthProvider() {
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: 'USER'
+                role: 'ADMIN',
+                name_foundation: value.name_foundation,
             })
             .then(
                 alert('Los datos se guardaron correctamente'),
