@@ -109,7 +109,6 @@ const EditionPublication = (props) => {
 
     const classes = useStyles();
     const { user, onAuth } = useAuth();
-    console.log('ID en edit', props.id)
     const [dataPublication, setDataPublication] = useState()
     const {updatePublication: doUpdate} = publications();
 
@@ -301,7 +300,7 @@ const EditionPublication = (props) => {
                 </form>
             </div>
             </>
-            : "No existe la publicación"
+            : "Cargando..."
             }
         </Container>
     )
