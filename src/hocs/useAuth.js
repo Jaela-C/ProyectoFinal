@@ -41,10 +41,9 @@ function useAuthProvider() {
 
     const registerUser = async (value) => {
         console.log(value.email, value.password)
-        const userUid = auth.currentUser;
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
-            await db.collection('users').doc(userUid.uid).set({
+            await db.collection('users').doc(auth.currentUser.uid).set({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
@@ -66,20 +65,17 @@ function useAuthProvider() {
 
     const registerAdmin = async (value) => {
         console.log(value.email, value.password)
-        const userUid = auth.currentUser;
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
-            await db.collection('requests').doc(userUid.uid).set({
+            await db.collection('requests').doc(auth.currentUser.uid).set({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: 'ADMIN',
-                name_foundation: value.name_foundation,
-                state: false
+                role: 'USER'
             })
             .then(
-                alert('La solicitud fue enviada'),
-                router.push('/')
+                alert('Los datos se guardaron correctamente'),
+                router.push('/publications')
             )
         } catch(e) {
             console.log(e.code)
