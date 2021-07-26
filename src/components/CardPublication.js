@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase/initFirebase';
-import Link from "@material-ui/core/Link";
 import CardContent from "@material-ui/core/CardContent";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -16,9 +15,14 @@ import IconButton from '@material-ui/core/IconButton';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import { publications } from "../lib/publications";
-import { useAuth } from '../hocs/useAuth'
+import { useAuth } from '../hocs/useAuth';
+import Modal from "@material-ui/core/Modal";
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import ViewPublication from "@/components/ViewPublication";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
     root: {
         width: '100%',
     },
@@ -31,14 +35,42 @@ const useStyles = makeStyles({
     avatar:{
         padding:'0px'
     },
-});
+    paper: {
+        textAlign:"right",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        height:"90%",
+        width:"80%",
+        display: "flex",
+        flexDirection:"column",
+    },
+    exit:{
+        height:'10px',
+        width:'10px',
+        float:"right",
+        position:"relative",
+    },
+    close:{
+        height:'22px',
+        textAlign:"right",
+        width:'100%',
+        backgroundColor: '#5081E5',
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+}));
 
-export default function CardPublication(){
+export default function CardPublication(props){
     const classes = useStyles();
     const { user, onAuth } = useAuth();
     const listPublications = [];
     const [dataPublications, setDataPublications] = useState([]);
     const {deletePublication: doDelete} = publications();
+    const [open, setOpen] = useState(false);
     const handleDelete = async(id) => {
         try {
             await doDelete(id);
@@ -53,6 +85,12 @@ export default function CardPublication(){
             console.error(error.config);
         }
     }
+    useEffect(()=>{
+        onAuth()
+        if(user){
+            getPublications();
+        }
+    },[user]);
 
     const getPublications = async () => {
         await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
@@ -73,26 +111,23 @@ export default function CardPublication(){
     };
 
     console.log('lista publicaciones', dataPublications)
-    useEffect(()=>{
-        onAuth()
-        if(user){
-            getPublications();
-        }
-    },[user]);
 
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    console.log('props card', props);
     return(
         <Card className={classes.root} >
-            {
-                dataPublications.map((data) => {
-                    console.log('data', data)
-                    return (
-                        <>
-                        <CardContent key={data.id}>
-                        <ListItem className={classes.avatar}>
-                            <ListItemAvatar>
+            <CardContent key={props.id}>
+                <ListItem className={classes.avatar}>
+                    <ListItemAvatar>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                             </ListItemAvatar>
-                            <ListItemText primary={data.name} secondary={data.phone} />
+                            <ListItemText primary={props.props.name} secondary={props.props.phone} />
                         </ListItem>
                         </CardContent>
                         <CardActionArea>
@@ -103,27 +138,44 @@ export default function CardPublication(){
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="h2">
-                                    {data.title}
+                                    {props.props.title}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary" component="p">
-                                    {data.description}
+                                    {props.props.description}
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
                         <CardActions className={classes.button}>
-                        <Link href={`publications/foundations/update/${data.id}`}>
-                            <IconButton aria-label="add to favorites">
+                            <IconButton aria-label="add to favorites" onClick={handleOpen}>
                                 <RemoveRedEyeIcon/>
                             </IconButton>
-                        </Link>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                className={classes.modal}
+                                open={open}
+                                onClose={handleClose}
+                                closeAfterTransition
+                                BackdropComponent={Backdrop}
+                                BackdropProps={{
+                                    timeout: 500,
+                                }}
+                            >
+                                <Fade in={open}>
+                                    <div className={classes.paper}>
+                                        <div className={classes.close}>
+                                            <IconButton onClick={handleClose} className={classes.exit}>
+                                                <CancelOutlinedIcon/>
+                                            </IconButton>
+                                        </div>
+                                            <ViewPublication props = {props}/>
+                                    </div>
+                                </Fade>
+                            </Modal>
                             <IconButton aria-label="add to favorites" onClick={() => {handleDelete(data.id)}}>
                                 <WhatsAppIcon/>
                             </IconButton>
                         </CardActions>
-                        </>
-                    );
-                })
-            }                    
         </Card>
     );
 }
