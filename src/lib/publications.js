@@ -45,8 +45,8 @@ export const publications = () => {
             })
             .then(
                 alert('Los datos se modificaron correctamente'),
-                router.push('/publications')
             )
+            router.push('/publications')
         } catch(e) {
             console.log(e.code)
             if(e.code){

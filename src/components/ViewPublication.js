@@ -114,7 +114,7 @@ const ViewPublication =(props)=>{
                         <IconButton aria-label="comentar">
                             <SendIcon/>
                         </IconButton>
-                        <Link href={`publications/foundations/update/${props.id}`}>
+                        <Link href={`publications/foundations/update/${props.props.props.id}`}>
                             <IconButton aria-label="contactar con la fundacion">
                                 <WhatsAppIcon/>
                             </IconButton>
