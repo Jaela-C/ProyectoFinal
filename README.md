@@ -1,34 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fundaciones Quito
+### SISTEMA WEB
+  - El sistema web se ha implementado con el fremawrok Next.js
+### SPRINTS
+- Sprint 1 (Completado)
+  - Implementación de la página principal
+  - Guía de usuario  
+![Página Principal](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/PrincipalPage1.PNG)
+![Página Principal](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/PrincipalPage2.PNG)
+![Página Principal](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/PrincipalPage3.PNG)
+![Página Principal](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/PrincipalPage4.PNG)
+![Página Principal](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/PrincipalPage5.PNG)
 
-## Getting Started
+- Sprint 2 (Completado)
+  - Registro en el sitio web
+  - Inicio de sesión en el sitio web  
+![Tipo de usuario](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/UserType.PNG) 
+![Registrar usuario](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/RegisterUser.PNG) 
+![Registrar fundación](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/RegisterAdmin.PNG) 
+![Iniciar sesión](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/Login.PNG) 
 
-First, run the development server:
+- Sprint 3 (Completado parcialmente)
+  - Registrar publicaciones
+  - Modificar publicaciones
+  - Visualizar publicaciones
+  - Eliminar publicaciones  
+![Registrar publicaciones](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/RegisterPublication.PNG) 
+![Modificar publicaciones](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/EditPublication.PNG) 
+![Visualizar publicaciones](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/ViewPublication.PNG) 
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- Sprint 4 (Parcial)
+  - Modificar información de perfil
+  - Visualizar publicaciones
+  - Comunicarse con el usuario mediante un enlace de WhatsApp
+  - Realizar comentarios en las publicaciones  
+![Modificar información de perfil](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/EditUser.PNG)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Sprint 5 (Pendiente)
+  - Aprobar perfiles de fundaciones
+  - Eliminar perfiles
+  - Visualizar perfiles
+  - Visualizar solicitudes  
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### APLICACIÓN MÓVIL
+  - La Aplicación Móvil se ha implementado en Ionic y está disponible en: https://github.com/Jaela-C/ProyectoFinalMovil
+### SPRINTS
+- Sprint 6 (Pendiente)
+  - Guía de uso de la Aplicación Móvil
+  - Página principal de la Aplicación Móvil
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+- Sprint 7 (Parcial)
+  - Registro en la Aplicación Móvil
+  - Inicio de sesión en la Aplicación Móvil  
+![Inicio de sesión](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/LoginMovil.PNG)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Sprint 8 (Pendiente)
+  - Registrar publicaciones
+  - Modificar publicaciones
+  - Visualizar publicaciones
+  - Eliminar publicaciones
 
-## Learn More
+- Sprint 9 (Pendiente)
+  - Modificar información de perfil de la Aplicación Móvil
+  - Visualizar publicaciones
+  - Comunicarse con el usuario mediante un enlace de WhatsApp
+  - Realizar comentarios en las publicaciones
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Sprint 10 (Pendiente)
+  - Pruebas unitarias
+  - Pruebas de integración
+  - Pruebas de usabilidad
+- Sprint 11 (Pendiente)
+  - Despliegue del Sistema Web en el host de Firebase
+  - Despliegue de la Aplicación Móvil en Google Play Store
