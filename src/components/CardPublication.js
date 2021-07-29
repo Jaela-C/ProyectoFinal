@@ -171,7 +171,7 @@ export default function CardPublication(props){
                                     </div>
                                 </Fade>
                             </Modal>
-                            <IconButton aria-label="add to favorites" onClick={() => {handleDelete(data.id)}}>
+                            <IconButton aria-label="add to favorites" onClick={() => {handleDelete(props.props.id)}}>
                                 <WhatsAppIcon/>
                             </IconButton>
                         </CardActions>
