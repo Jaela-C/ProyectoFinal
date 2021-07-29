@@ -58,6 +58,7 @@ export const publications = () => {
     }
 
     const deletePublication = async (id) => {
+        console.log('doc publication delete', id)
         try{
             await db.collection('publications').doc(id).delete()
             .then(

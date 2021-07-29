@@ -14,6 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Link from "@material-ui/core/Link";
+import { publications } from "../lib/publications";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -75,6 +76,22 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewPublication =(props)=>{
     const classes = useStyles();
+    const {deletePublication: doDelete} = publications();
+    
+    const handleDelete = async(id) => {
+        try {
+            await doDelete(id);
+        } catch (error) {
+            if (error.response) {
+                console.error(error.response);
+            } else if (error.request) {
+                console.error(error.request);
+            } else {
+                console.error("Error", error.message);
+            }
+            console.error(error.config);
+        }
+    }
     console.log('props view', props);
     return (
         <div className={classes.root}>
@@ -119,7 +136,7 @@ const ViewPublication =(props)=>{
                                 <WhatsAppIcon/>
                             </IconButton>
                         </Link>
-                        <IconButton aria-label="Eliminar publicacion">
+                        <IconButton aria-label="Eliminar publicacion" onClick={() => {handleDelete(props.props.props.id.id)}} >
                             <DeleteIcon/>
                         </IconButton>
                     </form>
