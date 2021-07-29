@@ -1,7 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import { auth, db } from '../../firebase/initFirebase'
-import cookie from "js-cookie";
-import translateMessage from "../constants/messages";
 import { useRouter } from 'next/router'
 
 export const AuthContext = createContext(null);
@@ -27,14 +25,10 @@ function useAuthProvider() {
         if (user) {
             // si tengo sesión activa
             setUser(user);
-            cookie.set("auth", true, {
-                expires: 1/24, // 1 hora
-            });
             console.log('sesión iniciada', user)
             return user;
         } else {
             setUser(false);
-            cookie.remove("auth");
             return false;
         }
     };
@@ -90,52 +84,78 @@ function useAuthProvider() {
 
     async function login(data) {
         try {
-            const response = await auth.signInWithEmailAndPassword(data.email, data.password);
-            console.log('response login-response', response)
-            console.log('response login', response.user)
+            await auth.signInWithEmailAndPassword(data.email, data.password);
             router.push('/publications')
-            return response;
+            return true;
         } catch (error) {
-            if (error.response) {
-                alert(translateMessage(error.response.data.message));
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                return error.response;
-            } else if (error.request) {
-                console.log(error.request);
-            } else {
-                console.log("Error", error.message);
-            }
-            console.log(error.config);
+            handleUser(false);
+            throw error;
         }
     }
 
     async function logout() {
-        auth
-        .signOut()
-        .then(() => {
-            // Sign-out successful.
+        try {
+            await auth.signOut();
             handleUser(false);
-            router.push('/home')
-        })
-        .catch((e) => {
-            console.error(e)
-        })
+        } catch (error) {
+            throw error;
+        }
     }
 
-    const onAuth = () => {
-        return auth.onAuthStateChanged(user => {
-            console.log('user onAuth', user)
-            handleUser(user)
+    useEffect(() => {
+        const subscribeUser = auth.onAuthStateChanged(async (userAuthData) => {
+          if (userAuthData) {
+            console.log("usuario con sesión activa", userAuthData);
+            const userInf = await db
+              .collection("users")
+              .doc(userAuthData.uid)
+              .get();
+              if(userInf.exists){
+                const userData = { id: userAuthData.uid, ...userInf.data()};
+                console.log("userData", userData);
+                handleUser(userData);
+              }
+              else {
+                  subscribeAdmin();
+              }
+          } else {
+            console.log("usuario sin sesión activa", userAuthData);
+            handleUser(false);
+          }
         });
-    }
+
+        const subscribeAdmin = auth.onAuthStateChanged(async (userAuthData) => {
+            if (userAuthData) {
+              console.log("usuario con sesión activa admin", userAuthData);
+              const userAdmin = await db
+                .collection("foundations")
+                .doc(userAuthData.uid)
+                .get();
+                if(userAdmin.exists){
+                    const userData = { id: userAuthData.uid, ...userAdmin.data()};
+                    console.log("userData", userData);
+                    handleUser(userData);
+                  }
+                  else {
+                      subscribeUser();
+                  }
+            } else {
+              console.log("usuario sin sesión activa", userAuthData);
+              handleUser(false);
+            }
+        });
+
+        return () => {
+          subscribeUser();
+          subscribeAdmin();
+        };
+      }, []);
 
     return {
         user,
         registerUser,
         registerAdmin,
         login,
-        logout, onAuth
+        logout,
     };
 }

@@ -26,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 const publications = () =>{
     const classes = useStyles(); 
-    
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
     const listPublications = [];
     const [dataPublications, setDataPublications] = useState([]);
+    
     const handleDelete = async(id) => {
         try {
             await doDelete(id);
@@ -44,11 +44,11 @@ const publications = () =>{
             console.error(error.config);
         }
     }
+    console.log('user', user)
     useEffect(()=>{
-        onAuth()
         if(user){
-            const getPublications = async () => {
-                await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
+            const getPublicationsAdmin = async () => {
+                await db.collection('publications').where("id_user", "==", `${user.id}`).onSnapshot(publication => {
                     publication.forEach(doc => {
                         const dataPublication = {
                             date_ex: doc.data().date_ex,
@@ -64,26 +64,31 @@ const publications = () =>{
                   setDataPublications(listPublications);
                 })
             };
-            getPublications();
+            const getPublicationsUser = async () => {
+                await db.collection('publications').onSnapshot(publication => {
+                    publication.forEach(doc => {
+                        const dataPublication = {
+                            date_ex: doc.data().date_ex,
+                            description: doc.data().description,
+                            image: doc.data().image,
+                            last_name: doc.data().last_name,
+                            name: doc.data().name,
+                            phone: doc.data().phone,
+                            title: doc.data().title,
+                        };
+                        listPublications.push({ id: doc.id, ...dataPublication});
+                  });
+                  setDataPublications(listPublications);
+                })
+            };
+            if(user.role == 'ADMIN'){
+                getPublicationsAdmin();
+            }
+            else {
+                getPublicationsUser();
+            }
         }
     },[user]);
-    /*const getPublications = async () => {
-        await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
-            publication.forEach(doc => {
-                const dataPublication = {
-                    date_ex: doc.data().date_ex,
-                    description: doc.data().description,
-                    image: doc.data().image,
-                    last_name: doc.data().last_name,
-                    name: doc.data().name,
-                    phone: doc.data().phone,
-                    title: doc.data().title,
-                };
-                listPublications.push({ id: doc.id, ...dataPublication});
-          });
-          setDataPublications(listPublications);
-        })
-    };*/
 
     console.log('lista publicaciones', dataPublications)
 

@@ -4,13 +4,12 @@ import { useRouter } from 'next/router'
 
 export const users = () => {
     const router = useRouter();
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
 
-    onAuth()
     console.log('user users', user)
     const userA = auth.currentUser
+
     const updateUser = async (value) => {
-        console.log('si entra', value)
         try{
             await userA.updateEmail(`${value.email}`).then(() => {
                 console.log('Correo actualizado')
@@ -18,7 +17,7 @@ export const users = () => {
             await userA.updatePassword(`${value.password}`).then(() => {
                 console.log('Contraseña actualizada')
             })
-            await db.collection('users').doc(`${user.uid}`).update({
+            await db.collection('users').doc(`${user.id}`).update({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
@@ -39,7 +38,7 @@ export const users = () => {
 
     const deleteUser = async () => {
         try{
-            await db.collection('users').doc(`${user.uid}`).delete()
+            await db.collection('users').doc(`${user.id}`).delete()
             .then(
                 alert('El usuario fue eliminado'),
                 router.push('/publications')

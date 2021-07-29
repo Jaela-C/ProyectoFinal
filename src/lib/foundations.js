@@ -4,9 +4,8 @@ import { useRouter } from 'next/router'
 
 export const foundations = () => {
     const router = useRouter();
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
 
-    onAuth()
     console.log('user users', user)
     const userA = auth.currentUser
     const updateFoundation = async (value) => {
@@ -18,7 +17,7 @@ export const foundations = () => {
             await userA.updatePassword(`${value.password}`).then(() => {
                 console.log('Contraseña actualizada')
             })
-            await db.collection('foundations').doc(`${user.uid}`).update({
+            await db.collection('foundations').doc(`${user.id}`).update({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
@@ -40,7 +39,7 @@ export const foundations = () => {
 
     const deleteFoundation = async () => {
         try{
-            await db.collection('foundations').doc(`${user.uid}`).delete()
+            await db.collection('foundations').doc(`${user.id}`).delete()
             .then(
                 alert('El usuario fue eliminado'),
                 router.push('/publications')

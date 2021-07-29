@@ -4,20 +4,20 @@ import { useRouter } from 'next/router'
 
 export const publications = () => {
     const router = useRouter();
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
 
-    onAuth()
     console.log('user publication', user)
     const registerPublication = async (value) => {
         try{
-            await db.collection('foundations').doc(`${user.uid}`).collection('publications').doc().set({
+            await db.collection('publications').doc().set({
                 date_ex: value.date_ex,
                 description: value.description,
                 image: 'image.png',
                 last_name: value.last_name,
                 name: value.name,
                 phone: value.phone,
-                title: value.title
+                title: value.title,
+                id_user: user.uid
             })
             .then(
                 alert('Los datos se guardaron correctamente'),
@@ -34,14 +34,15 @@ export const publications = () => {
     
     const updatePublication = async (value, id) => {
         try{
-            await db.collection('foundations').doc(`${user.uid}`).collection('publications').doc(id).update({
+            await db.collection('publications').doc(id).update({
                 date_ex: value.date_ex,
                 description: value.description,
                 image: 'image.png',
                 last_name: value.last_name,
                 name: value.name,
                 phone: value.phone,
-                title: value.title
+                title: value.title,
+                id_user: user.uid
             })
             .then(
                 alert('Los datos se modificaron correctamente'),
@@ -58,7 +59,7 @@ export const publications = () => {
 
     const deletePublication = async (id) => {
         try{
-            await db.collection('foundations').doc(`${user.uid}`).collection('publications').doc(id).delete()
+            await db.collection('publications').doc(id).delete()
             .then(
                 alert('La publicación fue eliminada'),
                 router.push('/publications')
