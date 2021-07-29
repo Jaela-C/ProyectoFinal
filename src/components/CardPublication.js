@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme)=>({
 
 export default function CardPublication(props){
     const classes = useStyles();
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
     const listPublications = [];
     const [dataPublications, setDataPublications] = useState([]);
     const {deletePublication: doDelete} = publications();
@@ -86,14 +86,13 @@ export default function CardPublication(props){
         }
     }
     useEffect(()=>{
-        onAuth()
         if(user){
             getPublications();
         }
     },[user]);
 
     const getPublications = async () => {
-        await db.collection('foundations').doc(`${user.uid}`).collection('publications').onSnapshot(publication => {
+        await db.collection('publications').onSnapshot(publication => {
             publication.forEach(doc => {
                 const dataPublication = {
                     date_ex: doc.data().date_ex,
