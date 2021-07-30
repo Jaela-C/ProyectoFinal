@@ -21,7 +21,6 @@ export const foundations = () => {
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: 'ADMIN',
                 name_foundation: value.name_foundation,
             })
             .then(
