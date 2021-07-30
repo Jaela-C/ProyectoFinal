@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import { auth, db } from '../../firebase/initFirebase'
 import { useRouter } from 'next/router'
 
@@ -12,7 +12,7 @@ export function AuthProvider({children}) {
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (context === undefined) {
-        throw new Error("useAuth must be used within an AuthProvider");
+        throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
 };
@@ -37,11 +37,11 @@ function useAuthProvider() {
         console.log(value.email, value.password)
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
-            await db.collection('users').doc(auth.currentUser.uid).set({
+            await db.collection('admin').doc(auth.currentUser.uid).set({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: 'USER'
+                role: 'SUPERADMIN'
             })
             .then(
                 alert('Los datos se guardaron correctamente'),
@@ -50,7 +50,7 @@ function useAuthProvider() {
         } catch(e) {
             console.log(e.code)
             if(e.code){
-                alert("El email ingresado le pertenece a otra cuenta")
+                alert('El email ingresado le pertenece a otra cuenta')
                 return e
             }
             return e
@@ -61,21 +61,23 @@ function useAuthProvider() {
         console.log(value.email, value.password)
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
-            await db.collection('requests').doc(auth.currentUser.uid).set({
+            await db.collection('foundations').doc(auth.currentUser.uid).set({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: 'ADMIN',
+                rol: {
+                    admin: false
+                },
                 name_foundation: value.name_foundation,
             })
             .then(
-                alert('Los datos se guardaron correctamente'),
-                router.push('/publications')
+                alert('Su cuenta debe ser verificada'),
+                router.push('/')
             )
         } catch(e) {
             console.log(e.code)
             if(e.code){
-                alert("El email ingresado le pertenece a otra cuenta")
+                alert('El email ingresado le pertenece a otra cuenta')
                 return e
             }
             return e
@@ -84,9 +86,27 @@ function useAuthProvider() {
 
     async function login(data) {
         try {
-            await auth.signInWithEmailAndPassword(data.email, data.password);
-            router.push('/publications')
-            return true;
+            const value = await auth.signInWithEmailAndPassword(data.email, data.password)
+            const infoUser = await db.collection('users').doc(value.user.uid).get()
+            if(!infoUser.exists){
+                const infoFoundation = await db.collection('foundations').doc(value.user.uid).get()
+                if(!infoFoundation.exists){
+                    const infoAdmin = await db.collection('admin').doc(value.user.uid).get()
+                    const userData = { id: value.user.uid, ...infoAdmin.data()}
+                    handleUser(userData)
+                    router.push('/administration')
+                }
+                else {
+                    const userData = { id: value.user.uid, ...infoFoundation.data()}
+                    handleUser(userData)
+                    router.push('/publications')
+                }
+            }
+            else {
+                const userData = { id: value.user.uid, ...infoUser.data()}
+                handleUser(userData)
+                router.push('/publications')
+            }
         } catch (error) {
             handleUser(false);
             throw error;
@@ -105,42 +125,42 @@ function useAuthProvider() {
     useEffect(() => {
         const subscribeUser = auth.onAuthStateChanged(async (userAuthData) => {
           if (userAuthData) {
-            console.log("usuario con sesión activa", userAuthData);
+            console.log('usuario con sesión activa', userAuthData);
             const userInf = await db
-              .collection("users")
+              .collection('users')
               .doc(userAuthData.uid)
               .get();
               if(userInf.exists){
                 const userData = { id: userAuthData.uid, ...userInf.data()};
-                console.log("userData", userData);
+                console.log('userData', userData);
                 handleUser(userData);
               }
               else {
                   subscribeAdmin();
               }
           } else {
-            console.log("usuario sin sesión activa", userAuthData);
+            console.log('usuario sin sesión activa', userAuthData);
             handleUser(false);
           }
         });
 
         const subscribeAdmin = auth.onAuthStateChanged(async (userAuthData) => {
             if (userAuthData) {
-              console.log("usuario con sesión activa admin", userAuthData);
+              console.log('usuario con sesión activa admin', userAuthData);
               const userAdmin = await db
-                .collection("foundations")
+                .collection('foundations')
                 .doc(userAuthData.uid)
                 .get();
                 if(userAdmin.exists){
                     const userData = { id: userAuthData.uid, ...userAdmin.data()};
-                    console.log("userData", userData);
+                    console.log('userData', userData);
                     handleUser(userData);
                   }
                   else {
                       subscribeUser();
                   }
             } else {
-              console.log("usuario sin sesión activa", userAuthData);
+              console.log('usuario sin sesión activa', userAuthData);
               handleUser(false);
             }
         });
