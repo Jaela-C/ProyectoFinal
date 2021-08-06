@@ -9,42 +9,6 @@ export const admin = () => {
     console.log('user admin', user)
     const userA = auth.currentUser
 
-    //PARA OBTENER LISTA DE PERFILES DE FUNDACIONES
-    // const [dataFoundations, setDataFoundations] = useState([]);
-    // const listFoundations = [];
-    // const getFoundations = async () => {
-    //     await db.collection('foundations').onSnapshot(foundation => {
-    //         foundation.forEach(doc => {
-    //             const dataFoundation = {
-    //                 email: doc.data().email
-    //                 last_name: doc.data().last_name,
-    //                 name: doc.data().name,
-    //                 name_foundation: doc.data().name_foundation
-    //             };
-    //             listFoundations.push({ id: doc.id, ...dataFoundation});
-    //       });
-    //       setDataFoundations(listFoundations);
-    //     })
-    // };
-
-    //PARA OBTENER LISTA DE PERFILES DE USUARIOS
-    // const [dataUsers, setDataUsers] = useState([]);
-    // const listUsers = [];
-    // const getUsers = async () => {
-    //     await db.collection('users').onSnapshot(user => {
-    //         user.forEach(doc => {
-    //             const dataUsers = {
-    //                 email: doc.data().email
-    //                 last_name: doc.data().last_name,
-    //                 name: doc.data().name,
-    //                 role: doc.data().role
-    //             };
-    //             listUsers.push({ id: doc.id, ...dataUsers});
-    //       });
-    //       setDataUsers(listUsers);
-    //     })
-    // };
-
     const updateUser = async (value) => {
         try{
             await userA.updateEmail(`${value.email}`).then(() => {

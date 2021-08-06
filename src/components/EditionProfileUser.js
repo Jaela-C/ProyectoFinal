@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
 const EditionProfileUser = () => {
 
     const classes = useStyles();
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
     const [dataUser, setDataUser] = useState()
     const {updateUser: doUpdate} = users();
 
@@ -124,13 +124,12 @@ const EditionProfileUser = () => {
     };
 
     const viewUser = () => {
-        db.collection('users').doc(`${user.uid}`).onSnapshot(function (doc) {
+        db.collection('users').doc(`${user.id}`).onSnapshot(function (doc) {
             console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
     }
     useEffect(()=>{
-        onAuth()
         if(user){
             viewUser();
         }

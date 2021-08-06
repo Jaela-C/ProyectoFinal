@@ -27,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Request() {
+export default function Request(props) {
   const classes = useStyles();
+  console.log('props request', props);
 
   return (
     <Card className={classes.root}>
@@ -40,7 +41,7 @@ export default function Request() {
       <CardContent>
       <TextField
           id="filled-read-only-input"
-          defaultValue="Nombre de la fundacion"
+          defaultValue={props.props.name_foundation}
           InputProps={{
             readOnly: true,
           }}
@@ -48,16 +49,18 @@ export default function Request() {
           size="small"
           className={classes.input}
         />
-        <TextField
-        id="filled-read-only-input"
-        defaultValue="Estado"
-        InputProps={{
-          readOnly: true,
-        }}
-        size="small"
-        variant="outlined"
-        className={classes.input}
-      />
+        {
+          props.props.rol.admin == false ? <TextField
+          id="filled-read-only-input"
+          defaultValue='Por aprobar'
+          InputProps={{
+            readOnly: true,
+          }}
+          size="small"
+          variant="outlined"
+          className={classes.input}
+        /> : '...'
+    }
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
