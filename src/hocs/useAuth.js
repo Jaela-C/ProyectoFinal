@@ -144,7 +144,7 @@ function useAuthProvider() {
           }
         });
 
-        const subscribeAdmin = auth.onAuthStateChanged(async (userAuthData) => {
+        const subscribeFoundation = auth.onAuthStateChanged(async (userAuthData) => {
             if (userAuthData) {
               console.log('usuario con sesión activa admin', userAuthData);
               const userAdmin = await db
@@ -164,10 +164,32 @@ function useAuthProvider() {
               handleUser(false);
             }
         });
+        
+        const subscribeAdmin = auth.onAuthStateChanged(async (userAuthData) => {
+            if (userAuthData) {
+              console.log('usuario con sesión activa admin', userAuthData);
+              const userAdmin = await db
+                .collection('admin')
+                .doc(userAuthData.uid)
+                .get();
+                if(userAdmin.exists){
+                    const userData = { id: userAuthData.uid, ...userAdmin.data()};
+                    console.log('userData', userData);
+                    handleUser(userData);
+                  }
+                  else {
+                      subscribeUser();
+                  }
+            } else {
+              console.log('usuario sin sesión activa', userAuthData);
+              handleUser(false);
+            }
+        });
 
         return () => {
           subscribeUser();
           subscribeAdmin();
+          subscribeFoundation();
         };
       }, []);
 

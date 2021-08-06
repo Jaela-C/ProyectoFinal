@@ -67,8 +67,6 @@ const useStyles = makeStyles((theme)=>({
 export default function CardPublication(props){
     const classes = useStyles();
     const { user } = useAuth();
-    const listPublications = [];
-    const [dataPublications, setDataPublications] = useState([]);
     const {deletePublication: doDelete} = publications();
     const [open, setOpen] = useState(false);
     const handleDelete = async(id) => {
@@ -85,39 +83,6 @@ export default function CardPublication(props){
             console.error(error.config);
         }
     }
-    useEffect(()=>{
-        if(user){
-            getPublications();
-        }
-    },[user]);
-
-    const getPublications = async () => {
-        await db.collection('publications').onSnapshot(publication => {
-            publication.forEach(doc => {
-                const dataPublication = {
-                    date_ex: doc.data().date_ex,
-                    description: doc.data().description,
-                    image: doc.data().image,
-                    last_name: doc.data().last_name,
-                    name: doc.data().name,
-                    phone: doc.data().phone,
-                    title: doc.data().title,
-                };
-                listPublications.push({ id: doc.id, ...dataPublication});
-          });
-          setDataPublications(listPublications);
-        })
-    };
-
-    console.log('lista publicaciones', dataPublications)
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
     console.log('props card', props);
     return(
         <Card className={classes.root} >

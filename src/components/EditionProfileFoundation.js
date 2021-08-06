@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
 const EditionProfileFoundation = () => {
 
     const classes = useStyles();
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
     const [dataUser, setDataUser] = useState()
     const {updateFoundation: doUpdate} = foundations();
 
@@ -125,13 +125,12 @@ const EditionProfileFoundation = () => {
     };
 
     const viewUser = () => {
-        db.collection('foundations').doc(`${user.uid}`).onSnapshot(function (doc) {
+        db.collection('foundations').doc(`${user.id}`).onSnapshot(function (doc) {
             console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
     }
     useEffect(()=>{
-        onAuth()
         if(user){
             viewUser();
         }

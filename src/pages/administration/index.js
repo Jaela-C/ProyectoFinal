@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Block } from '@material-ui/icons';
+import { db } from '../../../firebase/initFirebase';
+import { useAuth } from '../../hocs/useAuth';
 import Request from '@/components/Request';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,31 +31,68 @@ const useStyles = makeStyles((theme) => ({
 
 const administration = () =>{
     const classes = useStyles(); 
+    const { user } = useAuth();
+    const listRequest = [];
+    const [dataRequest, setDataRequest] = useState([]);
+    
+    const handleDelete = async(id) => {
+        try {
+            await doDelete(id);
+        } catch (error) {
+            if (error.response) {
+                console.error(error.response);
+            } else if (error.request) {
+                console.error(error.request);
+            } else {
+                console.error("Error", error.message);
+            }
+            console.error(error.config);
+        }
+    }
+    console.log('user', user)
+    useEffect(()=>{
+        if(user){
+            const getRequest = async () => {
+                await db.collection('foundations').onSnapshot(request => {
+                    request.forEach(doc => {
+                        listRequest.push({ id: doc.id, ...doc.data()});
+                  });
+                  setDataRequest(listRequest);
+                })
+            };
+            if(user.role == 'SUPERADMIN'){
+                getRequest();
+            }
+        }
+    },[user]);
+
+    console.log('lista solicitudes', dataRequest)
 
     return(
         <div className={classes.root}>
             <div className={classes.title}>
                 <b>Nuevas solicitudes</b>
             </div>
-            <div>
+            <div className={classes.root}>
             <Grid container spacing={2} className={classes.container}>
-                <Grid item xs={6} sm={3}>
-                    <Request/>
-                </Grid>
-                <Grid item xs={6} sm={3}>
-                    <Request/>
-                </Grid>
-                <Grid item xs={6} sm={3}>
-                    <Request/>
-                </Grid>
-                <Grid item xs={6} sm={3}>
-                    <Request/>
-                </Grid>
-                <Grid item xs={6} sm={3}>
-                    <Request/>
-                </Grid>
+            {console.log('solicitudes', dataRequest)}
+            {
+                dataRequest.map((data) => {
+                    console.log('data', data)
+                    if(data.rol.admin == false) {
+                        return(
+                            <Grid item xs={6}>
+                                <Request props = {data}/>
+                            </Grid>
+                        );
+                    }
+                    else {
+                        return 0
+                    }
+                })
+            }
             </Grid>
-            </div>
+        </div>
             
         </div>
     );
