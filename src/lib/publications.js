@@ -8,6 +8,7 @@ export const publications = () => {
 
     console.log('user publication', user)
     const registerPublication = async (value) => {
+        console.log('valor', value)
         try{
             await db.collection('publications').doc().set({
                 date_ex: value.date_ex,
@@ -17,7 +18,7 @@ export const publications = () => {
                 name: value.name,
                 phone: value.phone,
                 title: value.title,
-                id_user: user.uid
+                id_user: user.id
             })
             .then(
                 alert('Los datos se guardaron correctamente'),
@@ -42,7 +43,7 @@ export const publications = () => {
                 name: value.name,
                 phone: value.phone,
                 title: value.title,
-                id_user: user.uid
+                id_user: user.id
             })
             .then(
                 alert('Los datos se modificaron correctamente'),
