@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(1),
+    padding: '15px',
     textAlign: 'center',
     color: "#000000",
     width: '100%',
@@ -61,17 +61,14 @@ export default function InformationAdmin() {
   
     return (
       <div>
-        <Grid container>
-          <Grid container item xs={12} >
             <Paper className={classes.paper}>
               <Typography variant="h2" className={classes.paperTitle} >
-              ADMINISTRADOR
+              FUNDACIONES
               </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm container spacing={2} className={classes.container}>
                     <Grid item xs={4}>
                       <Card>
-                          <CardActionArea>
                               <CardContent>
                               <CardMedia
                               className={classes.media}
@@ -88,12 +85,10 @@ export default function InformationAdmin() {
                                   - Puedes agregar una foto de perfil
                               </Typography>
                               </CardContent>
-                          </CardActionArea>
                       </Card>
                   </Grid>
                   <Grid item xs={4}>
                       <Card>
-                          <CardActionArea>
                               <CardContent>
                               <CardMedia
                               className={classes.media}
@@ -116,12 +111,10 @@ export default function InformationAdmin() {
                                   - Tus necesidades tendrán un mayor alcance
                               </Typography>
                               </CardContent>
-                          </CardActionArea>
                       </Card>
                   </Grid>
                   <Grid item xs={4}>
                       <Card>
-                          <CardActionArea>
                               <CardContent>
                               <CardMedia
                               className={classes.media}
@@ -138,7 +131,6 @@ export default function InformationAdmin() {
                                   - Puedes comunicarte directamente con las personas que estén interesadas en ayudar
                               </Typography>
                               </CardContent>
-                          </CardActionArea>
                       </Card>
                   </Grid>
                 </Grid>
@@ -150,8 +142,6 @@ export default function InformationAdmin() {
                 Crear cuenta
               </Button>
             </Paper>
-          </Grid>
-        </Grid>
       </div>
     );
 }

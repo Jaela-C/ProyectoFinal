@@ -70,7 +70,6 @@ export default function InformationUser() {
                   <Grid item xs={12} sm container spacing={2} className={classes.container}>
                     <Grid item xs={4}>
                       <Card>
-                          <CardActionArea>
                               <CardContent>
                               <CardMedia
                               className={classes.media}
@@ -87,12 +86,10 @@ export default function InformationUser() {
                                   - Puedes agregar una foto de perfil
                               </Typography>
                               </CardContent>
-                          </CardActionArea>
                       </Card>
                   </Grid>
                   <Grid item xs={4}>
                       <Card>
-                          <CardActionArea>
                               <CardContent>
                               <CardMedia
                               className={classes.media}
@@ -109,12 +106,10 @@ export default function InformationUser() {
                                   - Puedes ver toda la información que haya sido publicada por cualquier fundación
                               </Typography>
                               </CardContent>
-                          </CardActionArea>
                       </Card>
                   </Grid>
                   <Grid item xs={4}>
                       <Card>
-                          <CardActionArea>
                               <CardContent>
                               <CardMedia
                               className={classes.media}
@@ -131,7 +126,6 @@ export default function InformationUser() {
                                   - Puedes comunicarte directamente con la persona encargada de la fundación
                               </Typography>
                               </CardContent>
-                          </CardActionArea>
                       </Card>
                   </Grid>
                 </Grid>
