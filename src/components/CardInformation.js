@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     textAlign: "center"
+  },
+  card:{
+    maxHeight: '330 px',
   }
 }));
 
@@ -42,8 +45,7 @@ export default function NestedGrid() {
           <Grid container item xs={12} spacing={2}>
             <Grid item xs={4}>
                 <Card className={classes.root}>
-                    <CardActionArea>
-                        <CardContent>
+                        <CardContent className={classes.card}>
                         <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
                             Brindar ayuda
                         </Typography>
@@ -56,13 +58,11 @@ export default function NestedGrid() {
                             Las fundaciones de la ciudad de Quito necesitan la colaboración de todos los ciudadanos para seguir brindando ayuda a las personas de bajos recursos. 
                         </Typography>
                         </CardContent>
-                    </CardActionArea>
                 </Card>
             </Grid>
             <Grid item xs={4}>
                 <Card className={classes.root}>
-                    <CardActionArea>
-                        <CardContent>
+                        <CardContent className={classes.card}>
                         <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
                             Comunicarse con una fundación
                         </Typography>
@@ -75,13 +75,11 @@ export default function NestedGrid() {
                             Si decides ayudar a una fundación, puedes realizar comentarios para pedir información o comunicarte directamente por medio de mensajes. 
                         </Typography>
                         </CardContent>
-                    </CardActionArea>
                 </Card>
             </Grid>
             <Grid item xs={4}>
                 <Card className={classes.root}>
-                    <CardActionArea>
-                        <CardContent>
+                        <CardContent className={classes.card}>
                         <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
                             Publicaciones
                         </Typography>
@@ -94,7 +92,6 @@ export default function NestedGrid() {
                             Las fundaciones publican sus principales necesidades, las cuales pueden ser atendidas por cualquier persona en cualquier momento.
                         </Typography>
                         </CardContent>
-                    </CardActionArea>
                 </Card>
             </Grid>
           </Grid>
