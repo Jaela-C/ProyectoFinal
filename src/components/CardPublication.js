@@ -83,6 +83,15 @@ export default function CardPublication(props){
             console.error(error.config);
         }
     }
+    
+    const handleOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
     console.log('props card', props);
     return(
         <Card className={classes.root} >
