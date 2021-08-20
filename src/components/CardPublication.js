@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase/initFirebase';
 import CardContent from "@material-ui/core/CardContent";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -22,9 +21,11 @@ import Fade from '@material-ui/core/Fade';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import ViewPublication from "@/components/ViewPublication";
 
+
 const useStyles = makeStyles((theme)=>({
     root: {
         width: '100%',
+        height: '400px',
     },
     media: {
         height: 140,
@@ -62,6 +63,10 @@ const useStyles = makeStyles((theme)=>({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    des:{
+        overflow: 'hidden',
+        height: '29%',
+    },
 }));
 
 export default function CardPublication(props){
@@ -93,9 +98,16 @@ export default function CardPublication(props){
     }
 
     console.log('props card', props);
+    const handleOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+      };
     return(
-        <Card className={classes.root} >
-            <CardContent key={props.id}>
+        <Card className={classes.root} key={props.props.id} >
+            <CardContent>
                 <ListItem className={classes.avatar}>
                     <ListItemAvatar>
                             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
@@ -109,15 +121,18 @@ export default function CardPublication(props){
                                 image="/static/images/cards/contemplative-reptile.jpg"
                                 title="Contemplative Reptile"
                             />
-                            <CardContent>
+                        </CardActionArea>
+                        <CardContent className={classes.des}>
+                            <CardActionArea onClick={handleOpen}>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     {props.props.title}
                                 </Typography>
+                            </CardActionArea>
                                 <Typography variant="body2" color="textSecondary" component="p">
                                     {props.props.description}
                                 </Typography>
                             </CardContent>
-                        </CardActionArea>
+                        
                         <CardActions className={classes.button}>
                             <IconButton aria-label="add to favorites" onClick={handleOpen}>
                                 <RemoveRedEyeIcon/>

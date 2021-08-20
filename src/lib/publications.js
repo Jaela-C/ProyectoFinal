@@ -63,8 +63,8 @@ export const publications = () => {
         try{
             await db.collection('publications').doc(id).delete()
             .then(
-                alert('La publicación fue eliminada'),
-                router.push('/publications')
+                //alert('La publicación fue eliminada'),
+                router.push('/publications'),
             )
         } catch(e) {
             console.log(e.code)
