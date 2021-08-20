@@ -37,11 +37,13 @@ function useAuthProvider() {
         console.log(value.email, value.password)
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
-            await db.collection('admin').doc(auth.currentUser.uid).set({
+            await db.collection('users').doc(auth.currentUser.uid).set({
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: 'SUPERADMIN'
+                rol: {
+                    admin: false
+                },
             })
             .then(
                 alert('Los datos se guardaron correctamente'),

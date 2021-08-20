@@ -94,7 +94,7 @@ const ProfileUser = () => {
     });
 
     const viewUser = () => {
-        db.collection('users').doc(`${user.uid}`).onSnapshot(function (doc) {
+        db.collection('users').doc(`${user.id}`).onSnapshot(function (doc) {
             console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
