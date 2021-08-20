@@ -98,13 +98,6 @@ export default function CardPublication(props){
     }
 
     console.log('props card', props);
-    const handleOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-        setOpen(false);
-      };
     return(
         <Card className={classes.root} key={props.props.id} >
             <CardContent>

@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfileUser = () => {
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
     const classes = useStyles();
     const [dataUser, setDataUser] = useState()
 
@@ -100,7 +100,6 @@ const ProfileUser = () => {
         })
     }
     useEffect(()=>{
-        onAuth()
         if(user){
             viewUser();
         }
