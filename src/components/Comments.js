@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
+import { useAuth } from '@/hocs/useAuth';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,62 +40,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function BottomAppBar() {
+export default function BottomAppBar(props) {
+
+    const dataComments = props.props.props.props.comments;
     const classes = useStyles();
+    const { user } = useAuth();
+
+    console.log('userComments', user)
 
     return (
         <>
-            <ListItem className={classes.avatar}>
+        {dataComments.map((data, index) => (
+            <ListItem key={index} className={classes.avatar}>
                 <ListItemAvatar>
                     <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
                 </ListItemAvatar>
-                <ListItemText primary="Usuario" secondary="Comentario de usuario" />
+                <ListItemText primary={data.name_user} secondary={data.content} />
             </ListItem>
-            <ListItem className={classes.avatar}>
-                <ListItemAvatar>
-                    <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText primary="Usuario" secondary="Comentario de usuario" />
-            </ListItem>
-            <ListItem className={classes.avatar}>
-                <ListItemAvatar>
-                    <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText primary="Usuario" secondary="Comentario de usuario" />
-            </ListItem>
-            <ListItem className={classes.avatar}>
-                <ListItemAvatar>
-                    <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText primary="Usuario" secondary="Este es un comentario largo de usuario donde expresa muchas de sus ideas" />
-            </ListItem>
-            <ListItem className={classes.avatar}>
-                <ListItemAvatar>
-                    <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText primary="Usuario" secondary="Comentario de usuario" />
-            </ListItem>
-            <ListItem className={classes.avatar}>
-                <ListItemAvatar>
-                    <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText primary="Usuario" secondary="Comentario de usuario" />
-            </ListItem><ListItem className={classes.avatar}>
-            <ListItemAvatar>
-                <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-            </ListItemAvatar>
-            <ListItemText primary="Usuario" secondary="Comentario de usuario" />
-        </ListItem><ListItem className={classes.avatar}>
-            <ListItemAvatar>
-                <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-            </ListItemAvatar>
-            <ListItemText primary="Usuario" secondary="Comentario de usuario" />
-        </ListItem><ListItem className={classes.avatar}>
-            <ListItemAvatar>
-                <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
-            </ListItemAvatar>
-            <ListItemText primary="Usuario" secondary="Comentario de usuario" />
-        </ListItem>
+        ))}
         </>
     );
 }

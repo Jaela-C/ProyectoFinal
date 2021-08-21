@@ -58,6 +58,7 @@ const publications = () =>{
                             name: doc.data().name,
                             phone: doc.data().phone,
                             title: doc.data().title,
+                            comments: doc.data().comments,
                         };
                         listPublications.push({ id: doc.id, ...dataPublication});
                   });
@@ -75,6 +76,7 @@ const publications = () =>{
                             name: doc.data().name,
                             phone: doc.data().phone,
                             title: doc.data().title,
+                            comments: doc.data().comments,
                         };
                         listPublications.push({ id: doc.id, ...dataPublication});
                   });
