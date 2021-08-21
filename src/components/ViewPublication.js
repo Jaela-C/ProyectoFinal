@@ -108,13 +108,13 @@ const ViewPublication =(props)=>{
     const {deletePublication: doDelete} = publications();
     const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+    const handleOpen = () => {
+        setOpen(true);
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    const handleClose = () => {
+        setOpen(false);
+    };
     const handleDelete = async(id) => {
         try {
             await doDelete(id);

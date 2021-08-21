@@ -14,6 +14,10 @@ import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { useAuth } from '../hocs/useAuth'
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+
 
 const schema = yup.object().shape({
     title: yup
@@ -103,6 +107,30 @@ const useStyles = makeStyles((theme) => ({
     input: {
         display: 'none',
     },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+    modalpaper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        backgroundColor:"#9CBBF2",
+      },
+    containerbuttons:{
+        textAlign:"center",
+    },
+    button1:{
+        margin: 6,
+        color:"black",
+        backgroundColor:"#F06177",
+    },
+    button2:{
+        margin: 6,
+        color:"#EC323D",
+    },
 }));
 
 const EditionPublication = (props) => {
@@ -111,6 +139,15 @@ const EditionPublication = (props) => {
     const { user, onAuth } = useAuth();
     const [dataPublication, setDataPublication] = useState()
     const {updatePublication: doUpdate} = publications();
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
@@ -283,13 +320,40 @@ const EditionPublication = (props) => {
                         </label>
                     </div>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         className={classes.submit}
+                        onClick={handleOpen}
                     >
                         Guardar
                     </Button>
+                    <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            className={classes.modal}
+                            open={open}
+                            onClose={handleClose}
+                            closeAfterTransition
+                            BackdropComponent={Backdrop}
+                            BackdropProps={{
+                            timeout: 500,
+                            }}
+                        >
+                            <Fade in={open}>
+                            <div className={classes.modalpaper}>
+                                <h2 id="transition-modal-title">Confirmación</h2>
+                                <p id="transition-modal-description">¿Quiere guardar cambios?</p>
+                                <div className={classes.containerbuttons}>
+                                <Button variant="contained" color="primary" className={classes.button1} type="submit">
+                                    Sí
+                                </Button>
+                                <Button color="secondary" className={classes.button2} onClick={handleClose}>
+                                    No
+                                </Button>
+                                </div>
+                            </div>
+                            </Fade>
+                        </Modal>
                     <Button
                         fullWidth
                         variant="contained"
