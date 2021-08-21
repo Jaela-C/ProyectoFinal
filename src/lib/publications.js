@@ -1,12 +1,29 @@
 import { db } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
+import firebase from "firebase/app";
+import Comments from "@/components/Comments";
 
 export const publications = () => {
     const router = useRouter();
     const { user } = useAuth();
 
     console.log('user publication', user)
+
+    const sendComments = async (dataComments, idPublication) => {
+        try {
+            await db.collection('publications').doc(idPublication).update({
+                comments: firebase.firestore.FieldValue.arrayUnion(dataComments),
+            })
+        } catch(e) {
+            console.log(e.code)
+            if(e.code){
+                return e
+            }
+            return e
+        }
+    }
+
     const registerPublication = async (value) => {
         console.log('valor', value)
         try{
@@ -76,6 +93,7 @@ export const publications = () => {
     }
 
     return {
+        sendComments,
         registerPublication,
         updatePublication,
         deletePublication

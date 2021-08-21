@@ -18,8 +18,18 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
-import Link from 'next/link'
-import Router from 'next/router'
+import Link from 'next/link';
+import Router from 'next/router';
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useAuth } from "@/hocs/useAuth";
+
+const schema = yup.object().shape({
+    content: yup
+        .string()
+        .required("Ingrese un comentario"),
+});
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -105,8 +115,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewPublication =(props)=>{
     const classes = useStyles();
-    const {deletePublication: doDelete} = publications();
+    const {deletePublication: doDelete, sendComments: comments} = publications();
     const [open, setOpen] = React.useState(false);
+    const { user } = useAuth();
+
+    const {register, handleSubmit, formState: { errors }, } = useForm({
+        resolver: yupResolver(schema),
+    });
 
     const handleOpen = () => {
         setOpen(true);
@@ -131,6 +146,30 @@ const ViewPublication =(props)=>{
         }
     }
     //console.log('props view', props);
+
+    const onComment = async(data, id) => {
+        const newComment = {
+            name_user: user.name,
+            content: data.content,
+            id_user: user.id,
+            last_name_user: user.last_name,
+            date: Date()
+        };
+        const id_publication = props.props.props.id;
+        try {
+            const dataComment = await comments(newComment, id_publication);
+        } catch (error) {
+            if (error.response) {
+                console.error(error.response);
+            } else if (error.request) {
+                console.error(error.request);
+            } else {
+                console.error("Error", error.message);
+            }
+            console.error(error.config);
+        }
+    }
+
     return (
         <div className={classes.root} key={props.id}>
             <Grid container spacing={0} className={classes.container}>
@@ -162,11 +201,13 @@ const ViewPublication =(props)=>{
                         <ListItemText primary="Fundacion" secondary={props.props.props.title} />
                     </ListItem>
                     <div className={classes.message}>
-                        <Comments/>
+                        <Comments props = {props}/>
                     </div>
-                    <form className={classes.root} noValidate autoComplete="off">
-                        <TextField id="outlined-basic" label="Comentario" variant="outlined" className={classes.input}/>
-                        <IconButton aria-label="comentar">
+                    <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit(onComment)}>
+                        <TextField id="outlined-basic" label="comentario" variant="outlined" className={classes.input}
+                        {...register('content', { required: true })}
+                        />
+                        <IconButton type="submit">
                             <SendIcon/>
                         </IconButton>
                         <Link href={`publications/foundations/update/${props.props.props.id}`}>
