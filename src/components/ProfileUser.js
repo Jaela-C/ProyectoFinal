@@ -131,7 +131,7 @@ const ProfileUser = () => {
                             <Typography className={classes.textField} color="primary">{dataUser.email}</Typography>
                             </Grid>
                         </Grid>
-                        <Link href={`users/${user.uid}`}>
+                        <Link href={`users/${user.id}`}>
                             <Button
                                 fullWidth
                                 variant="contained"

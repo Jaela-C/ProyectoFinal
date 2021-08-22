@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Users() {
+export default function Users(props) {
+  console.log('props user', props)
   const classes = useStyles();
   
 
@@ -41,7 +42,7 @@ export default function Users() {
       <CardContent>
       <TextField
           id="filled-read-only-input"
-          defaultValue="Nombre y apellido"
+          defaultValue={props.props.name + ' ' + props.props.last_name}
           InputProps={{
             readOnly: true,
           }}
@@ -52,7 +53,7 @@ export default function Users() {
         
           <TextField
           id="filled-read-only-input"
-          defaultValue="Tipo de usuario"
+          defaultValue={props.props.role == "USER" ? 'Usuario' : 'Fundación'}
           InputProps={{
             readOnly: true,
           }}
@@ -62,7 +63,7 @@ export default function Users() {
         />
         <TextField
           id="filled-read-only-input"
-          defaultValue="Estado"
+          defaultValue={props.props.role == "REQUEST" ? 'Por aprobar' : 'Aprobado'}
           InputProps={{
             readOnly: true,
           }}
@@ -72,7 +73,7 @@ export default function Users() {
         />
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        <IconButton aria-label="add to favorites" href={`profiles/${props.props.id}`}>
             <RemoveRedEyeIcon/>
         </IconButton>
       </CardActions>

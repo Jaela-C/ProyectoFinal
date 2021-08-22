@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Request from '@/components/Request';
 import Users from '@/components/Users';
+import { db } from '../../../../firebase/initFirebase';
+import { useAuth } from '../../../hocs/useAuth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,65 +30,62 @@ const useStyles = makeStyles((theme) => ({
 
 const administration = () =>{
     const classes = useStyles(); 
-    //const { user } = useAuth();
-    //const listRequest = [];
-    //const [dataRequest, setDataRequest] = useState([]);
-    
-   /* const handleDelete = async(id) => {
-        try {
-            await doDelete(id);
-        } catch (error) {
-            if (error.response) {
-                console.error(error.response);
-            } else if (error.request) {
-                console.error(error.request);
-            } else {
-                console.error("Error", error.message);
-            }
-            console.error(error.config);
-        }
-    }
-    console.log('user', user)
+    const { user } = useAuth();
+    const listProfiles = [];
+    const [dataProfile, setDataProfile] = useState([]);
+    const listFoudantions = [];
+    const [dataFoundation, setDataFoundation] = useState([]);
+
     useEffect(()=>{
         if(user){
-            const getRequest = async () => {
+            const getProfiles = async () => {
                 await db.collection('foundations').onSnapshot(request => {
                     request.forEach(doc => {
-                        listRequest.push({ id: doc.id, ...doc.data()});
+                        listFoudantions.push({ id: doc.id, ...doc.data()});
                   });
-                  setDataRequest(listRequest);
+                  setDataFoundation(listFoudantions);
                 })
             };
+            const getFoundations = async () => {
+                await db.collection('users').onSnapshot(request => {
+                    request.forEach(doc => {
+                        listProfiles.push({ id: doc.id, ...doc.data()});
+                  });
+                  setDataProfile(listProfiles);
+                }) 
+            };
             if(user.role == 'SUPERADMIN'){
-                getRequest();
+                getProfiles();
+                getFoundations();
             }
         }
     },[user]);
 
-    console.log('lista solicitudes', dataRequest)*/
-
     return(
         <div className={classes.root}>
             <div className={classes.title}>
-                <b>Nuevas solicitudes</b>
+                <b>Perfiles</b>
             </div>
             <div className={classes.root}>
             <Grid container spacing={2} className={classes.container}>
-                <Grid item xs={4}>
-                    <Users/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Users/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Users/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Users/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Users/>
-                </Grid>
+            {
+                dataProfile.map((data) => {
+                    return(
+                        <Grid item xs={6}>
+                            <Users props = {data}/>
+                        </Grid>
+                    );
+                })
+            }
+            {
+                dataFoundation.map((data) => {
+                    return(
+                        <Grid item xs={6}>
+                            <Users props = {data}/>
+                        </Grid>
+                    );
+                })
+            }
             </Grid>
         </div>
             

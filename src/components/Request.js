@@ -50,7 +50,7 @@ export default function Request(props) {
           className={classes.input}
         />
         {
-          props.props.rol.admin == false ? <TextField
+          props.props.role == "REQUEST" ? <TextField
           id="filled-read-only-input"
           defaultValue='Por aprobar'
           InputProps={{
@@ -63,7 +63,7 @@ export default function Request(props) {
     }
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        <IconButton aria-label="add to favorites" href={`administration/request/${props.props.id}`}>
             <RemoveRedEyeIcon/>
         </IconButton>
       </CardActions>

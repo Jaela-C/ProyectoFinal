@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {useForm} from "react-hook-form";
-import { db } from '../../firebase/initFirebase'
+import { db } from '../../firebase/initFirebase';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfileFoundation = () => {
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
     const classes = useStyles();
     const [dataUser, setDataUser] = useState()
 
@@ -100,7 +100,6 @@ const ProfileFoundation = () => {
         })
     }
     useEffect(()=>{
-        onAuth()
         if(user){
             viewUser();
         }
@@ -135,7 +134,7 @@ const ProfileFoundation = () => {
                             <Typography className={classes.textField} color="primary">{dataUser.name_foundation}</Typography>
                             </Grid>
                         </Grid>
-                        <Link href={`foundations/${user.uid}`}>
+                        <Link href={`foundations/${user.id}`}>
                             <Button
                                 fullWidth
                                 variant="contained"
