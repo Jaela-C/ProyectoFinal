@@ -136,7 +136,7 @@ const useStyles = makeStyles((theme) => ({
 const EditionPublication = (props) => {
 
     const classes = useStyles();
-    const { user, onAuth } = useAuth();
+    const { user } = useAuth();
     const [dataPublication, setDataPublication] = useState()
     const {updatePublication: doUpdate} = publications();
     const [open, setOpen] = React.useState(false);
@@ -154,13 +154,12 @@ const EditionPublication = (props) => {
     });
     
     const viewPublication = () => {
-        db.collection('foundations').doc(`${user.uid}`).collection('publications').doc(props.id).onSnapshot(function (doc) {
+        db.collection('foundations').doc(`${user.id}`).collection('publications').doc(props.id).onSnapshot(function (doc) {
             console.log('datos de publicación', doc.data())
             setDataPublication(doc.data())
         })
     }
     useEffect(()=>{
-        onAuth()
         if(user){
             viewPublication();
         }

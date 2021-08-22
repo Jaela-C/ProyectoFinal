@@ -36,26 +36,14 @@ export const admin = () => {
         }
     }
 
-    const updateFoundation = async (value) => {
+    const updateRolFoundation = async (id) => {
         try{
-            await userA.updateEmail(`${value.email}`).then(() => {
-                console.log('Correo actualizado')
-            })
-            await userA.updatePassword(`${value.password}`).then(() => {
-                console.log('Contraseña actualizada')
-            })
-            await db.collection('foundations').doc(`${user.id}`).update({
-                email: value.email,
-                name: value.name,
-                last_name: value.last_name,
-                rol: {
-                    admin: true
-                },
-                name_foundation: value.name_foundation,
+            await db.collection('foundations').doc(`${id}`).update({
+                role: 'ADMIN',
             })
             .then(
                 alert('Los datos se modificaron correctamente'),
-                router.push('/foundations')
+                router.push('/administration')
             )
         } catch(e) {
             console.log(e.code)
@@ -66,12 +54,12 @@ export const admin = () => {
         }
     }
 
-    const deleteUser = async () => {
+    const deleteUser = async (id) => {
         try{
-            await db.collection('users').doc(`${user.id}`).delete()
+            await db.collection('users').doc(`${id}`).delete()
             .then(
                 alert('El usuario fue eliminado'),
-                router.push('/publications')
+                router.push('/administration/profiles')
             )
         } catch(e) {
             console.log(e.code)
@@ -82,12 +70,12 @@ export const admin = () => {
         }
     }
 
-    const deleteFoundation = async () => {
+    const deleteFoundation = async (id) => {
         try{
-            await db.collection('foundations').doc(`${user.id}`).delete()
+            await db.collection('foundations').doc(`${id}`).delete()
             .then(
                 alert('El usuario fue eliminado'),
-                router.push('/publications')
+                router.push('/administration/profiles')
             )
         } catch(e) {
             console.log(e.code)
@@ -100,7 +88,7 @@ export const admin = () => {
 
     return {
         updateUser,
-        updateFoundation,
+        updateRolFoundation,
         deleteUser,
         deleteFoundation
     };

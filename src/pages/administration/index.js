@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Block } from '@material-ui/icons';
 import { db } from '../../../firebase/initFirebase';
 import { useAuth } from '../../hocs/useAuth';
 import Request from '@/components/Request';
@@ -79,15 +78,12 @@ const administration = () =>{
             {
                 dataRequest.map((data) => {
                     console.log('data', data)
-                    if(data.rol.admin == false) {
+                    if(data.role == "REQUEST") {
                         return(
                             <Grid item xs={6}>
                                 <Request props = {data}/>
                             </Grid>
                         );
-                    }
-                    else {
-                        return 0
                     }
                 })
             }

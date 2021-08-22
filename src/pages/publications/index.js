@@ -83,10 +83,13 @@ const publications = () =>{
                   setDataPublications(listPublications);
                 })
             };
-            if(user.rol.admin == true){
+            if(user.role == "ADMIN"){
                 getPublicationsAdmin();
             }
-            else {
+            if(user.role == "REQUEST"){
+                
+            }
+            if(user.role == "USER") {
                 getPublicationsUser();
             }
         }
