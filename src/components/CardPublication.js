@@ -97,6 +97,17 @@ export default function CardPublication(props){
         setOpen(false);
     }
 
+    const optionUser = () => {
+        if(user.role == "ADMIN"){
+        }
+        else{
+            return(
+                <IconButton aria-label="add to favorites">
+                    <WhatsAppIcon/>
+                </IconButton>
+            );
+        }
+    }
     console.log('props card', props);
     return(
         <Card className={classes.root} key={props.props.id} >
@@ -153,9 +164,7 @@ export default function CardPublication(props){
                                     </div>
                                 </Fade>
                             </Modal>
-                            <IconButton aria-label="add to favorites" onClick={() => {handleDelete(props.props.id)}}>
-                                <WhatsAppIcon/>
-                            </IconButton>
+                            {optionUser()}
                         </CardActions>
         </Card>
     );
