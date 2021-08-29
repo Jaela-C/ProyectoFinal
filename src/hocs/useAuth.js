@@ -41,7 +41,8 @@ function useAuthProvider() {
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: "USER"
+                role: "USER",
+                image: ""
             })
             .then(
                 alert('Los datos se guardaron correctamente'),
@@ -67,6 +68,8 @@ function useAuthProvider() {
                 last_name: value.last_name,
                 role: "REQUEST",
                 name_foundation: value.name_foundation,
+                image: "",
+                file: ""
             })
             .then(
                 alert('Su cuenta debe ser verificada'),

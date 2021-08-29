@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 const LoginForm = () => {
 
     const classes = useStyles();
-    const { login, onAuth } = useAuth();
+    const { login } = useAuth();
     const [user, setUser] = useState(null)
 
     const {register, handleSubmit, formState: { errors }, } = useForm({

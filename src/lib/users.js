@@ -1,15 +1,27 @@
-import { auth, db } from '../../firebase/initFirebase'
+import { auth, db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import image from 'next/image'
+import { SignalCellularConnectedNoInternet4BarOutlined } from '@material-ui/icons'
 
 export const users = () => {
     const router = useRouter();
     const { user } = useAuth();
-
-    console.log('user users', user)
     const userA = auth.currentUser
 
+    const photoUser = (id, file) => {
+        return storage.ref(`/usersimage/${id}`);
+    }
+
+    const savePhotoUser = async (url) => {
+        await db.collection('users').doc(`${user.id}`).update({
+            image: url
+        })
+    }
+
     const updateUser = async (value) => {
+        console.log('Daros de usuarios imagen', value)
         try{
             await userA.updateEmail(`${value.email}`).then(() => {
                 console.log('Correo actualizado')
@@ -21,7 +33,7 @@ export const users = () => {
                 email: value.email,
                 name: value.name,
                 last_name: value.last_name,
-                role: 'USER'
+                role: 'USER',
             })
             .then(
                 alert('Los datos se modificaron correctamente'),
@@ -54,6 +66,8 @@ export const users = () => {
 
     return {
         updateUser,
-        deleteUser
+        deleteUser,
+        photoUser,
+        savePhotoUser
     };
 }

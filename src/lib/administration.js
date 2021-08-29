@@ -1,4 +1,4 @@
-import { auth, db } from '../../firebase/initFirebase'
+import { auth, db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
 

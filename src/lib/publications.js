@@ -1,4 +1,4 @@
-import { db } from '../../firebase/initFirebase'
+import { db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
 import firebase from "firebase/app";

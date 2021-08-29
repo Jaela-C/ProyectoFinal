@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {useForm} from "react-hook-form";
-import { db } from '../../firebase/initFirebase';
+import { db,  } from '../../firebase/initFirebase';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -118,7 +118,7 @@ const ProfileFoundation = () => {
                             Perfil
                         </Typography>
                     </Grid>
-                    <Avatar className={classes.avatar} alt="Ícono de usuario" src="https://i.pinimg.com/originals/5d/67/98/5d6798b9aea22ca240e63a5b9acb3424.png" />
+                    <Avatar className={classes.avatar} alt="Ícono de usuario" src={dataUser.image} />
                     <form className={classes.form} noValidate >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>

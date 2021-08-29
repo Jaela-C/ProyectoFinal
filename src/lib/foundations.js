@@ -1,4 +1,4 @@
-import { auth, db } from '../../firebase/initFirebase'
+import { auth, db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
 
@@ -8,6 +8,17 @@ export const foundations = () => {
 
     console.log('user users', user)
     const userA = auth.currentUser
+
+    const photoFoundation = (id, file) => {
+        return storage.ref(`/foundations/${id}`);
+    }
+
+    const savePhotoFoundation = async (url) => {
+        await db.collection('foundations').doc(`${user.id}`).update({
+            image: url
+        })
+    }
+
     const updateFoundation = async (value) => {
         console.log('si entra', value)
         try{
@@ -54,6 +65,8 @@ export const foundations = () => {
 
     return {
         updateFoundation,
-        deleteFoundation
+        deleteFoundation,
+        photoFoundation,
+        savePhotoFoundation,
     };
 }

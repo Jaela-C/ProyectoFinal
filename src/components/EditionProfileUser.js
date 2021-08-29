@@ -153,13 +153,47 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const EditionProfileUser = () => {
-
+const EditionProfileUser = (props) => {
     const classes = useStyles();
-    const { user } = useAuth();
     const [dataUser, setDataUser] = useState()
-    const {updateUser: doUpdate} = users();
+    const {updateUser: doUpdate, savePhotoUser, photoUser } = users();
     const [open, setOpen] = React.useState(false);
+    const [updateFile, setUpdateFile] = useState(null);
+
+    const handleuploadImage = async (id, file) => {
+        const uploadTask = photoUser(id, file).put(file);
+        await uploadTask.on(
+            "state_changed",
+            function (snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Imagen está ' + progress + '% subida');
+            },
+            function (error) {
+                console.log(error);
+            },
+            function (){
+                uploadTask.snapshot.ref
+                    .getDownloadURL()
+                    .then(async function (downloadURL) {
+                        console.log('Imagen disponible', downloadURL)
+                        savePhotoUser(downloadURL)
+                    })
+            }
+        )
+    };
+    const handleAddFile = (e) => {
+        console.log('image', e)
+        if (e !== undefined) {
+          if (e.type.includes("image/")) {
+            console.log('infoImages', e);
+            setUpdateFile(e);
+          } else {
+            setUpdateFile(null);
+          }
+        } else {
+          setUpdateFile(null);
+        }
+      };
 
     const handleOpen = () => {
         setOpen(true);
@@ -186,16 +220,17 @@ const EditionProfileUser = () => {
     };
 
     const viewUser = () => {
-        db.collection('users').doc(`${user.id}`).onSnapshot(function (doc) {
+        db.collection('users').doc(`${props.id}`).onSnapshot(function (doc) {
             console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
     }
     useEffect(()=>{
-        if(user){
-            viewUser();
-        }
-    },[user]);
+        viewUser();
+        return () => {
+            setDataUser();
+        };
+    },[]);
     
     const [values, setValues] = React.useState({
         amount: '',
@@ -206,8 +241,8 @@ const EditionProfileUser = () => {
     });
 
     const onSubmit = async (data) => {
+        setOpen(false);
         console.log("data", data);
-
         const updateUser = {
             name: data.name,
             last_name: data.last_name,
@@ -215,11 +250,11 @@ const EditionProfileUser = () => {
             password: data.password,
             password_confirmation: data.password_confirmation,
         };
-        console.log("Usuario actualizado", updateUser);
 
         try {
-            const userData = await doUpdate(data);
-
+            const userData = await doUpdate(updateUser).then( () => {
+                handleuploadImage(props.id, updateFile)
+            });
             console.log("userData", userData);
 
         } catch (error) {
@@ -246,11 +281,16 @@ const EditionProfileUser = () => {
                 <Grid container spacing={0}>
                     <Grid item xs={12} sm={6} className={classes.father}>
                         <div>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+                            <Avatar alt="Remy Sharp" src={dataUser.image} className={classes.avatar} />
                             <br/>
                             <div>
+                            <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={(e) => {
+                                        handleAddFile(e.target.files[0]);
+                            }}/>
+                            <label htmlFor="icon-button-file">
                                 <PhotoCamera className={classes.camera}/>
-                                <Button className={classes.change}>Cambiar imagen</Button>
+                                {/* <Button className={classes.change}>Cambiar imagen</Button> */}
+                            </label>
                             </div>
                         </div>
                     </Grid>
@@ -354,7 +394,7 @@ const EditionProfileUser = () => {
                                     </FormControl>
                                     <Typography color="primary">{errors.password_confirmation?.message}</Typography>
                             <div className={classes.buttons}>
-                                <Link href="">
+                                <Link href="/users">
                                     <Button
                                     className={classes.cancel}
                                     >
@@ -386,7 +426,7 @@ const EditionProfileUser = () => {
                                         <h2 id="transition-modal-title">Confirmación</h2>
                                         <p id="transition-modal-description">¿Quiere guardar los cambios?</p>
                                         <div className={classes.containerbuttons}>
-                                        <Button variant="contained" color="primary" className={classes.button1} type="submit">
+                                        <Button variant="contained" color="primary" className={classes.button1} onClick={handleSubmit(onSubmit)} >
                                             Sí
                                         </Button>
                                         
@@ -396,7 +436,7 @@ const EditionProfileUser = () => {
                                         </div>
                                     </div>
                                     </Fade>
-                                </Modal>            
+                                </Modal>
                             </div>
                             
                         </form>

@@ -25,6 +25,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Avatar from '@material-ui/core/Avatar';
+import { Link } from "@material-ui/core";
 
 const schema = yup.object().shape({
     name: yup.string().required("Ingrese su nombre"),
@@ -151,13 +152,48 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const EditionProfileFoundation = () => {
+const EditionProfileFoundation = (props) => {
 
     const classes = useStyles();
-    const { user } = useAuth();
     const [dataUser, setDataUser] = useState()
-    const {updateFoundation: doUpdate} = foundations();
+    const {updateFoundation: doUpdate, savePhotoFoundation, photoFoundation} = foundations();
     const [open, setOpen] = React.useState(false);
+    const [updateFile, setUpdateFile] = useState(null);
+
+    const handleuploadImage = async (id, file) => {
+        const uploadTask = photoFoundation(id, file).put(file);
+        await uploadTask.on(
+            "state_changed",
+            function (snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Imagen está ' + progress + '% subida');
+            },
+            function (error) {
+                console.log(error);
+            },
+            function (){
+                uploadTask.snapshot.ref
+                    .getDownloadURL()
+                    .then(async function (downloadURL) {
+                        console.log('Imagen disponible', downloadURL)
+                        savePhotoFoundation(downloadURL)
+                    })
+            }
+        )
+    };
+    const handleAddFile = (e) => {
+        console.log('image', e)
+        if (e !== undefined) {
+          if (e.type.includes("image/")) {
+            console.log('infoImages', e);
+            setUpdateFile(e);
+          } else {
+            setUpdateFile(null);
+          }
+        } else {
+          setUpdateFile(null);
+        }
+      };
 
     const handleOpen = () => {
         setOpen(true);
@@ -184,16 +220,17 @@ const EditionProfileFoundation = () => {
     };
 
     const viewUser = () => {
-        db.collection('foundations').doc(`${user.id}`).onSnapshot(function (doc) {
+        db.collection('foundations').doc(`${props.id}`).onSnapshot(function (doc) {
             console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
     }
     useEffect(()=>{
-        if(user){
-            viewUser();
-        }
-    },[user]);
+        viewUser();
+        return () => {
+            setDataUser();
+        };
+    },[]);
     
     const [values, setValues] = React.useState({
         amount: '',
@@ -204,7 +241,7 @@ const EditionProfileFoundation = () => {
     });
 
     const onSubmit = async (data) => {
-        console.log("data", data);
+        setOpen(false);
 
         const updateFoundation = {
             name: data.name,
@@ -217,9 +254,9 @@ const EditionProfileFoundation = () => {
         console.log("Usuario actualizado", updateFoundation);
 
         try {
-            const userData = await doUpdate(data);
-
-            console.log("userData", userData);
+            const userData = await doUpdate(updateFoundation).then( () => {
+                handleuploadImage(props.id, updateFile)
+            });
 
         } catch (error) {
             if (error.response) {
@@ -245,12 +282,15 @@ const EditionProfileFoundation = () => {
                     <Grid container spacing={0}>
                         <Grid item xs={12} sm={6} className={classes.father}>
                             <div>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+                                <Avatar alt="Remy Sharp" src={dataUser.image} className={classes.avatar} />
                                 <br/>
-                                <div>
-                                    <PhotoCamera className={classes.camera}/>
-                                    <Button className={classes.change}>Cambiar imagen</Button>
-                                </div>
+                                <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={(e) => {
+                                        handleAddFile(e.target.files[0]);
+                            }}/>
+                            <label htmlFor="icon-button-file">
+                                <PhotoCamera className={classes.camera}/>
+                                {/* <Button className={classes.change}>Cambiar imagen</Button> */}
+                            </label>
                             </div>
                         </Grid>
                         <Grid item xs={12} sm={6} className={classes.right}>
@@ -365,11 +405,13 @@ const EditionProfileFoundation = () => {
                                 <Typography color="primary">{errors.password_confirmation?.message}</Typography>
                             
                                 <div className={classes.buttons}>
+                                <Link href="/foundations">
                                     <Button
                                     className={classes.cancel}
                                     >
                                     Cancelar
                                     </Button>
+                                </Link>
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -395,7 +437,7 @@ const EditionProfileFoundation = () => {
                                         <h2 id="transition-modal-title">Confirmación</h2>
                                         <p id="transition-modal-description">¿Quiere guardar los cambios?</p>
                                         <div className={classes.containerbuttons}>
-                                        <Button variant="contained" color="primary" className={classes.button1} type="submit">
+                                        <Button variant="contained" color="primary" className={classes.button1} onClick={handleSubmit(onSubmit)} >
                                             Sí
                                         </Button>
                                         

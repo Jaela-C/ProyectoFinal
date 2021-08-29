@@ -9,7 +9,14 @@ const FoundationUpdate = () =>{
     console.log('idUser', id)
 
     return(
-        <EditionProfileFoundation id = {id}/>
+        <>
+            {
+                id !== undefined ?
+                (
+                    <EditionProfileFoundation id = {id}/>
+                ) : "cargando.."
+            }
+        </>
     );
 }
 export default FoundationUpdate;
