@@ -24,6 +24,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuth } from "@/hocs/useAuth";
+import EditIcon from '@material-ui/icons/Edit';
 
 const schema = yup.object().shape({
     content: yup
@@ -170,6 +171,58 @@ const ViewPublication =(props)=>{
         }
     }
 
+     const optionAdmin = () => {
+        if(user.role == "ADMIN"){
+            return(
+                <>
+                <Link href={`publications/foundations/update/${props.props.props.id}`}>
+                            <IconButton aria-label="contactar con la fundacion">
+                                <EditIcon/>
+                            </IconButton>
+                        </Link>
+                        <IconButton aria-label="Eliminar publicacion" onClick={handleOpen}>
+                            <DeleteIcon/>
+                        </IconButton>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            className={classes.modal}
+                            open={open}
+                            onClose={handleClose}
+                            closeAfterTransition
+                            BackdropComponent={Backdrop}
+                            BackdropProps={{
+                            timeout: 500,
+                            }}
+                        >
+                            <Fade in={open}>
+                            <div className={classes.modalpaper}>
+                                <h2 id="transition-modal-title">Confirmación</h2>
+                                <p id="transition-modal-description">¿Esta seguro de borrar esta publicación?</p>
+                                <div className={classes.containerbuttons}>
+                                <Button variant="contained" color="primary" className={classes.button1} onClick={() => {handleDelete(props.props.props.id)}}>
+                                    Sí
+                                </Button>
+                                
+                                    <Button color="secondary" className={classes.button2} onClick={handleClose}>
+                                        No
+                                    </Button>
+                                </div>
+                            </div>
+                            </Fade>
+                        </Modal>
+                        </>
+            );
+        } else{
+            return(
+            <IconButton aria-label="contactar con la fundacion">
+                <WhatsAppIcon/>
+            </IconButton>
+            );
+            
+        }
+    }
+
     return (
         <div className={classes.root} key={props.id}>
             <Grid container spacing={0} className={classes.container}>
@@ -210,42 +263,7 @@ const ViewPublication =(props)=>{
                         <IconButton type="submit">
                             <SendIcon/>
                         </IconButton>
-                        <Link href={`publications/foundations/update/${props.props.props.id}`}>
-                            <IconButton aria-label="contactar con la fundacion">
-                                <WhatsAppIcon/>
-                            </IconButton>
-                        </Link>
-                        <IconButton aria-label="Eliminar publicacion" onClick={handleOpen}>
-                            <DeleteIcon/>
-                        </IconButton>
-                        <Modal
-                            aria-labelledby="transition-modal-title"
-                            aria-describedby="transition-modal-description"
-                            className={classes.modal}
-                            open={open}
-                            onClose={handleClose}
-                            closeAfterTransition
-                            BackdropComponent={Backdrop}
-                            BackdropProps={{
-                            timeout: 500,
-                            }}
-                        >
-                            <Fade in={open}>
-                            <div className={classes.modalpaper}>
-                                <h2 id="transition-modal-title">Confirmación</h2>
-                                <p id="transition-modal-description">¿Esta seguro de borrar esta publicación?</p>
-                                <div className={classes.containerbuttons}>
-                                <Button variant="contained" color="primary" className={classes.button1} onClick={() => {handleDelete(props.props.props.id)}}>
-                                    Sí
-                                </Button>
-                                
-                                    <Button color="secondary" className={classes.button2} onClick={handleClose}>
-                                        No
-                                    </Button>
-                                </div>
-                            </div>
-                            </Fade>
-                        </Modal>
+                        {optionAdmin()}
                     </form>
 
                 </Grid>
