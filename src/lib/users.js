@@ -21,7 +21,6 @@ export const users = () => {
     }
 
     const updateUser = async (value) => {
-        console.log('Daros de usuarios imagen', value)
         try{
             await userA.updateEmail(`${value.email}`).then(() => {
                 console.log('Correo actualizado')

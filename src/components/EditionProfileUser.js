@@ -252,10 +252,9 @@ const EditionProfileUser = (props) => {
         };
 
         try {
-            const userData = await doUpdate(updateUser).then( () => {
+            await doUpdate(updateUser).then( () => {
                 handleuploadImage(props.id, updateFile)
             });
-            console.log("userData", userData);
 
         } catch (error) {
             if (error.response) {
@@ -289,7 +288,6 @@ const EditionProfileUser = (props) => {
                             }}/>
                             <label htmlFor="icon-button-file">
                                 <PhotoCamera className={classes.camera}/>
-                                {/* <Button className={classes.change}>Cambiar imagen</Button> */}
                             </label>
                             </div>
                         </div>

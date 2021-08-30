@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
@@ -7,8 +8,20 @@ import Comments from "@/components/Comments";
 export const publications = () => {
     const router = useRouter();
     const { user } = useAuth();
+    const [ imageUser, setImageUser ] = useState();
 
     console.log('user publication', user)
+
+    const photoPublication = (id, file) => {
+        return storage.ref(`/publications/${id}`);
+    }
+
+    const savePhotoPublication = async (url, idPublication) => {
+        console.log('idPublication', idPublication)
+        await db.collection('publications').doc(idPublication).update({
+            image: url
+        })
+    }
 
     const sendComments = async (dataComments, idPublication) => {
         try {
@@ -27,15 +40,20 @@ export const publications = () => {
     const registerPublication = async (value) => {
         console.log('valor', value)
         try{
+            db.collection('foundations').doc(`${user.id}`).onSnapshot(function (doc) {
+                console.log('datos de usuario registrar publicación', doc.data().image)
+                setImageUser(doc.data().image);
+            })
             await db.collection('publications').doc().set({
                 date_ex: value.date_ex,
                 description: value.description,
-                image: 'image.png',
+                image: url,
                 last_name: value.last_name,
                 name: value.name,
                 phone: value.phone,
                 title: value.title,
-                id_user: user.id
+                id_user: user.id,
+                image_user: imageUser,
             })
             .then(
                 alert('Los datos se guardaron correctamente'),
@@ -51,16 +69,20 @@ export const publications = () => {
     }
     
     const updatePublication = async (value, id) => {
+        console.log('dataUpdate', value + 'id' + id)
+        db.collection('foundations').doc(`${user.id}`).onSnapshot(function (doc) {
+            setImageUser(doc.data().image);
+        })
         try{
             await db.collection('publications').doc(id).update({
                 date_ex: value.date_ex,
                 description: value.description,
-                image: 'image.png',
                 last_name: value.last_name,
                 name: value.name,
                 phone: value.phone,
                 title: value.title,
-                id_user: user.id
+                id_user: user.id,
+                image_user: imageUser,
             })
             .then(
                 alert('Los datos se modificaron correctamente'),
@@ -96,6 +118,8 @@ export const publications = () => {
         sendComments,
         registerPublication,
         updatePublication,
-        deletePublication
+        deletePublication,
+        savePhotoPublication,
+        photoPublication,
     };
 }
