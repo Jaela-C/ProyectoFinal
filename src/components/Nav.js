@@ -85,7 +85,7 @@ export default function MainMenu() {
           : user.role ==="ADMIN" ?
           <>
           <Grid container spacing={3}>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               <Image
                 src="/logonav.png"
                 alt="Imagen de publicación"
@@ -93,7 +93,7 @@ export default function MainMenu() {
                 height={50}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={7}>
               <Link href="/users" color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonIcon />
@@ -137,7 +137,7 @@ export default function MainMenu() {
               </IconButton>{"PERFILES"}</Link>
             </Grid>
             <Grid item xs={3} className={classes.iconuser}>
-            <Link href="/users" color="inherit" >
+            <Link href="/administration" color="inherit" >
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
               </IconButton>{user.name}</Link>

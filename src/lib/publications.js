@@ -47,13 +47,14 @@ export const publications = () => {
             await db.collection('publications').doc().set({
                 date_ex: value.date_ex,
                 description: value.description,
-                image: 'prueba',
                 last_name: value.last_name,
                 name: value.name,
                 phone: value.phone,
                 title: value.title,
                 id_user: user.id,
+                image: value.image,
                 image_user: imageUser,
+                comments: []
             })
             .then(
                 alert('Los datos se guardaron correctamente'),

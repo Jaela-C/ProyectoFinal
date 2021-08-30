@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {useForm} from "react-hook-form";
 import { publications } from "../lib/publications";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -106,7 +106,44 @@ const useStyles = makeStyles((theme) => ({
 const RegisterPublication = () => {
 
     const classes = useStyles();
-    const {registerPublication: doRegister} = publications();
+    const {registerPublication: doRegister, photoPublication, savePhotoPublication} = publications();
+    const [updateFile, setUpdateFile] = useState(null);
+    const [url, setUrl] = useState(null);
+
+    const handleuploadImage = async (id, file) => {
+        const uploadTask = photoPublication(id, file).put(file);
+        await uploadTask.on(
+            "state_changed",
+            function (snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Imagen está ' + progress + '% subida');
+            },
+            function (error) {
+                console.log(error);
+            },
+            function (){
+                uploadTask.snapshot.ref
+                    .getDownloadURL()
+                    .then(async function (downloadURL) {
+                        console.log('Imagen disponible', downloadURL)
+                        setUrl(downloadURL)
+                    })
+            }
+        )
+    };
+    const handleAddFile = (e) => {
+        console.log('image', e)
+        if (e !== undefined) {
+          if (e.type.includes("image/")) {
+            console.log('infoImages', e);
+            setUpdateFile(e);
+          } else {
+            setUpdateFile(null);
+          }
+        } else {
+          setUpdateFile(null);
+        }
+      };
 
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
@@ -126,22 +163,22 @@ const RegisterPublication = () => {
 
     const onSubmit = async (data) => {
         console.log("data", data);
+        
+        handleuploadImage(data.title, updateFile);
 
         const newPublication = {
             date_ex: data.date_ex,
             description: data.description,
-            image: data.image,
             last_name: data.last_name,
             name: data.name,
             phone: data.phone,
             title: data.title,
+            image: url
         };
-        console.log("Nueva publicación", newPublication);
 
         try {
-            const dataPublication = await doRegister(data);
-
-            console.log("dataPublication", dataPublication);
+            await doRegister(newPublication)
+            console.log("dataPublication", newPublication);
 
         } catch (error) {
             if (error.response) {
@@ -254,7 +291,9 @@ const RegisterPublication = () => {
                             defaultValue="Inserte una imagen"
                             fullWidth
                         />
-                        <input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
+                        <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={(e) => {
+                                        handleAddFile(e.target.files[0]);
+                            }}/>
                         <label htmlFor="icon-button-file">
                             <IconButton color="default" aria-label="upload picture" component="span">
                                 <PhotoCamera />
