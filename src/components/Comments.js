@@ -53,7 +53,7 @@ export default function BottomAppBar(props) {
         {dataComments.map((data, index) => (
             <ListItem key={index} className={classes.avatar}>
                 <ListItemAvatar>
-                    <Avatar alt="Usuario" src="/static/images/avatar/1.jpg" />
+                    <Avatar alt="Usuario" src={user.image} />
                 </ListItemAvatar>
                 <ListItemText primary={data.name_user} secondary={data.content} />
             </ListItem>

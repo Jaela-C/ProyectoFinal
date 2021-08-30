@@ -135,11 +135,48 @@ const useStyles = makeStyles((theme) => ({
 
 const EditionPublication = (props) => {
 
+    console.log('props edition publicaction', props)
     const classes = useStyles();
     const { user } = useAuth();
     const [dataPublication, setDataPublication] = useState()
-    const {updatePublication: doUpdate} = publications();
+    const {updatePublication: doUpdate, photoPublication, savePhotoPublication} = publications();
     const [open, setOpen] = React.useState(false);
+    const [updateFile, setUpdateFile] = useState(null);
+
+    const handleuploadImage = async (id, file) => {
+        const uploadTask = photoPublication(id, file).put(file);
+        await uploadTask.on(
+            "state_changed",
+            function (snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Imagen está ' + progress + '% subida');
+            },
+            function (error) {
+                console.log(error);
+            },
+            function (){
+                uploadTask.snapshot.ref
+                    .getDownloadURL()
+                    .then(async function (downloadURL) {
+                        console.log('Imagen disponible', downloadURL)
+                        savePhotoPublication(downloadURL, props.id)
+                    })
+            }
+        )
+    };
+    const handleAddFile = (e) => {
+        console.log('image', e)
+        if (e !== undefined) {
+          if (e.type.includes("image/")) {
+            console.log('infoImages', e);
+            setUpdateFile(e);
+          } else {
+            setUpdateFile(null);
+          }
+        } else {
+          setUpdateFile(null);
+        }
+      };
 
     const handleOpen = () => {
         setOpen(true);
@@ -154,16 +191,17 @@ const EditionPublication = (props) => {
     });
     
     const viewPublication = () => {
-        db.collection('foundations').doc(`${user.id}`).collection('publications').doc(props.id).onSnapshot(function (doc) {
+        db.collection('publications').doc(props.id).onSnapshot(function (doc) {
             console.log('datos de publicación', doc.data())
             setDataPublication(doc.data())
         })
     }
     useEffect(()=>{
-        if(user){
-            viewPublication();
-        }
-    },[user]);
+        viewPublication();
+        return () => {
+            setDataPublication();
+        };
+    },[]);
     
     const [values, setValues] = React.useState({
         amount: '',
@@ -174,9 +212,8 @@ const EditionPublication = (props) => {
     });
 
     const onSubmit = async (data) => {
-        console.log("data", data);
-
-        const updatePublication = {
+        setOpen(false);
+        const dataPublication = {
             date_ex: data.date_ex,
             description: data.description,
             image: data.image,
@@ -185,13 +222,12 @@ const EditionPublication = (props) => {
             phone: data.phone,
             title: data.title,
         };
-        console.log("Publicación editada", updatePublication);
 
         try {
-            const dataPublication = await doUpdate(data, props.id);
-
-            console.log("dataPublication", dataPublication);
-
+            await doUpdate(dataPublication, props.id).then( () => { 
+                handleuploadImage(props.id, updateFile)
+                console.log("Publicación editada---", dataPublication);
+            });
         } catch (error) {
             if (error.response) {
                 console.error(error.response);
@@ -311,11 +347,11 @@ const EditionPublication = (props) => {
                             defaultValue="Inserte una imagen"
                             fullWidth
                         />
-                        <input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
+                        <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={(e) => {
+                                        handleAddFile(e.target.files[0]);
+                            }}/>
                         <label htmlFor="icon-button-file">
-                            <IconButton color="default" aria-label="upload picture" component="span">
-                                <PhotoCamera />
-                            </IconButton>
+                            <PhotoCamera className={classes.camera}/>
                         </label>
                     </div>
                     <Button
@@ -343,7 +379,7 @@ const EditionPublication = (props) => {
                                 <h2 id="transition-modal-title">Confirmación</h2>
                                 <p id="transition-modal-description">¿Quiere guardar cambios?</p>
                                 <div className={classes.containerbuttons}>
-                                <Button variant="contained" color="primary" className={classes.button1} type="submit">
+                                <Button variant="contained" color="primary" className={classes.button1} onClick={handleSubmit(onSubmit)}>
                                     Sí
                                 </Button>
                                 <Button color="secondary" className={classes.button2} onClick={handleClose}>

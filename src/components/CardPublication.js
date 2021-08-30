@@ -114,17 +114,29 @@ export default function CardPublication(props){
             <CardContent>
                 <ListItem className={classes.avatar}>
                     <ListItemAvatar>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                    {
+                        props.props.image_user ?
+                            <Avatar alt="Remy Sharp" src={props.props.image_user} />
+                        : <Avatar alt="Remy Sharp" src="/avatar.png" />
+                    }
                     </ListItemAvatar>
                         <ListItemText primary={props.props.name} secondary={props.props.phone} />
                 </ListItem>
             </CardContent>
                         <CardActionArea onClick={handleOpen}>
+                        {
+                            props.props.image ?
                             <CardMedia
                                 className={classes.media}
-                                image="/static/images/cards/contemplative-reptile.jpg"
+                                image={props.props.image}
                                 title="Contemplative Reptile"
                             />
+                            : <CardMedia
+                                className={classes.media}
+                                image="/logo.jpeg"
+                                title="Contemplative Reptile"
+                            />
+                        }
                         </CardActionArea>
                         <CardContent className={classes.des}>
                             <CardActionArea onClick={handleOpen}>

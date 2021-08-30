@@ -254,7 +254,7 @@ const EditionProfileFoundation = (props) => {
         console.log("Usuario actualizado", updateFoundation);
 
         try {
-            const userData = await doUpdate(updateFoundation).then( () => {
+            await doUpdate(updateFoundation).then( () => {
                 handleuploadImage(props.id, updateFile)
             });
 
