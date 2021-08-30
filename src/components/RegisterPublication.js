@@ -3,6 +3,7 @@ import {useForm} from "react-hook-form";
 import { publications } from "../lib/publications";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -39,6 +40,11 @@ const schema = yup.object().shape({
 const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: '#5081E5',
+    },
+    textField: {
+        width: "-webkit-fill-available",
+        backgroundColor: "#9CBBF2",
+        borderRadius: "5%"
     },
     colorLabel: {
         color: "#EC323D"
@@ -91,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         margin:"11px 0px",
         width: 200,
+        backgroundColor: "#9CBBF2",
         borderRadius: "5%",
     },
     root1: {
@@ -206,6 +213,7 @@ const RegisterPublication = () => {
                         margin="normal"
                         required
                         fullWidth
+                        className={clsx(classes.textField)}
                         id="title"
                         {...register('title', { required: true })}
                         label="Ingrese un título"
@@ -220,6 +228,7 @@ const RegisterPublication = () => {
                         margin="normal"
                         required
                         fullWidth
+                        className={clsx(classes.textField)}
                         id="name"
                         {...register('name', { required: true })}
                         label="Ingrese el nombre del responsable"
@@ -234,6 +243,7 @@ const RegisterPublication = () => {
                         margin="normal"
                         required
                         fullWidth
+                        className={clsx(classes.textField)}
                         id="last_name"
                         {...register('last_name', { required: true })}
                         label="Ingrese el apellido del responsable"
@@ -248,6 +258,7 @@ const RegisterPublication = () => {
                         margin="normal"
                         required
                         fullWidth
+                        className={clsx(classes.textField)}
                         id="phone"
                         {...register('phone', { required: true })}
                         label="Ingrese el numero del contacto"
@@ -275,6 +286,7 @@ const RegisterPublication = () => {
                         label="Ingrese una descripción"
                         multiline
                         required
+                        className={clsx(classes.textField)}
                         rows={3}
                         variant="outlined"
                         fullWidth
@@ -287,6 +299,7 @@ const RegisterPublication = () => {
                         <TextField
                             variant="outlined"
                             disabled
+                            className={clsx(classes.textField)}
                             id="standard-disabled"
                             defaultValue="Inserte una imagen"
                             fullWidth

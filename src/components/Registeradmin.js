@@ -19,6 +19,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import {yupResolver} from "@hookform/resolvers/yup";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -56,6 +57,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginBottom: theme.spacing(8),
   },
+  root1: {
+    margin:"11px 0px",
+    display:"flex",
+    textAlign: "center"
+},
   avatar: {
     margin: theme.spacing(5, 0, 0),
     backgroundColor: "#FFFFFF",
@@ -83,6 +89,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#9CBBF2",
     borderRadius: "5%"
   },
+  input: {
+    display: 'none',
+},
 }));
 
 
@@ -278,6 +287,26 @@ const Registeradmin = () => {
                                 className={clsx(classes.textField)}
                             />
                             <Typography color="primary">{errors.name_foundation?.message}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <div className={classes.root1}>
+                            <TextField
+                                variant="outlined"
+                                disabled
+                                id="standard-disabled"
+                                defaultValue="Inserte un comprobante"
+                                fullWidth
+                                className={clsx(classes.textField)}
+                            />
+                            <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={(e) => {
+                                            handleAddFile(e.target.files[0]);
+                                }}/>
+                            <label htmlFor="icon-button-file">
+                                <IconButton color="default" aria-label="upload picture" component="span">
+                                <FileCopyIcon />
+                                </IconButton>
+                            </label>
+                        </div>    
                         </Grid>
                     </Grid>
                     <Button

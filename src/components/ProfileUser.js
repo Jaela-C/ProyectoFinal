@@ -100,10 +100,8 @@ const ProfileUser = () => {
         })
     }
     useEffect(()=>{
-        if(user){
-            viewUser();
-        }
-    },[user]);
+      viewUser();
+    },[]);
 
     return (
 

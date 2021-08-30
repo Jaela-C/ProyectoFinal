@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { admin } from '@/lib/administration';
 import { Link } from "@material-ui/core";
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -22,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
     title: {
         color: "#FFFFFF",
         fontSize: 40
+    },
+    textField: {
+        width: "-webkit-fill-available",
+        backgroundColor: "#9CBBF2",
+        borderRadius: "5%"
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -124,6 +130,7 @@ const ViewRequest = (id) => {
                             variant="outlined"
                             margin="normal"
                             fullWidth
+                            className={clsx(classes.textField)}
                             disabled
                             defaultValue={request.name_foundation}
                             id="name"
@@ -138,6 +145,7 @@ const ViewRequest = (id) => {
                             fullWidth
                             id="username"
                             disabled
+                            className={clsx(classes.textField)}
                             defaultValue={request.name + ' ' + request.last_name}
                             label="Nombre de usuario"
                             name="username"
@@ -149,6 +157,7 @@ const ViewRequest = (id) => {
                             margin="normal"
                             fullWidth
                             id="email"
+                            className={clsx(classes.textField)}
                             disabled
                             defaultValue={request.email}
                             label="Correo electrónico"
@@ -161,6 +170,7 @@ const ViewRequest = (id) => {
                                 variant="outlined"
                                 disabled
                                 id="standard-disabled"
+                                className={clsx(classes.textField)}
                                 defaultValue="Comprobante"
                                 fullWidth
                             />
@@ -177,6 +187,7 @@ const ViewRequest = (id) => {
                             fullWidth
                             id="state"
                             disabled
+                            className={clsx(classes.textField)}
                             defaultValue={request.role == "REQUEST" ? "Por aprobar" : "..."}
                             label="Estado"
                             name="state"

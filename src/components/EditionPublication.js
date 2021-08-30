@@ -17,6 +17,7 @@ import { useAuth } from '../hocs/useAuth'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import clsx from 'clsx';
 
 
 const schema = yup.object().shape({
@@ -52,6 +53,11 @@ const useStyles = makeStyles((theme) => ({
     login: {
         color: "#FFFFFF",
         fontSize: 40
+    },
+    textField: {
+        width: "-webkit-fill-available",
+        backgroundColor: "#9CBBF2",
+        borderRadius: "5%"
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -97,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         margin:"11px 0px",
         width: 200,
+        backgroundColor: "#9CBBF2",
         borderRadius: "5%",
     },
     root1: {
@@ -213,7 +220,7 @@ const EditionPublication = (props) => {
 
     const onSubmit = async (data) => {
         setOpen(false);
-        const dataPublication = {
+        const newPublication = {
             date_ex: data.date_ex,
             description: data.description,
             image: data.image,
@@ -224,9 +231,9 @@ const EditionPublication = (props) => {
         };
 
         try {
-            await doUpdate(dataPublication, props.id).then( () => { 
+            await doUpdate(newPublication, props.id).then( () => { 
                 handleuploadImage(props.id, updateFile)
-                console.log("Publicación editada---", dataPublication);
+                console.log("Publicación editada---", newPublication);
             });
         } catch (error) {
             if (error.response) {
@@ -255,6 +262,7 @@ const EditionPublication = (props) => {
                     <TextField
                         variant="outlined"
                         margin="normal"
+                        className={clsx(classes.textField)}
                         required
                         fullWidth
                         id="title"
@@ -276,6 +284,7 @@ const EditionPublication = (props) => {
                         {...register('name', { required: true })}
                         label="Ingrese el nombre del responsable"
                         name="name"
+                        className={clsx(classes.textField)}
                         defaultValue={dataPublication.name}
                         autoComplete="text"
                         autoFocus
@@ -291,6 +300,7 @@ const EditionPublication = (props) => {
                         {...register('last_name', { required: true })}
                         label="Ingrese el apellido del responsable"
                         name="last_name"
+                        className={clsx(classes.textField)}
                         defaultValue={dataPublication.last_name}
                         autoComplete="text"
                         autoFocus
@@ -303,6 +313,7 @@ const EditionPublication = (props) => {
                         required
                         fullWidth
                         id="phone"
+                        className={clsx(classes.textField)}
                         {...register('phone', { required: true })}
                         label="Ingrese el numero del contacto"
                         name="phone"
@@ -318,6 +329,7 @@ const EditionPublication = (props) => {
                         label="Fecha de expiracion"
                         type="date"
                         required
+                        className={clsx(classes.textField)}
                         defaultValue="2021-07-15"
                         className={classes.textFieldDate}
                         InputLabelProps={{
@@ -330,6 +342,7 @@ const EditionPublication = (props) => {
                         label="Ingrese una descripción"
                         multiline
                         required
+                        className={clsx(classes.textField)}
                         rows={3}
                         variant="outlined"
                         fullWidth
@@ -343,6 +356,7 @@ const EditionPublication = (props) => {
                         <TextField
                             variant="outlined"
                             disabled
+                            className={clsx(classes.textField)}
                             id="standard-disabled"
                             defaultValue="Inserte una imagen"
                             fullWidth

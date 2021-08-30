@@ -75,7 +75,7 @@ const TypeUser = () => {
         <Container component="main" maxWidth="xs" className={classes.container}>
         <CssBaseline/>
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>LOGO</Avatar>
+                <Avatar className={classes.avatar} src="/logo.jpeg"></Avatar>
                 <Grid container style={{paddingTop: "30px"}}>
                     <Grid item xs={9}>
                         <Typography className={classes.message}>¿Ya tienes cuenta?</Typography>

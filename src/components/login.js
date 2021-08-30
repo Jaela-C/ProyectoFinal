@@ -116,7 +116,7 @@ const LoginForm = () => {
         <Container component="main" maxWidth="xs" className={classes.container}>
         <CssBaseline/>
         <div className={classes.paper}>
-            <Avatar className={classes.avatar} alt="Ícono de usuario" src="https://i.pinimg.com/originals/5d/67/98/5d6798b9aea22ca240e63a5b9acb3424.png" />
+            <Avatar className={classes.avatar} alt="Ícono de usuario" src="/user_icon.png" />
             <Grid container style={{paddingTop: "30px"}}>
                 <Grid item xs={9}>
                     <Typography>¿No tienes una cuenta?</Typography>
@@ -149,6 +149,7 @@ const LoginForm = () => {
                     autoFocus
                     error={!!errors.email}
                     helperText={errors.email?.message}
+                    className={clsx(classes.textField)}
                 />
 
                 <FormControl className={clsx(classes.textField)} variant="outlined">

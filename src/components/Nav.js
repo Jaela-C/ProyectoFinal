@@ -46,7 +46,7 @@ export default function MainMenu() {
   const { user } = useAuth();
   console.log('nav ', user);
 
-  const navUser = () => {
+  const nav = () => {
     if(user){
       return (
         <div >
@@ -94,7 +94,7 @@ export default function MainMenu() {
               />
             </Grid>
             <Grid item xs={7}>
-              <Link href="/users" color="inherit" className={classes.usernav}>
+              <Link href="/foundations" color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonIcon />
               </IconButton>{"MI PERFIL"}</Link>
@@ -166,10 +166,33 @@ export default function MainMenu() {
         </div>
     );
     }
+    else{
+      return (
+        <div >
+        <AppBar position="static">
+          <Toolbar>
+          <Grid container spacing={3}>
+            <Grid item xs={3}>
+              <Image
+                src="/logonav.png"
+                alt="Imagen de publicación"
+                width={100}
+                height={50}
+              />
+            </Grid>
+            <Grid item xs={9} className={classes.iconuser}>
+              <Link href="/login" color="inherit" className={classes.nav}>{"Iniciar Sesión"}</Link>
+              <Link href="/type" color="inherit" className={classes.nav}>{"Registrarse"}</Link>
+            </Grid>
+          </Grid>
+          </Toolbar>
+        </AppBar>
+        </div>
+    );}
   }
   return (
       <div className={classes.root}>
-        {navUser()}
+        {nav()}
       </div>
   );
 }
