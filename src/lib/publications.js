@@ -47,7 +47,7 @@ export const publications = () => {
             await db.collection('publications').doc().set({
                 date_ex: value.date_ex,
                 description: value.description,
-                image: url,
+                image: 'prueba',
                 last_name: value.last_name,
                 name: value.name,
                 phone: value.phone,
