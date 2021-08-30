@@ -113,14 +113,12 @@ const ViewRequest = (id) => {
 
     const viewProfileUser = () => {
         db.collection('users').doc(`${id.id}`).onSnapshot(function (doc) {
-            console.log('usuarioadad', doc.data())
             setUser(doc.data())
         })
     }
 
     const viewProfileFoundation = () => {
         db.collection('foundations').doc(`${id.id}`).onSnapshot(function (doc) {
-            console.log('foundat', doc.data())
             setFoundation(doc.data())
         })
     }
@@ -154,7 +152,7 @@ const ViewRequest = (id) => {
                 <>
                     <div className={classes.paper}>
                         <div className={classes.containertavatar}>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+                            <Avatar alt="Remy Sharp" src={user.image} className={classes.avatar} />
                         </div>
                             <Typography component="h3" variant="h3" className={classes.title}>
                                 {user.name + ' ' +  user.last_name}
@@ -240,7 +238,7 @@ const ViewRequest = (id) => {
                 <>
                 <div className={classes.paper}>
                         <div className={classes.containertavatar}>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+                            <Avatar alt="Remy Sharp" src={foundation.image} className={classes.avatar} />
                         </div>
                             <Typography component="h3" variant="h3" className={classes.title}>
                                 {foundation.name + ' ' +  foundation.last_name}
@@ -263,7 +261,7 @@ const ViewRequest = (id) => {
                                 margin="normal"
                                 fullWidth
                                 disabled
-                                defaultValue={user.role == "ADMIN" ? 'Fundación' : ''}
+                                defaultValue={foundation.role == "ADMIN" ? 'Fundación' : ''}
                                 id="type"
                                 label="Tipo de usuario"
                                 name="type"
@@ -276,7 +274,7 @@ const ViewRequest = (id) => {
                                 fullWidth
                                 id="state"
                                 disabled
-                                defaultValue={user.role == "REQUEST" ? 'Por aprobar' : 'Aprobado'}
+                                defaultValue={foundation.role == "REQUEST" ? 'Por aprobar' : 'Aprobado'}
                                 label="Estado"
                                 name="state"
                                 type="text"
