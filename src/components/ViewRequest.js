@@ -10,6 +10,7 @@ import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { admin } from '@/lib/administration';
+import { Link } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -183,11 +184,13 @@ const ViewRequest = (id) => {
                             autoFocus                        
                         />
                         <div className={classes.butons}>
-                            <Button
-                                className={classes.cancel}
-                            >
-                                Rechazar
-                            </Button>
+                            <Link href="/administration">
+                                <Button
+                                    className={classes.cancel}
+                                >
+                                    Rechazar
+                                </Button>
+                            </Link>
                             <Button
                                 onClick={() => { updateRolFoundation(id.id) }}
                                 variant="contained"
