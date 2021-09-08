@@ -102,7 +102,7 @@ export default function CardPublication(props){
         }
         else{
             return(
-                <IconButton aria-label="add to favorites">
+                <IconButton aria-label="add to favorites" href="https://api.whatsapp.com/send?phone=593987610019&text=Quiero%20ayudar">
                     <WhatsAppIcon/>
                 </IconButton>
             );

@@ -27,8 +27,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   nav: {
-    flexGrow: 0.05,
-    marginTop: "4%"
+    marginRight: 20,
   },
   icons: {
     color: '#FFFFFFF',
@@ -37,8 +36,17 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "8%"
   },
   iconuser:{
-    textAlign: "end"
-  }
+    textAlign: "end",
+    position: 'relative',
+  },
+  right:{
+    height:40,
+    width:'100%',
+    position: 'absolute',
+    top: '46%',
+    marginTop: -10,
+    textAlign: 'right',
+  },
 }));
 
 export default function MainMenu() {
@@ -108,7 +116,7 @@ export default function MainMenu() {
               </IconButton>{"REGISTRAR PUBLICACIÓN"}</Link>
             </Grid>
             <Grid item xs={3} className={classes.iconuser}>
-            <Link href="/users" color="inherit" >
+            <Link href="/foundations" color="inherit" >
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
               </IconButton>{user.name}</Link>
@@ -181,8 +189,10 @@ export default function MainMenu() {
               />
             </Grid>
             <Grid item xs={9} className={classes.iconuser}>
+            <div className={classes.right}>
               <Link href="/login" color="inherit" className={classes.nav}>{"Iniciar Sesión"}</Link>
               <Link href="/type" color="inherit" className={classes.nav}>{"Registrarse"}</Link>
+            </div>
             </Grid>
           </Grid>
           </Toolbar>
