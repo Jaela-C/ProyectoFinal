@@ -74,6 +74,8 @@ export default function CardPublication(props){
     const { user } = useAuth();
     const {deletePublication: doDelete} = publications();
     const [open, setOpen] = useState(false);
+    const URLPhone = "https://api.whatsapp.com/send?phone=593" + props.props.phone + "&text=Hola%20" + props.props.name + ",%20quiero%20ayudar!";
+
     const handleDelete = async(id) => {
         try {
             await doDelete(id);
@@ -102,7 +104,7 @@ export default function CardPublication(props){
         }
         else{
             return(
-                <IconButton aria-label="add to favorites" href="https://api.whatsapp.com/send?phone=593987610019&text=Quiero%20ayudar">
+                <IconButton aria-label="add to favorites" href={URLPhone}>
                     <WhatsAppIcon/>
                 </IconButton>
             );

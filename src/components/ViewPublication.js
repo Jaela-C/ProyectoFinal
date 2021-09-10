@@ -121,6 +121,7 @@ const ViewPublication =(props)=>{
     const {deletePublication: doDelete, sendComments: comments} = publications();
     const [open, setOpen] = React.useState(false);
     const { user } = useAuth();
+    const URLPhone = "https://api.whatsapp.com/send?phone=593" + props.props.props.phone + "&text=Hola%20" + props.props.props.name + ",%20quiero%20ayudar!";
 
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
@@ -217,7 +218,7 @@ const ViewPublication =(props)=>{
             );
         } else{
             return(
-            <IconButton aria-label="contactar con la fundacion">
+            <IconButton aria-label="contactar con la fundacion" href={URLPhone}>
                 <WhatsAppIcon/>
             </IconButton>
             );
