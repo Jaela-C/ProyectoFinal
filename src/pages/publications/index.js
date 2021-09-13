@@ -104,10 +104,12 @@ const publications = () =>{
             <Grid container spacing={2} className={classes.container}>
             {console.log('mensaje 1', dataPublications)}
             {
-                dataPublications.map((data) => {
+                dataPublications.map((data, index) => {
                     console.log('data', data)
                     return(
-                        <Grid item xs={6}>
+                        <Grid item xs={6}
+                            key={index}
+                        >
                             <CardPublication props = {data}/>
                         </Grid>
                     );

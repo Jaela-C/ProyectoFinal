@@ -69,9 +69,11 @@ const administration = () =>{
             <div className={classes.root}>
             <Grid container spacing={2} className={classes.container}>
             {
-                dataProfile.map((data) => {
+                dataProfile.map((data, index) => {
                     return(
-                        <Grid item xs={6}>
+                        <Grid item xs={6}
+                            key={index}
+                        >
                             <Users props = {data}/>
                         </Grid>
                     );

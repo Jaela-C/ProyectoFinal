@@ -76,11 +76,13 @@ const administration = () =>{
             <Grid container spacing={2} className={classes.container}>
             {console.log('solicitudes', dataRequest)}
             {
-                dataRequest.map((data) => {
+                dataRequest.map((data, index) => {
                     console.log('data', data)
                     if(data.role == "REQUEST") {
                         return(
-                            <Grid item xs={6}>
+                            <Grid item xs={6}
+                                key={index}
+                            >
                                 <Request props = {data}/>
                             </Grid>
                         );
