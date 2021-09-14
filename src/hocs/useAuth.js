@@ -116,7 +116,9 @@ function useAuthProvider() {
 
     async function logout() {
         try {
-            await auth.signOut();
+            await auth.signOut().then(() => {
+                router.push('/')
+            });
             handleUser(false);
         } catch (error) {
             throw error;

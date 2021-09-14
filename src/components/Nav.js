@@ -13,6 +13,7 @@ import PersonPinIcon from '@material-ui/icons/PersonPin';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,8 +52,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MainMenu() {
   const classes = useStyles();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   console.log('nav ', user);
+
+  const handleLogout = async () => {
+    logout();
+  };
 
   const nav = () => {
     if(user){
@@ -86,7 +91,15 @@ export default function MainMenu() {
             <Link href="/users" color="inherit" >
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
-              </IconButton>{user.name}</Link>
+              </IconButton>{user.name}
+            </Link>
+            <Link onClick={() => {
+              handleLogout();
+            }} color="inherit">
+              <IconButton color="inherit" aria-label="upload picture" component="span">
+                <ExitToAppIcon />
+              </IconButton>
+            </Link>
             </Grid>
           </Grid>
           </>
@@ -120,6 +133,13 @@ export default function MainMenu() {
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
               </IconButton>{user.name}</Link>
+            <Link onClick={() => {
+              handleLogout();
+            }} color="inherit">
+              <IconButton color="inherit" aria-label="upload picture" component="span">
+                <ExitToAppIcon />
+              </IconButton>
+            </Link>
             </Grid>
           </Grid>
           </>
@@ -149,6 +169,13 @@ export default function MainMenu() {
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
               </IconButton>{user.name}</Link>
+            <Link onClick={() => {
+              handleLogout();
+            }} color="inherit">
+              <IconButton color="inherit" aria-label="upload picture" component="span">
+                <ExitToAppIcon />
+              </IconButton>
+            </Link>
             </Grid>
           </Grid>
           </>

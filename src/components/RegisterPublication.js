@@ -113,12 +113,14 @@ const useStyles = makeStyles((theme) => ({
 const RegisterPublication = () => {
 
     const classes = useStyles();
-    const {registerPublication: doRegister, photoPublication, savePhotoPublication} = publications();
+    const {registerPublication: doRegister, photoPublication} = publications();
     const [updateFile, setUpdateFile] = useState(null);
+    const [checkValues, setCheckValues] = useState(false);
     const [url, setUrl] = useState(null);
 
-    const handleuploadImage = async (id, file) => {
-        const uploadTask = photoPublication(id, file).put(file);
+    const handleuploadImage = async (file) => {
+        console.log('archivo', file)
+        const uploadTask = photoPublication(file).put(file);
         await uploadTask.on(
             "state_changed",
             function (snapshot) {
@@ -133,6 +135,7 @@ const RegisterPublication = () => {
                     .getDownloadURL()
                     .then(async function (downloadURL) {
                         console.log('Imagen disponible', downloadURL)
+                        setCheckValues(true)
                         setUrl(downloadURL)
                     })
             }
@@ -143,6 +146,7 @@ const RegisterPublication = () => {
         if (e !== undefined) {
           if (e.type.includes("image/")) {
             console.log('infoImages', e);
+            handleuploadImage(e);
             setUpdateFile(e);
           } else {
             setUpdateFile(null);
@@ -150,6 +154,7 @@ const RegisterPublication = () => {
         } else {
           setUpdateFile(null);
         }
+        
       };
 
     const {register, handleSubmit, formState: { errors }, } = useForm({
@@ -170,9 +175,6 @@ const RegisterPublication = () => {
 
     const onSubmit = async (data) => {
         console.log("data", data);
-        
-        handleuploadImage(data.title, updateFile);
-
         const newPublication = {
             date_ex: data.date_ex,
             description: data.description,
@@ -313,14 +315,20 @@ const RegisterPublication = () => {
                             </IconButton>
                         </label>
                     </div>
-                    <Button
+                    <>
+                    { checkValues ? (
+                        <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         className={classes.submit}
-                    >
-                        Guardar
-                    </Button>
+                        >
+                            Guardar
+                        </Button>
+                    )
+                    : <div></div>
+                    }
+                    </>
                     <Button
                         onSubmit={handleSubmit(onCancel)}
                         fullWidth

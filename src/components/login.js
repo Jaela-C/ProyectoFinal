@@ -177,13 +177,6 @@ const LoginForm = () => {
                     />
                 </FormControl>
                 <Typography color="primary">{errors.password?.message}</Typography>
-                <Grid container>
-                    <Grid item xs style={{textAlign: "end"}}>
-                        <Link className={classes.colorLabel} href="#" variant="body2" value="forget">
-                            ¿Olvidaste tu contraseña?
-                        </Link>
-                    </Grid>
-                </Grid>
                 <Button
                     type="submit"
                     fullWidth
