@@ -29,7 +29,9 @@ export const publications = () => {
             await db.collection('publications').doc(idPublication).update({
                 comments: firebase.firestore.FieldValue.arrayUnion(dataComments),
             })
+            console.log('dadasdasd', dataComments)
         } catch(e) {
+            console.log("Error", e)
             console.log(e.code)
             if(e.code){
                 return e

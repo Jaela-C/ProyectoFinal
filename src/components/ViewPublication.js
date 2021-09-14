@@ -151,26 +151,49 @@ const ViewPublication =(props)=>{
     }
 
     const onComment = async(data, id) => {
-        const newComment = {
-            name_user: user.name,
-            content: data.content,
-            id_user: user.id,
-            last_name_user: user.last_name,
-            date: Date(),
-            image: props.props.props.image_user
-        };
-        const id_publication = props.props.props.id;
-        try {
-            await comments(newComment, id_publication);
-        } catch (error) {
-            if (error.response) {
-                console.error(error.response);
-            } else if (error.request) {
-                console.error(error.request);
-            } else {
-                console.error("Error", error.message);
+        if(props.props.props.image_user !== undefined){
+            const newComment = {
+                name_user: user.name,
+                content: data.content,
+                id_user: user.id,
+                last_name_user: user.last_name,
+                date: Date(),
+                image: props.props.props.image_user
+            };
+            const id_publication = props.props.props.id;
+            try {
+                await comments(newComment, id_publication);
+            } catch (error) {
+                if (error.response) {
+                    console.error(error.response);
+                } else if (error.request) {
+                    console.error(error.request);
+                } else {
+                    console.error("Error", error.message);
+                }
+                console.error(error.config);
             }
-            console.error(error.config);
+        } else {
+            const newComment = {
+                name_user: user.name,
+                content: data.content,
+                id_user: user.id,
+                last_name_user: user.last_name,
+                date: Date(),
+            };
+            const id_publication = props.props.props.id;
+            try {
+                await comments(newComment, id_publication);
+            } catch (error) {
+                if (error.response) {
+                    console.error(error.response);
+                } else if (error.request) {
+                    console.error(error.request);
+                } else {
+                    console.error("Error", error.message);
+                }
+                console.error(error.config);
+            }
         }
     }
 

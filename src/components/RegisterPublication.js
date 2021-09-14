@@ -28,6 +28,7 @@ const schema = yup.object().shape({
         .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
     phone: yup
         .number()
+        .matches(/^[1-9]{1}[0-9]{8}/, "El número ingresado es incorrecto, el número no debe empezar con 0")
         .typeError("Solo use números")
         .positive("Ingrese solo números positivos")
         .integer("Ingrese solo números enteros")
