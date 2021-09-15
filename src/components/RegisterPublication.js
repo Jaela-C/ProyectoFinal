@@ -13,6 +13,9 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import * as moment from 'moment'; 
+
+const today = new Date();
 
 const schema = yup.object().shape({
     title: yup
@@ -33,6 +36,10 @@ const schema = yup.object().shape({
     description: yup
         .string()
         .required("Ingrese una descripción"),
+    date_ex: yup
+        .date()
+        .required("La fecha es requerida")
+        .min(today, "Ingrese una fecha válida")
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -173,8 +180,9 @@ const RegisterPublication = () => {
 
     const onSubmit = async (data) => {
         console.log("data", data);
+        const date = moment(data.date_ex).format('YYYY-MM-DD')
         const newPublication = {
-            date_ex: data.date_ex,
+            date_ex: date,
             description: data.description,
             last_name: data.last_name,
             name: data.name,
@@ -279,6 +287,9 @@ const RegisterPublication = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        autoFocus
+                        error={!!errors.date_ex}
+                        helperText={errors.date_ex?.message}
                     />
 
                     <TextField

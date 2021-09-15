@@ -18,7 +18,9 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import clsx from 'clsx';
+import * as moment from 'moment';
 
+const today = new Date();
 
 const schema = yup.object().shape({
     title: yup
@@ -33,14 +35,16 @@ const schema = yup.object().shape({
         .required("Ingrese el apellido del responsable")
         .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
     phone: yup
-        .number()
-        .typeError("Solo use números")
-        .positive("Ingrese solo números positivos")
-        .integer("Ingrese solo números enteros")
-        .required('Ingrese el número de contacto'),
+        .string()
+        .required('Ingrese el número de contacto')
+        .matches(/^[1-9]{1}[0-9]{8}/, "El número ingresado es incorrecto, el número no debe empezar con 0"),
     description: yup
         .string()
         .required("Ingrese una descripción"),
+    date_ex: yup
+        .date()
+        .required("La fecha es requerida")
+        .min(today, "Ingrese una fecha válida")
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -220,8 +224,9 @@ const EditionPublication = (props) => {
 
     const onSubmit = async (data) => {
         setOpen(false);
+        const date = moment(data.date_ex).format('YYYY-MM-DD')
         const newPublication = {
-            date_ex: data.date_ex,
+            date_ex: date,
             description: data.description,
             image: data.image,
             last_name: data.last_name,
@@ -335,6 +340,9 @@ const EditionPublication = (props) => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        autoFocus
+                        error={!!errors.date_ex}
+                        helperText={errors.date_ex?.message}
                     />
 
                     <TextField

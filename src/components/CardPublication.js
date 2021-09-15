@@ -131,12 +131,12 @@ export default function CardPublication(props){
                             <CardMedia
                                 className={classes.media}
                                 image={props.props.image}
-                                title="Contemplative Reptile"
+                                title="Imagen de fundación"
                             />
                             : <CardMedia
                                 className={classes.media}
                                 image="/logo.jpeg"
-                                title="Contemplative Reptile"
+                                title="Imagen de fundación"
                             />
                         }
                         </CardActionArea>

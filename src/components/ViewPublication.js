@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import Image from 'next/image'
@@ -115,11 +115,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ViewPublication =(props)=>{
-    console.log('props asdasd', props)
 
     const classes = useStyles();
     const {deletePublication: doDelete, sendComments: comments} = publications();
     const [open, setOpen] = React.useState(false);
+    const dataComments = props.props.props.comments;
     const { user } = useAuth();
     const URLPhone = "https://api.whatsapp.com/send?phone=593" + props.props.props.phone + "&text=Hola%20" + props.props.props.name + ",%20quiero%20ayudar!";
 
@@ -152,49 +152,51 @@ const ViewPublication =(props)=>{
 
     const onComment = async(data, id) => {
         if(props.props.props.image_user !== undefined){
-            const newComment = {
-                name_user: user.name,
-                content: data.content,
-                id_user: user.id,
-                last_name_user: user.last_name,
-                date: Date(),
-                image: props.props.props.image_user
-            };
-            const id_publication = props.props.props.id;
-            try {
-                await comments(newComment, id_publication);
-            } catch (error) {
-                if (error.response) {
-                    console.error(error.response);
-                } else if (error.request) {
-                    console.error(error.request);
-                } else {
-                    console.error("Error", error.message);
+                const newComment = {
+                    name_user: user.name,
+                    content: data.content,
+                    id_user: user.id,
+                    last_name_user: user.last_name,
+                    date: Date(),
+                    image: props.props.props.image_user
+                };
+                const id_publication = props.props.props.id;
+                try {
+                    await comments(newComment, id_publication);
+                } catch (error) {
+                    if (error.response) {
+                        console.error(error.response);
+                    } else if (error.request) {
+                        console.error(error.request);
+                    } else {
+                        console.error("Error", error.message);
+                    }
+                    console.error(error.config);
                 }
-                console.error(error.config);
-            }
+            
         } else {
-            const newComment = {
-                name_user: user.name,
-                content: data.content,
-                id_user: user.id,
-                last_name_user: user.last_name,
-                date: Date(),
-            };
-            const id_publication = props.props.props.id;
-            try {
-                await comments(newComment, id_publication);
-            } catch (error) {
-                if (error.response) {
-                    console.error(error.response);
-                } else if (error.request) {
-                    console.error(error.request);
-                } else {
-                    console.error("Error", error.message);
-                }
-                console.error(error.config);
+                const newComment = {
+                    name_user: user.name,
+                    content: data.content,
+                    id_user: user.id,
+                    last_name_user: user.last_name,
+                    date: Date(),
+                };
+                const id_publication = props.props.props.id;
+                try {
+                    await comments(newComment, id_publication);
+                } catch (error) {
+                    if (error.response) {
+                        console.error(error.response);
+                    } else if (error.request) {
+                        console.error(error.request);
+                    } else {
+                        console.error("Error", error.message);
+                    }
+                    console.error(error.config);
             }
         }
+        Router.reload(window.location.pathname);
     }
 
      const optionAdmin = () => {
@@ -293,7 +295,14 @@ const ViewPublication =(props)=>{
                         <ListItemText primary={props.props.props.name} secondary={props.props.props.title} />
                     </ListItem>
                     <div className={classes.message}>
-                        <Comments props = {props}/>
+                    {dataComments.map((data, index) => (
+                        <ListItem key={index} className={classes.avatar}>
+                            <ListItemAvatar>
+                                <Avatar alt="Usuario" src={user.image} />
+                            </ListItemAvatar>
+                            <ListItemText primary={data.name_user} secondary={data.content} />
+                        </ListItem>
+                    ))}
                     </div>
                     <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit(onComment)}>
                         <TextField id="outlined-basic" label="comentario" variant="outlined" className={classes.input}
