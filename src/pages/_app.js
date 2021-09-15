@@ -3,7 +3,7 @@ import MainMenu from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Head from "next/head";
 import {ThemeProvider } from "@material-ui/core";
-import theme from "./theme";
+import theme from "../styles/theme";
 import { AuthProvider } from '../hocs/useAuth';
 
 function App({ Component, pageProps }) {
