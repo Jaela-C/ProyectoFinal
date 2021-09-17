@@ -8,9 +8,7 @@ El siguiente proyecto muestra el desarrollo de un Sistema Web y Aplicación Móv
 ### Arquitectura Sistema Web
 
 ![Arquitectura Sistema Web](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/arquitecturaWeb.png)
-### Arquitectura Aplicación Móvil
 
-![Arquitectura Aplicación Móvil](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/arquitecturaMovil.png)
 ### Estructura
 En la siguiente imagen se muestra la estructura que se maneja en Firebase
 ![Base de datos](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/Database.PNG)
@@ -70,26 +68,6 @@ El superadministrador puede visualizar los perfiles registrados en el Sistema We
 ### Visualizar solicitudes   
 El superadministrador puede visualizar las solicitudes del Sistema Web    
 ![Visualizar solicitudes](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/request.PNG) 
-
-## FUNCIONALIDADES DE LA APLICACIÓN MÓVIL
-  - La Aplicación Móvil se ha implementado en Ionic y está disponible en: https://github.com/Jaela-C/ProyectoFinalMovil
-### Iniciar sesión
-El formulario que se le presenta al usuario para iniciar sesión es el siguiente.  
-![Iniciar sesión](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/LoginMovil.PNG)  
-### Registro de usuario
-Para registrar un perfil es necesario que el usuario escoja el tipo y posteriormente llene el cuestionario correspondiente.   
-![Tipo de usuario](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/typeMovil.PNG)  
-Formulario de registro de usuario   
-![Registrar usuario](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/registeruserMovil.PNG)   
-Formulario de registro de fundación   
-![Registrar fundación](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/registeradminMovil.PNG) 
-
-### Ver perfil de usuario
-![Información de perfil](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/viewProfileMovil.PNG)
-
-### Visualizar publicaciones
-El usuario puede visualizar todas las publicaciones que estén en la Aplicación Móvil 
-![Visualizar publicaciones](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/viewPublicationsMovil.PNG) 
 
 ## INSTALACIÓN
 1. Clonar Repositorio
