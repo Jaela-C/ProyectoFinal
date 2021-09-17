@@ -90,3 +90,19 @@ Formulario de registro de fundación
 ### Visualizar publicaciones
 El usuario puede visualizar todas las publicaciones que estén en la Aplicación Móvil 
 ![Visualizar publicaciones](https://raw.githubusercontent.com/Jaela-C/ProyectoFinal/dev/Images/viewPublicationsMovil.PNG) 
+
+## INSTALACIÓN
+1. Clonar Repositorio
+```bash
+git clone https://github.com/Jaela-C/ProyectoFinal.git
+```
+2. Instalar dependencias
+```bash
+npm i
+```
+3. Levantar el servidor local
+```bash
+npm run dev
+```
+## ANEXOS
+En [Anexos](https://github.com/Jaela-C/Documentacion_Tesis) se encuentra el Informe Técnico, Manual Técnico y video explicativo.
