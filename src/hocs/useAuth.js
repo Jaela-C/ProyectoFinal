@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import { auth, db } from '../../firebase/initFirebase'
+import { auth, db, storage } from '../../firebase/initFirebase'
 import { useRouter } from 'next/router'
 
 export const AuthContext = createContext(null);
@@ -58,7 +58,12 @@ function useAuthProvider() {
         }
     }
 
+    const fileAdmin = (file) => {
+        return storage.ref(`/request/${file.name}--${new Date}`);
+    }
+
     const registerAdmin = async (value) => {
+        console.log('archivo', value)
         console.log(value.email, value.password)
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
@@ -69,7 +74,7 @@ function useAuthProvider() {
                 role: "REQUEST",
                 name_foundation: value.name_foundation,
                 image: "",
-                file: ""
+                file: value.file
             })
             .then(
                 alert('Su cuenta debe ser verificada'),
@@ -201,6 +206,7 @@ function useAuthProvider() {
         registerUser,
         registerAdmin,
         login,
+        fileAdmin,
         logout,
     };
 }

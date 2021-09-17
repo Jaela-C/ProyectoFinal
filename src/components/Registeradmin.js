@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import {useForm} from "react-hook-form";
-import {useAuth} from "../hocs/useAuth";
+import { useAuth } from "../hocs/useAuth";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -96,8 +96,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Registeradmin = () => {
-    const {registerAdmin: doRegister} = useAuth();
+    
     const classes = useStyles();
+    const {registerAdmin: doRegister, fileAdmin} = useAuth();
     const {register, handleSubmit, formState: { errors },} = useForm({
         resolver: yupResolver(schema),
     });
@@ -109,6 +110,47 @@ const Registeradmin = () => {
         weightRange: '',
         showPassword: false,
     });
+    const [updateFile, setUpdateFile] = useState(null);
+    const [checkValues, setCheckValues] = useState(false);
+    const [url, setUrl] = useState(null);
+    
+    const handleuploadImage = async (file) => {
+        const uploadTask = fileAdmin(file).put(file);
+        await uploadTask.on(
+            "state_changed",
+            function (snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Imagen está ' + progress + '% subida');
+            },
+            function (error) {
+                console.log(error);
+            },
+            function (){
+                uploadTask.snapshot.ref
+                    .getDownloadURL()
+                    .then(async function (downloadURL) {
+                        console.log('Imagen disponible', downloadURL)
+                        setCheckValues(true)
+                        setUrl(downloadURL)
+                    })
+            }
+        )
+    };
+    const handleAddFile = (e) => {
+        console.log('image', e.type)
+        if (e !== undefined) {
+          if (e.type.includes("application/pdf")) {
+            console.log('infoImages', e);
+            handleuploadImage(e);
+            setUpdateFile(e);
+          } else {
+            setUpdateFile(null);
+          }
+        } else {
+          setUpdateFile(null);
+        }
+        
+      };
 
     const onSubmit = async (data) => {
         console.log("data", data);
@@ -120,13 +162,12 @@ const Registeradmin = () => {
             password: data.password,
             password_confirmation: data.password_confirmation,
             name_foundation: data.name_foundation,
+            file: url
         };
         console.log("Nuevo usuario", newUser);
 
         try {
-            const userData = await doRegister(data);
-
-            console.log("userData", userData);
+            await doRegister(newUser);
 
         } catch (error) {
             if (error.response) {
@@ -298,7 +339,7 @@ const Registeradmin = () => {
                                 fullWidth
                                 className={clsx(classes.textField)}
                             />
-                            <input accept="image/*" className={classes.input} id="icon-button-file" type="file" onChange={(e) => {
+                            <input accept="file/*" className={classes.input} id="icon-button-file" type="file" onChange={(e) => {
                                             handleAddFile(e.target.files[0]);
                                 }}/>
                             <label htmlFor="icon-button-file">
@@ -309,15 +350,19 @@ const Registeradmin = () => {
                         </div>    
                         </Grid>
                     </Grid>
-                    <Button
+                    { checkValues ? (
+                        <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                    >
-                        Registrar
-                    </Button>
+                        >
+                            Registrar
+                        </Button>
+                    )
+                    : <div></div>
+                    }
                 </form>
             </div>
         </Container>
