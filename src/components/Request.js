@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Request(props) {
   const classes = useStyles();
-  console.log('props request', props);
 
   return (
     <Card className={classes.root}>

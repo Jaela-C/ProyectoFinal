@@ -1,21 +1,21 @@
 import { auth, db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
+import translateMessage from '../utils/translateMessage';
+import { useSnackbar } from 'notistack';
 
 export const admin = () => {
     const router = useRouter();
     const { user } = useAuth();
+    const { enqueueSnackbar } = useSnackbar();
 
-    console.log('user admin', user)
     const userA = auth.currentUser
 
     const updateUser = async (value) => {
         try{
             await userA.updateEmail(`${value.email}`).then(() => {
-                console.log('Correo actualizado')
             })
             await userA.updatePassword(`${value.password}`).then(() => {
-                console.log('Contraseña actualizada')
             })
             await db.collection('users').doc(`${user.id}`).update({
                 email: value.email,
@@ -24,14 +24,23 @@ export const admin = () => {
                 role: 'USER'
             })
             .then(
-                alert('Los datos se modificaron correctamente'),
+                enqueueSnackbar('Los datos se modificaron correctamente', {
+                    variant: "success",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/users')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                return e
-            }
+            enqueueSnackbar(translateMessage(e.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }
@@ -42,14 +51,23 @@ export const admin = () => {
                 role: 'ADMIN',
             })
             .then(
-                alert('Los datos se modificaron correctamente'),
+                enqueueSnackbar('La fundación ha sido aprobada', {
+                    variant: "success",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/administration')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                return e
-            }
+            enqueueSnackbar(translateMessage(e.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }
@@ -58,14 +76,23 @@ export const admin = () => {
         try{
             await db.collection('users').doc(`${id}`).delete()
             .then(
-                alert('El usuario fue eliminado'),
+                enqueueSnackbar('El usuario ha sido eliminado', {
+                    variant: "info",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/administration/profiles')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                return e
-            }
+            enqueueSnackbar(translateMessage(e.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }
@@ -74,14 +101,23 @@ export const admin = () => {
         try{
             await db.collection('foundations').doc(`${id}`).delete()
             .then(
-                alert('El usuario fue eliminado'),
+                enqueueSnackbar('La fundación se ha eliminado', {
+                    variant: "info",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/administration/profiles')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                return e
-            }
+            enqueueSnackbar(translateMessage(e.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }

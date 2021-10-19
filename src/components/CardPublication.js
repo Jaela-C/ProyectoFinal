@@ -110,7 +110,6 @@ export default function CardPublication(props){
             );
         }
     }
-    console.log('props card', props);
     return(
         <Card className={classes.root} key={props.props.id} >
             <CardContent>

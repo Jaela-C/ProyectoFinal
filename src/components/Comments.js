@@ -46,8 +46,6 @@ export default function BottomAppBar(props) {
     const classes = useStyles();
     const { user } = useAuth();
 
-    console.log('userComments', user)
-
     return (
         <>
         {dataComments.map((data, index) => (

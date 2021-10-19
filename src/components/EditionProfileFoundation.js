@@ -166,7 +166,6 @@ const EditionProfileFoundation = (props) => {
             "state_changed",
             function (snapshot) {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Imagen está ' + progress + '% subida');
             },
             function (error) {
                 console.log(error);
@@ -175,17 +174,14 @@ const EditionProfileFoundation = (props) => {
                 uploadTask.snapshot.ref
                     .getDownloadURL()
                     .then(async function (downloadURL) {
-                        console.log('Imagen disponible', downloadURL)
                         savePhotoFoundation(downloadURL)
                     })
             }
         )
     };
     const handleAddFile = (e) => {
-        console.log('image', e)
         if (e !== undefined) {
           if (e.type.includes("image/")) {
-            console.log('infoImages', e);
             setUpdateFile(e);
           } else {
             setUpdateFile(null);
@@ -221,7 +217,6 @@ const EditionProfileFoundation = (props) => {
 
     const viewUser = () => {
         db.collection('foundations').doc(`${props.id}`).onSnapshot(function (doc) {
-            console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
     }
@@ -251,7 +246,6 @@ const EditionProfileFoundation = (props) => {
             password_confirmation: data.password_confirmation,
             name_foundation: data.name_foundation,
         };
-        console.log("Usuario actualizado", updateFoundation);
 
         try {
             await doUpdate(updateFoundation).then( () => {

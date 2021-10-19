@@ -13,7 +13,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import * as moment from 'moment'; 
+import * as moment from 'moment';
+import { useSnackbar } from 'notistack';
 
 const today = new Date();
 
@@ -122,15 +123,14 @@ const RegisterPublication = () => {
     const [updateFile, setUpdateFile] = useState(null);
     const [checkValues, setCheckValues] = useState(false);
     const [url, setUrl] = useState(null);
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleuploadImage = async (file) => {
-        console.log('archivo', file)
         const uploadTask = photoPublication(file).put(file);
         await uploadTask.on(
             "state_changed",
             function (snapshot) {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Imagen está ' + progress + '% subida');
             },
             function (error) {
                 console.log(error);
@@ -175,11 +175,16 @@ const RegisterPublication = () => {
     });
 
     const onCancel = async () => {
-        alert('Los datos no se guardaron')
+        enqueueSnackbar('Los datos no se guardaron', {
+            variant: "info",
+            anchorOrigin: {
+                vertical: "top",
+                horizontal: "center",
+            },
+        })
     };
 
     const onSubmit = async (data) => {
-        console.log("data", data);
         const date = moment(data.date_ex).format('YYYY-MM-DD')
         const newPublication = {
             date_ex: date,
@@ -193,7 +198,6 @@ const RegisterPublication = () => {
 
         try {
             await doRegister(newPublication)
-            console.log("dataPublication", newPublication);
 
         } catch (error) {
             if (error.response) {

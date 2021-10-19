@@ -1,6 +1,8 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import { auth, db, storage } from '../../firebase/initFirebase'
 import { useRouter } from 'next/router'
+import translateMessage from '../utils/translateMessage';
+import { useSnackbar } from 'notistack';
 
 export const AuthContext = createContext(null);
 
@@ -20,12 +22,11 @@ export const useAuth = () => {
 function useAuthProvider() {
     const [user, setUser] = useState(null);
     const router = useRouter();
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleUser = (user) => {
         if (user) {
-            // si tengo sesión activa
             setUser(user);
-            console.log('sesión iniciada', user)
             return user;
         } else {
             setUser(false);
@@ -34,7 +35,6 @@ function useAuthProvider() {
     };
 
     const registerUser = async (value) => {
-        console.log(value.email, value.password)
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
             await db.collection('users').doc(auth.currentUser.uid).set({
@@ -45,15 +45,23 @@ function useAuthProvider() {
                 image: ""
             })
             .then(
-                alert('Los datos se guardaron correctamente'),
+                enqueueSnackbar('Los datos se guardaron correctamente', {
+                    variant: "success",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/publications')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                alert('El email ingresado le pertenece a otra cuenta')
-                return e
-            }
+            enqueueSnackbar(translateMessage(e.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }
@@ -63,8 +71,6 @@ function useAuthProvider() {
     }
 
     const registerAdmin = async (value) => {
-        console.log('archivo', value)
-        console.log(value.email, value.password)
         try{
             await auth.createUserWithEmailAndPassword(value.email, value.password);
             await db.collection('foundations').doc(auth.currentUser.uid).set({
@@ -77,15 +83,23 @@ function useAuthProvider() {
                 file: value.file
             })
             .then(
-                alert('Su cuenta debe ser verificada'),
+                enqueueSnackbar('La fundación se ha registrado correctamente, su perfil será aprobado en un lapso de 24 horas.', {
+                    variant: "info",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                alert('El email ingresado le pertenece a otra cuenta')
-                return e
-            }
+            enqueueSnackbar(translateMessage(error.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }
@@ -115,6 +129,13 @@ function useAuthProvider() {
             }
         } catch (error) {
             handleUser(false);
+            enqueueSnackbar(translateMessage(error.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             throw error;
         }
     }
@@ -133,63 +154,54 @@ function useAuthProvider() {
     useEffect(() => {
         const subscribeUser = auth.onAuthStateChanged(async (userAuthData) => {
           if (userAuthData) {
-            console.log('usuario con sesión activa', userAuthData);
             const userInf = await db
               .collection('users')
               .doc(userAuthData.uid)
               .get();
               if(userInf.exists){
                 const userData = { id: userAuthData.uid, ...userInf.data()};
-                console.log('userData', userData);
                 handleUser(userData);
               }
               else {
                   subscribeAdmin();
               }
           } else {
-            console.log('usuario sin sesión activa', userAuthData);
             handleUser(false);
           }
         });
 
         const subscribeFoundation = auth.onAuthStateChanged(async (userAuthData) => {
             if (userAuthData) {
-              console.log('usuario con sesión activa admin', userAuthData);
               const userAdmin = await db
                 .collection('foundations')
                 .doc(userAuthData.uid)
                 .get();
                 if(userAdmin.exists){
                     const userData = { id: userAuthData.uid, ...userAdmin.data()};
-                    console.log('userData', userData);
                     handleUser(userData);
                   }
                   else {
                       subscribeUser();
                   }
             } else {
-              console.log('usuario sin sesión activa', userAuthData);
               handleUser(false);
             }
         });
         
         const subscribeAdmin = auth.onAuthStateChanged(async (userAuthData) => {
             if (userAuthData) {
-              console.log('usuario con sesión activa admin', userAuthData);
               const userAdmin = await db
                 .collection('admin')
                 .doc(userAuthData.uid)
                 .get();
                 if(userAdmin.exists){
                     const userData = { id: userAuthData.uid, ...userAdmin.data()};
-                    console.log('userData', userData);
                     handleUser(userData);
                   }
                   else {
                       subscribeUser();
                   }
             } else {
-              console.log('usuario sin sesión activa', userAuthData);
               handleUser(false);
             }
         });

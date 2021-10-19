@@ -102,7 +102,6 @@ const User = () => {
     });
 
     const onSubmit = async (data) => {
-        console.log("data", data);
 
         const newUser = {
             name: data.name,
@@ -111,13 +110,9 @@ const User = () => {
             password: data.password,
             password_confirmation: data.password_confirmation,
         };
-        console.log("Nuevo usuario", newUser);
 
         try {
             const userData = await doRegister(data);
-
-            console.log("userData", userData);
-
         } catch (error) {
             if (error.response) {
                 console.error(error.response);

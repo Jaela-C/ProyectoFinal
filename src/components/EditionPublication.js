@@ -146,13 +146,14 @@ const useStyles = makeStyles((theme) => ({
 
 const EditionPublication = (props) => {
 
-    console.log('props edition publicaction', props)
     const classes = useStyles();
     const { user } = useAuth();
     const [dataPublication, setDataPublication] = useState()
     const {updatePublication: doUpdate, photoPublication, savePhotoPublication} = publications();
     const [open, setOpen] = React.useState(false);
+    const [checkValues, setCheckValues] = useState(false);
     const [updateFile, setUpdateFile] = useState(null);
+    const [url, setUrl] = useState(null);
 
     const handleuploadImage = async (id, file) => {
         const uploadTask = photoPublication(id, file).put(file);
@@ -160,7 +161,6 @@ const EditionPublication = (props) => {
             "state_changed",
             function (snapshot) {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Imagen está ' + progress + '% subida');
             },
             function (error) {
                 console.log(error);
@@ -169,17 +169,17 @@ const EditionPublication = (props) => {
                 uploadTask.snapshot.ref
                     .getDownloadURL()
                     .then(async function (downloadURL) {
-                        console.log('Imagen disponible', downloadURL)
                         savePhotoPublication(downloadURL, props.id)
+                        setCheckValues(true)
+                        setUrl(downloadURL)
                     })
             }
         )
     };
     const handleAddFile = (e) => {
-        console.log('image', e)
         if (e !== undefined) {
           if (e.type.includes("image/")) {
-            console.log('infoImages', e);
+            handleuploadImage(props.id, updateFile)
             setUpdateFile(e);
           } else {
             setUpdateFile(null);
@@ -203,7 +203,6 @@ const EditionPublication = (props) => {
     
     const viewPublication = () => {
         db.collection('publications').doc(props.id).onSnapshot(function (doc) {
-            console.log('datos de publicación', doc.data())
             setDataPublication(doc.data())
         })
     }
@@ -223,7 +222,8 @@ const EditionPublication = (props) => {
     });
 
     const onSubmit = async (data) => {
-        setOpen(false);
+
+        handleClose()
         const date = moment(data.date_ex).format('YYYY-MM-DD')
         const newPublication = {
             date_ex: date,
@@ -233,11 +233,11 @@ const EditionPublication = (props) => {
             name: data.name,
             phone: data.phone,
             title: data.title,
+            image: url
         };
 
         try {
             await doUpdate(newPublication, props.id).then( () => { 
-                handleuploadImage(props.id, updateFile)
                 console.log("Publicación editada---", newPublication);
             });
         } catch (error) {
@@ -263,7 +263,7 @@ const EditionPublication = (props) => {
                         Editar Publicación
                     </Typography>
                 </Grid>
-                <form className={classes.form} noValidate style={{paddingBottom: "30px"}} onSubmit={handleSubmit(onSubmit)}>
+                <form className={classes.form} style={{paddingBottom: "30px"}} >
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -376,14 +376,20 @@ const EditionPublication = (props) => {
                             <PhotoCamera className={classes.camera}/>
                         </label>
                     </div>
-                    <Button
+                    <>
+                    { checkValues ? (
+                        <Button
                         fullWidth
                         variant="contained"
                         className={classes.submit}
                         onClick={handleOpen}
-                    >
-                        Guardar
-                    </Button>
+                        >
+                            Guardar
+                        </Button>
+                    )
+                    : <div></div>
+                    }
+                    </>
                     <Modal
                             aria-labelledby="transition-modal-title"
                             aria-describedby="transition-modal-description"

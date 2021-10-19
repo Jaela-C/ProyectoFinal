@@ -1,12 +1,14 @@
 import { auth, db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
+import translateMessage from '../utils/translateMessage';
+import { useSnackbar } from 'notistack';
 
 export const foundations = () => {
     const router = useRouter();
     const { user } = useAuth();
+    const { enqueueSnackbar } = useSnackbar();
 
-    console.log('user users', user)
     const userA = auth.currentUser
 
     const photoFoundation = (id, file) => {
@@ -20,13 +22,10 @@ export const foundations = () => {
     }
 
     const updateFoundation = async (value) => {
-        console.log('si entra', value)
         try{
             await userA.updateEmail(`${value.email}`).then(() => {
-                console.log('Correo actualizado')
             })
             await userA.updatePassword(`${value.password}`).then(() => {
-                console.log('Contraseña actualizada')
             })
             await db.collection('foundations').doc(`${user.id}`).update({
                 email: value.email,
@@ -35,14 +34,23 @@ export const foundations = () => {
                 name_foundation: value.name_foundation,
             })
             .then(
-                alert('Los datos se modificaron correctamente'),
+                enqueueSnackbar('Los datos se modificaron correctamente', {
+                    variant: "success",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/foundations')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                return e
-            }
+            enqueueSnackbar(translateMessage(e.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }
@@ -51,14 +59,23 @@ export const foundations = () => {
         try{
             await db.collection('foundations').doc(`${user.id}`).delete()
             .then(
-                alert('El usuario fue eliminado'),
+                enqueueSnackbar('La publicación ha sido eliminada', {
+                    variant: "info",
+                    anchorOrigin: {
+                        vertical: "top",
+                        horizontal: "center",
+                    },
+                }),
                 router.push('/publications')
             )
         } catch(e) {
-            console.log(e.code)
-            if(e.code){
-                return e
-            }
+            enqueueSnackbar(translateMessage(e.code), {
+                variant: "error",
+                anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "center",
+                },
+            })
             return e
         }
     }

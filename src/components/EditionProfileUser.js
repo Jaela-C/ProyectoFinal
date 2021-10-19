@@ -166,7 +166,6 @@ const EditionProfileUser = (props) => {
             "state_changed",
             function (snapshot) {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Imagen está ' + progress + '% subida');
             },
             function (error) {
                 console.log(error);
@@ -175,17 +174,14 @@ const EditionProfileUser = (props) => {
                 uploadTask.snapshot.ref
                     .getDownloadURL()
                     .then(async function (downloadURL) {
-                        console.log('Imagen disponible', downloadURL)
                         savePhotoUser(downloadURL)
                     })
             }
         )
     };
     const handleAddFile = (e) => {
-        console.log('image', e)
         if (e !== undefined) {
           if (e.type.includes("image/")) {
-            console.log('infoImages', e);
             setUpdateFile(e);
           } else {
             setUpdateFile(null);
@@ -221,7 +217,6 @@ const EditionProfileUser = (props) => {
 
     const viewUser = () => {
         db.collection('users').doc(`${props.id}`).onSnapshot(function (doc) {
-            console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
     }
@@ -242,7 +237,6 @@ const EditionProfileUser = (props) => {
 
     const onSubmit = async (data) => {
         setOpen(false);
-        console.log("data", data);
         const updateUser = {
             name: data.name,
             last_name: data.last_name,

@@ -95,7 +95,6 @@ const ProfileFoundation = () => {
 
     const viewUser = () => {
         db.collection('foundations').doc(`${user.id}`).onSnapshot(function (doc) {
-            console.log('datos de usuario', doc.data())
             setDataUser(doc.data())
         })
     }

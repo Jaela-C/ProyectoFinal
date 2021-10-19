@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 export default function MainMenu() {
   const classes = useStyles();
   const { user, logout } = useAuth();
-  console.log('nav ', user);
 
   const handleLogout = async () => {
     logout();

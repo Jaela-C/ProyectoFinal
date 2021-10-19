@@ -38,7 +38,7 @@ export default function AppMovil() {
             <Image src="/AppMovil.png" width={400} height={400}/>
         </div>
         <div className={classes.paper}>
-            <Button variant="contained" className={classes.button}>
+            <Button href="https://play.google.com/store/apps/details?id=com.fundaciones.fundacionesquito" target="_blank" variant="contained" className={classes.button}>
                 Descargar aplicación móvil
             </Button>
         </div>

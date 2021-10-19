@@ -120,7 +120,6 @@ const Registeradmin = () => {
             "state_changed",
             function (snapshot) {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Imagen está ' + progress + '% subida');
             },
             function (error) {
                 console.log(error);
@@ -129,7 +128,6 @@ const Registeradmin = () => {
                 uploadTask.snapshot.ref
                     .getDownloadURL()
                     .then(async function (downloadURL) {
-                        console.log('Imagen disponible', downloadURL)
                         setCheckValues(true)
                         setUrl(downloadURL)
                     })
@@ -137,10 +135,8 @@ const Registeradmin = () => {
         )
     };
     const handleAddFile = (e) => {
-        console.log('image', e.type)
         if (e !== undefined) {
           if (e.type.includes("application/pdf")) {
-            console.log('infoImages', e);
             handleuploadImage(e);
             setUpdateFile(e);
           } else {
@@ -153,7 +149,6 @@ const Registeradmin = () => {
       };
 
     const onSubmit = async (data) => {
-        console.log("data", data);
 
         const newUser = {
             name: data.name,
@@ -164,7 +159,6 @@ const Registeradmin = () => {
             name_foundation: data.name_foundation,
             file: url
         };
-        console.log("Nuevo usuario", newUser);
 
         try {
             await doRegister(newUser);

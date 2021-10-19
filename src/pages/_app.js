@@ -5,10 +5,12 @@ import Head from "next/head";
 import {ThemeProvider } from "@material-ui/core";
 import theme from "../styles/theme";
 import { AuthProvider } from '../hocs/useAuth';
+import { SnackbarProvider } from 'notistack';
 
 function App({ Component, pageProps }) {
   return (
     <>
+    <SnackbarProvider maxSnack={3}>
       <AuthProvider>
         <Head>
           <title>Quito Acolita</title>
@@ -25,6 +27,7 @@ function App({ Component, pageProps }) {
           <Footer />
         </ThemeProvider>
       </AuthProvider>
+      </SnackbarProvider>
     </>
   );
 }
