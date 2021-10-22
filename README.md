@@ -1,7 +1,7 @@
 # Quito Acolita
 El siguiente proyecto muestra el desarrollo de un Sistema Web y Aplicación Móvil que permite a fundaciones registrar sus necesidades y a usuarios interactuar con las mismas para brindar ayuda.   
-**Video demostrativo:** https://youtu.be/Fasbli8t5M8
-**Repositorio de la Aplicación Móvil:** https://github.com/Jaela-C/ProyectoFinalMovil
+**Video demostrativo:** https://youtu.be/Fasbli8t5M8   
+**Repositorio de la Aplicación Móvil:** https://github.com/Jaela-C/ProyectoFinalMovil    
 **Realizado por:**
   - Christian Chalacan
   - Jaela Carlosama
