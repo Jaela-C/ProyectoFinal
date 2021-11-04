@@ -44,7 +44,6 @@ const publications = () =>{
             console.error(error.config);
         }
     }
-    console.log('user', user)
     useEffect(()=>{
         if(user){
             const getPublicationsAdmin = async () => {
@@ -97,15 +96,11 @@ const publications = () =>{
         }
     },[user]);
 
-    console.log('lista publicaciones', dataPublications)
-
     return(
         <div className={classes.root}>
             <Grid container spacing={2} className={classes.container}>
-            {console.log('mensaje 1', dataPublications)}
             {
                 dataPublications.map((data, index) => {
-                    console.log('data', data)
                     return(
                         <Grid item xs={6}
                             key={index}

@@ -6,7 +6,6 @@ const Request = () =>{
     
     const router = useRouter();
     const { id } = router.query
-    console.log('idUser', id)
 
     return(
         <>

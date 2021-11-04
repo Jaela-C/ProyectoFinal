@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Request(props) {
   const classes = useStyles();
 
+  console.log(props)
   return (
     <Card className={classes.root}>
       {
@@ -37,12 +38,12 @@ export default function Request(props) {
         <CardMedia
           className={classes.media}
           image={props.props.image}
-          title="Paella dish"
+          title="Image profile"
         />
         : <CardMedia
           className={classes.media}
           image="https://d500.epimg.net/cincodias/imagenes/2016/07/04/lifestyle/1467646262_522853_1467646344_noticia_normal.jpg"
-          title="Paella dish"
+          title="Image profile"
         />
       }
       <CardContent>

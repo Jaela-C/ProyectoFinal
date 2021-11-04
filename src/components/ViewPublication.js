@@ -243,7 +243,7 @@ const ViewPublication =(props)=>{
             );
         } else{
             return(
-            <IconButton aria-label="contactar con la fundacion" href={URLPhone}>
+            <IconButton aria-label="contactar con la fundacion" href={URLPhone} target="_blank">
                 <WhatsAppIcon/>
             </IconButton>
             );

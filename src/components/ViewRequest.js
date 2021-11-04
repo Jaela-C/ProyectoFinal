@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import { admin } from '@/lib/administration';
 import { Link } from "@material-ui/core";
 import clsx from 'clsx';
@@ -175,9 +175,11 @@ const ViewRequest = (id) => {
                                 fullWidth
                             />
                             <label htmlFor="icon-button-file">
-                                <IconButton color="default" aria-label="upload picture" component="span">
-                                    <GetAppIcon />
+                            <Link href={request.file} target="_blank">
+                                <IconButton color="default" component="span">
+                                    <RemoveRedEyeIcon/>
                                 </IconButton>
+                            </Link>
                             </label>
                         </div>
                     
