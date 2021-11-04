@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import Image from 'next/image'
@@ -7,7 +7,6 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
-import Comments from "@/components/Comments";
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from "@material-ui/core/IconButton";
@@ -25,7 +24,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuth } from "@/hocs/useAuth";
 import EditIcon from '@material-ui/icons/Edit';
-
+import { db } from '../../firebase/initFirebase';
 const schema = yup.object().shape({
     content: yup
         .string()
@@ -45,7 +44,8 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     description: {
-        overflowY:"scroll",
+        wordWrap: "break-word;",
+        overflowY:"auto",
         width: '100%',
         height: '130px',
         backgroundColor:'#9CBBF2',
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
         overflow:"hidden",
         height:'400px',
         width:'100%',
-        overflowY:"scroll",
+        overflowY:"auto",
         padding:8,
     },
     input:{
@@ -115,14 +115,28 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ViewPublication =(props)=>{
-
+    
     const classes = useStyles();
     const {deletePublication: doDelete, sendComments: comments} = publications();
     const [open, setOpen] = React.useState(false);
-    const dataComments = props.props.props.comments;
+    const [dataComments, setDataComments] = useState([]);
+    const [count, setCount] = useState(0);
     const { user } = useAuth();
     const URLPhone = "https://api.whatsapp.com/send?phone=593" + props.props.props.phone + "&text=Hola%20" + props.props.props.name + ",%20quiero%20ayudar!";
+    const divRef = useRef();
 
+    useEffect(() => {
+        divRef.current.scrollIntoView({ 
+            block: 'end'
+        });
+        const getPublication = async () => {
+            await db.collection('publications').doc(`${props.props.props.id}`).onSnapshot(function(doc){
+                console.log("PUBLICACION", doc.data().comments);
+                setDataComments(doc.data().comments);
+            });
+        };
+        getPublication();
+    },[count]);
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
     });
@@ -151,6 +165,7 @@ const ViewPublication =(props)=>{
     }
 
     const onComment = async(data, id) => {
+        document.getElementById("form").reset();
         if(props.props.props.image_user !== undefined){
                 const newComment = {
                     name_user: user.name,
@@ -196,7 +211,9 @@ const ViewPublication =(props)=>{
                     console.error(error.config);
             }
         }
-        Router.reload(window.location.pathname);
+        divRef.current.scrollIntoView({ 
+            block: 'end'
+        });
     }
 
      const optionAdmin = () => {
@@ -294,7 +311,7 @@ const ViewPublication =(props)=>{
                         </ListItemAvatar>
                         <ListItemText primary={props.props.props.name} secondary={props.props.props.title} />
                     </ListItem>
-                    <div className={classes.message}>
+                    <div ref={divRef} className={classes.message} >
                     {dataComments.map((data, index) => (
                         <ListItem key={index} className={classes.avatar}>
                             <ListItemAvatar>
@@ -304,7 +321,7 @@ const ViewPublication =(props)=>{
                         </ListItem>
                     ))}
                     </div>
-                    <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit(onComment)}>
+                    <form id ="form" className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit(onComment)}>
                         <TextField id="outlined-basic" label="comentario" variant="outlined" className={classes.input}
                         {...register('content', { required: true })}
                         />
