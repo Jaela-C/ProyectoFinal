@@ -80,9 +80,10 @@ const administration = () =>{
                 })
             }
             {
-                dataFoundation.map((data) => {
+                dataFoundation.map((data, index) => {
                     return(
-                        <Grid item xs={6}>
+                        <Grid item xs={6}
+                        key={index}>
                             <Users props = {data}/>
                         </Grid>
                     );

@@ -6,7 +6,6 @@ const PubllicationUpdate = () =>{
     
     const router = useRouter();
     const { id } = router.query
-    console.log('idPublication', id)
 
     return(
         <EditionPublication id = {id}/>

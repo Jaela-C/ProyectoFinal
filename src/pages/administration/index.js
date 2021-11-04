@@ -48,7 +48,6 @@ const administration = () =>{
             console.error(error.config);
         }
     }
-    console.log('user', user)
     useEffect(()=>{
         if(user){
             const getRequest = async () => {
@@ -60,12 +59,11 @@ const administration = () =>{
                 })
             };
             if(user.role == 'SUPERADMIN'){
+                console.log("funciona")
                 getRequest();
             }
         }
     },[user]);
-
-    console.log('lista solicitudes', dataRequest)
 
     return(
         <div className={classes.root}>
@@ -74,10 +72,8 @@ const administration = () =>{
             </div>
             <div className={classes.root}>
             <Grid container spacing={2} className={classes.container}>
-            {console.log('solicitudes', dataRequest)}
             {
                 dataRequest.map((data, index) => {
-                    console.log('data', data)
                     if(data.role == "REQUEST") {
                         return(
                             <Grid item xs={6}
@@ -91,7 +87,6 @@ const administration = () =>{
             }
             </Grid>
         </div>
-            
         </div>
     );
 }
