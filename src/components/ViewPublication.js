@@ -131,7 +131,6 @@ const ViewPublication =(props)=>{
         });
         const getPublication = async () => {
             await db.collection('publications').doc(`${props.props.props.id}`).onSnapshot(function(doc){
-                console.log("PUBLICACION", doc.data().comments);
                 setDataComments(doc.data().comments);
             });
         };
