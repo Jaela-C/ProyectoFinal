@@ -130,7 +130,7 @@ export default function InformationUser() {
                   </Grid>
                 </Grid>
               </Grid>
-              <Button variant="contained" className={classes.button}>
+              <Button variant="contained" className={classes.button} href="/registeruser">
                 Crear cuenta
               </Button>
             </Paper>

@@ -22,8 +22,8 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-    name: yup.string().required("Ingrese su nombre"),
-    last_name: yup.string().required("Ingrese su apellido"),
+    name: yup.string().required("Ingrese su nombre").matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un nombre válido'),
+    last_name: yup.string().required("Ingrese su apellido").matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un apellido válido'),
     email: yup
         .string()
         .email("Ingrese un email válido")

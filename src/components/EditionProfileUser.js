@@ -28,12 +28,11 @@ import Avatar from '@material-ui/core/Avatar';
 import { Link } from "@material-ui/core";
 
 const schema = yup.object().shape({
-    name: yup.string().required("Ingrese su nombre"),
-    last_name: yup.string().required("Ingrese su apellido"),
+    name: yup.string().matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un nombre válido'),
+    last_name: yup.string().matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un apellido válido'),
     email: yup
         .string()
-        .email("Ingrese un email válido")
-        .required("Ingrese su email."),
+        .email("Ingrese un email válido"),
     password: yup.string().required("Ingrese su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
     password_confirmation: yup.string().required("Confirme su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
 });

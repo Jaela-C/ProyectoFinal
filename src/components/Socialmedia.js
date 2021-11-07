@@ -19,25 +19,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function handleClick(event) {
-  event.preventDefault();
-}
-
 export default function IconBreadcrumbs() {
   const classes = useStyles();
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
       <Link
-        href="http://www.facebook.com"
-        onClick={handleClick}
+        href="https://www.facebook.com/Quito-Acolita-111045008032503"
+        target="_blank"
         className={classes.link}
       >
         <FacebookIcon className={classes.icon} />
       </Link>
       <Link
         href="http://www.instagram.com"
-        onClick={handleClick}
+        target="_blank"
         className={classes.link}
       >
         <InstagramIcon className={classes.icon} />
@@ -45,7 +41,7 @@ export default function IconBreadcrumbs() {
 
       <Link
         href="http://www.instagram.com"
-        onClick={handleClick}
+        target="_blank"
         className={classes.link}
       >
         <TwitterIcon className={classes.icon} />

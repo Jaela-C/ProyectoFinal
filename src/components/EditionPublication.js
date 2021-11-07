@@ -25,22 +25,19 @@ const today = new Date();
 const schema = yup.object().shape({
     title: yup
         .string()
-        .required("Ingrese un título"),
+        .matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ ]+$/, 'Ingrese un título válido'),
     name: yup
         .string()
-        .required("Ingrese el nombre del responsable")
-        .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
+        .matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un nombre válido'),
     last_name: yup
         .string()
-        .required("Ingrese el apellido del responsable")
-        .matches(/^[aA-zZ\s]+$/, "Solo se permiten letras en este apartado"),
+        .matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un apellido válido'),
     phone: yup
         .string()
-        .required('Ingrese el número de contacto')
         .matches(/^[1-9]{1}[0-9]{8}/, "El número ingresado es incorrecto, el número no debe empezar con 0"),
     description: yup
         .string()
-        .required("Ingrese una descripción"),
+        .matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ0-9 ]+$/, 'Ingrese una descripción válida'),
     date_ex: yup
         .date()
         .required("La fecha es requerida")

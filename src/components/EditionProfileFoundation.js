@@ -28,15 +28,14 @@ import Avatar from '@material-ui/core/Avatar';
 import { Link } from "@material-ui/core";
 
 const schema = yup.object().shape({
-    name: yup.string().required("Ingrese su nombre"),
-    last_name: yup.string().required("Ingrese su apellido"),
+    name: yup.string().matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un nombre válido'),
+    last_name: yup.string().matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un apellido válido'),
     email: yup
         .string()
-        .email("Ingrese un email válido")
-        .required("Ingrese su email."),
-    name_foundation: yup.string().required("Ingrese el nombre de la fundación"),
-    password: yup.string().required("Ingrese su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
-    password_confirmation: yup.string().required("Confirme su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
+        .email("Ingrese un email válido"),
+    name_foundation: yup.string().matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ ]+$/, 'Ingrese un nombre nombre de fundación válido'),
+    password: yup.string().min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
+    password_confirmation: yup.string().min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
 });
 
 const useStyles = makeStyles((theme) => ({

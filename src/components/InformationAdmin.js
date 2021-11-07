@@ -138,8 +138,8 @@ export default function InformationAdmin() {
               <Typography className={classes.condiciones}>
                 *Debe subir un respaldo que compruebe que la cuenta le pertenece a una entidad sin fines de lucro.
               </Typography>
-              <Button variant="contained" className={classes.button}>
-                Crear cuenta
+              <Button variant="contained" className={classes.button} href="/registeradmin">
+                Crear cuenta 
               </Button>
             </Paper>
       </div>

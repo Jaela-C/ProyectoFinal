@@ -23,15 +23,15 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-    name: yup.string().required("Ingrese su nombre"),
-    last_name: yup.string().required("Ingrese su apellido"),
+    name: yup.string().required("Ingrese su nombre").matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un nombre válido'),
+    last_name: yup.string().required("Ingrese su apellido").matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un apellido válido'),
     email: yup
         .string()
         .email("Ingrese un email válido")
         .required("Ingrese su email."),
     password: yup.string().required("Ingrese su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
     password_confirmation: yup.string().required("Confirme su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
-    name_foundation: yup.string().required("Ingrese el nombre de la fundación"),
+    name_foundation: yup.string().required("Ingrese el nombre de la fundación").matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ ]+$/, 'Ingrese un nombre nombre de fundación válido'),
 });
 
 const useStyles = makeStyles((theme) => ({
