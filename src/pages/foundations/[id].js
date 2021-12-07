@@ -1,6 +1,7 @@
 import React from 'react';
 import EditionProfileFoundation from "../../../src/components/EditionProfileFoundation";
 import {useRouter} from "next/router";
+import withAuth from "../../hocs/withAuth";
 
 const FoundationUpdate = () =>{
     
@@ -18,4 +19,4 @@ const FoundationUpdate = () =>{
         </>
     );
 }
-export default FoundationUpdate;
+export default withAuth(FoundationUpdate);

@@ -21,6 +21,7 @@ import clsx from 'clsx';
 import {yupResolver} from "@hookform/resolvers/yup";
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import * as yup from "yup";
+import Routes from "../constants/routes";
 
 const schema = yup.object().shape({
     name: yup.string().required("Ingrese su nombre").matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un nombre válido'),
@@ -197,7 +198,7 @@ const Registeradmin = () => {
                         <Typography className={classes.question}>¿Ya tienes una cuenta?</Typography>
                     </Grid>
                     <Grid item xs={6} style={{textAlign: "end"}}>
-                        <Link href="/login" variant="body2" className={classes.colorLabel}>
+                        <Link href={Routes.LOGIN} variant="body2" className={classes.colorLabel}>
                             {"Inicia Sesión"}
                         </Link>
                     </Grid>

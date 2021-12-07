@@ -1,5 +1,6 @@
 import React from 'react';
 import ProfileFoundation from "../../../src/components/ProfileFoundation";
+import withAuth from "../../hocs/withAuth";
 
 const foundations = () =>{
 
@@ -7,4 +8,4 @@ const foundations = () =>{
         <ProfileFoundation/>
     );
 }
-export default foundations;
+export default withAuth(foundations);

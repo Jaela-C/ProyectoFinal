@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { db } from '../../../firebase/initFirebase';
 import { useAuth } from '../../hocs/useAuth';
 import Request from '@/components/Request';
+import withAuth from "../../hocs/withAuth";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -90,4 +91,4 @@ const administration = () =>{
         </div>
     );
 }
-export default administration;
+export default withAuth(administration);

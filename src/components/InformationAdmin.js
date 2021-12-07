@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Routes from "../constants/routes";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -138,7 +139,7 @@ export default function InformationAdmin() {
               <Typography className={classes.condiciones}>
                 *Debe subir un respaldo que compruebe que la cuenta le pertenece a una entidad sin fines de lucro.
               </Typography>
-              <Button variant="contained" className={classes.button} href="/registeradmin">
+              <Button variant="contained" className={classes.button} href={Routes.REGISTERADMIN}>
                 Crear cuenta 
               </Button>
             </Paper>

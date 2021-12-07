@@ -26,6 +26,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Avatar from '@material-ui/core/Avatar';
 import { Link } from "@material-ui/core";
+import Routes from "../constants/routes";
 
 const schema = yup.object().shape({
     name: yup.string().matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+$/, 'Ingrese un nombre válido'),
@@ -398,7 +399,7 @@ const EditionProfileFoundation = (props) => {
                                 <Typography color="primary">{errors.password_confirmation?.message}</Typography>
                             
                                 <div className={classes.buttons}>
-                                <Link href="/foundations">
+                                <Link href={Routes.PROFILEFOUNDATION}>
                                     <Button
                                     className={classes.cancel}
                                     >

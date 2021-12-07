@@ -24,6 +24,13 @@ function App({ Component, pageProps }) {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <MainMenu />
             <Component {...pageProps} />
+            {/* <Switch>
+              <Route path='/login' render={() => {
+                <Login/>
+              }}
+
+              />
+            </Switch> */}
           <Footer />
         </ThemeProvider>
       </AuthProvider>

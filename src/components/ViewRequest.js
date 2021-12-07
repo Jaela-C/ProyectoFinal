@@ -12,6 +12,7 @@ import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import { admin } from '@/lib/administration';
 import { Link } from "@material-ui/core";
 import clsx from 'clsx';
+import Routes from "../constants/routes";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -197,7 +198,7 @@ const ViewRequest = (id) => {
                             autoFocus                        
                         />
                         <div className={classes.butons}>
-                            <Link href="/administration">
+                            <Link href={Routes.ADMINISTRATION}>
                                 <Button
                                     className={classes.cancel}
                                 >

@@ -1,6 +1,7 @@
 import React from 'react';
 import EditionProfileUser from "../../../src/components/EditionProfileUser";
 import {useRouter} from "next/router";
+import withAuth from "../../hocs/withAuth";
 
 const ProfileUpdate = () =>{
     
@@ -18,4 +19,4 @@ const ProfileUpdate = () =>{
         </>
     );
 }
-export default ProfileUpdate;
+export default withAuth(ProfileUpdate);

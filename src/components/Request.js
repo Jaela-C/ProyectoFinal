@@ -7,6 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import TextField from '@material-ui/core/TextField';
+import Routes from "../constants/routes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +72,7 @@ export default function Request(props) {
     }
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites" href={`administration/request/${props.props.id}`}>
+        <IconButton aria-label="add to favorites" href={`${Routes.ADMINISTRATIONREQUEST}/${props.props.id}`}>
             <RemoveRedEyeIcon/>
         </IconButton>
       </CardActions>

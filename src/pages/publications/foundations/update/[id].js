@@ -1,6 +1,7 @@
 import React from 'react';
 import EditionPublication from "../../../../components/EditionPublication";
 import {useRouter} from "next/router";
+import withAuth from "../../hocs/withAuth";
 
 const PubllicationUpdate = () =>{
     
@@ -11,4 +12,4 @@ const PubllicationUpdate = () =>{
         <EditionPublication id = {id}/>
     );
 }
-export default PubllicationUpdate;
+export default withAuth(PubllicationUpdate);

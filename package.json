@@ -16,6 +16,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/styles": "^4.11.4",
     "@mui/material": "^5.0.4",
+    "antd": "^4.17.2",
     "axios": "^0.21.1",
     "clsx": "^1.1.1",
     "firebase": "^8.6.8",
@@ -32,6 +33,7 @@
     "react-hook-form": "^7.9.0",
     "react-material-ui-carousel": "^2.2.6",
     "react-notistack": "^1.2.3",
+    "react-router-dom": "^6.0.2",
     "yup": "^0.32.9"
   }
 }

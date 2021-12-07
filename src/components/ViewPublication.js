@@ -25,6 +25,8 @@ import * as yup from "yup";
 import { useAuth } from "@/hocs/useAuth";
 import EditIcon from '@material-ui/icons/Edit';
 import { db } from '../../firebase/initFirebase';
+import Routes from "../constants/routes";
+
 const schema = yup.object().shape({
     content: yup
         .string()
@@ -219,7 +221,7 @@ const ViewPublication =(props)=>{
         if(user.role == "ADMIN"){
             return(
                 <>
-                <Link href={`publications/foundations/update/${props.props.props.id}`}>
+                <Link href={`${Routes.PUBLICATIONS}/foundations/update/${props.props.props.id}`}>
                             <IconButton aria-label="contactar con la fundación">
                                 <EditIcon/>
                             </IconButton>

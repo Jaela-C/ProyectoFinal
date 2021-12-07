@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
+import Routes from "@/constants/routes";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -81,7 +82,7 @@ const TypeUser = () => {
                         <Typography className={classes.message}>¿Ya tienes cuenta?</Typography>
                     </Grid>
                     <Grid item xs={3} style={{textAlign: "end"}}>
-                        <Link className={classes.colorLabel} href="/login" variant="body2"  value="Iniciar sesión">
+                        <Link className={classes.colorLabel} href={Routes.LOGIN} variant="body2" value="Iniciar sesión">
                             {"Iniciar sesión"}
                         </Link>
                     </Grid>
@@ -99,7 +100,7 @@ const TypeUser = () => {
                     fullWidth
                     variant="contained"
                     className={classes.submit}
-                    href="/registeradmin"
+                    href={Routes.REGISTERADMIN}
                 >
                     Administrador
                 </Button>
@@ -108,7 +109,7 @@ const TypeUser = () => {
                     fullWidth
                     variant="contained"
                     className={classes.submit1}
-                    href="/registeruser"
+                    href={Routes.REGISTERUSER}
                 >
                     Usuario
                 </Button>

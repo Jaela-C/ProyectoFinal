@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Routes from "../constants/routes";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -130,7 +131,7 @@ export default function InformationUser() {
                   </Grid>
                 </Grid>
               </Grid>
-              <Button variant="contained" className={classes.button} href="/registeruser">
+              <Button variant="contained" className={classes.button} href={Routes.REGISTERUSER}>
                 Crear cuenta
               </Button>
             </Paper>

@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Link from "@material-ui/core/Link";
 import { useAuth } from '../hocs/useAuth';
 import Image from 'next/image';
@@ -14,6 +13,8 @@ import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Routes from '../constants/routes';
+import { Route } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +60,6 @@ export default function MainMenu() {
   };
 
   const nav = () => {
-    if(user){
       return (
         <div >
         <AppBar position="static">
@@ -77,17 +77,17 @@ export default function MainMenu() {
               />
             </Grid>
             <Grid item xs={6}>
-              <Link href="/users" color="inherit" className={classes.usernav}>
+              <Link href={Routes.PROFILEUSER} color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonIcon />
               </IconButton>{"MI PERFIL"}</Link>
-              <Link href="/publications" color="inherit" className={classes.usernav}>
+              <Link href={Routes.PUBLICATIONS} color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <ListAltIcon />
               </IconButton>{"PUBLICACIONES"}</Link>
             </Grid>
             <Grid item xs={3} className={classes.iconuser}>
-            <Link href="/users" color="inherit" >
+            <Link href={Routes.PROFILEUSER} color="inherit" >
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
               </IconButton>{user.name}
@@ -114,21 +114,21 @@ export default function MainMenu() {
               />
             </Grid>
             <Grid item xs={7}>
-              <Link href="/foundations" color="inherit" className={classes.usernav}>
+              <Link href={Routes.PROFILEFOUNDATION} color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonIcon />
               </IconButton>{"MI PERFIL"}</Link>
-              <Link href="/publications" color="inherit" className={classes.usernav}>
+              <Link href={Routes.PUBLICATIONS} color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <ListAltIcon />
               </IconButton>{"PUBLICACIONES"}</Link>
-              <Link href="/publications/new" color="inherit" className={classes.usernav}>
+              <Link href={Routes.NEWPUBLICATION} color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <EditIcon />
               </IconButton>{"REGISTRAR PUBLICACIÓN"}</Link>
             </Grid>
             <Grid item xs={3} className={classes.iconuser}>
-            <Link href="/foundations" color="inherit" >
+            <Link href={Routes.PROFILEFOUNDATION} color="inherit" >
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
               </IconButton>{user.name}</Link>
@@ -154,17 +154,17 @@ export default function MainMenu() {
               />
             </Grid>
             <Grid item xs={6}>
-              <Link href="/administration" color="inherit" className={classes.usernav}>
+              <Link href={Routes.ADMINISTRATION} color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <NotificationsActiveIcon />
               </IconButton>{"NOTIFICACIONES"}</Link>
-              <Link href="/administration/profiles" color="inherit" className={classes.usernav}>
+              <Link href={Routes.ADMINISTRATIONPROFILES} color="inherit" className={classes.usernav}>
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <ListAltIcon />
               </IconButton>{"PERFILES"}</Link>
             </Grid>
             <Grid item xs={3} className={classes.iconuser}>
-            <Link href="/administration" color="inherit" >
+            <Link href={Routes.ADMINISTRATION} color="inherit" >
               <IconButton color="inherit" aria-label="upload picture" component="span">
                 <PersonPinIcon />
               </IconButton>{user.name}</Link>
@@ -179,56 +179,43 @@ export default function MainMenu() {
           </Grid>
           </>
           : <>
-          <Grid container spacing={3}>
-            <Grid item xs={3}>
-              <Image
-                src="/logonav.png"
-                alt="Imagen de publicación"
-                width={100}
-                height={50}
-              />
-            </Grid>
-            <Grid item xs={9} className={classes.iconuser}>
-              <Link href="/login" color="inherit" className={classes.nav}>{"Iniciar Sesión"}</Link>
-              <Link href="/type" color="inherit" className={classes.nav}>{"Registrarse"}</Link>
-            </Grid>
-          </Grid>
           </>
         }
           </Toolbar>
         </AppBar>
         </div>
     );
-    }
-    else{
-      return (
-        <div >
-        <AppBar position="static">
-          <Toolbar>
-          <Grid container spacing={3}>
-            <Grid item xs={3}>
-              <Image
-                src="/logonav.png"
-                alt="Imagen de publicación"
-                width={100}
-                height={50}
-              />
-            </Grid>
-            <Grid item xs={9} className={classes.iconuser}>
-            <div className={classes.right}>
-              <Link href="/login" color="inherit" className={classes.nav}>{"Iniciar Sesión"}</Link>
-              <Link href="/type" color="inherit" className={classes.nav}>{"Registrarse"}</Link>
-            </div>
-            </Grid>
-          </Grid>
-          </Toolbar>
-        </AppBar>
-        </div>
-    );}
   }
   return (
       <div className={classes.root}>
-        {nav()}
+        {
+          user ?
+            nav()
+          : <>
+            <div>
+              <AppBar position="static">
+                <Toolbar>
+                <Grid container spacing={3}>
+                  <Grid item xs={3}>
+                    <Image
+                      src="/logonav.png"
+                      alt="Imagen de publicación"
+                      width={100}
+                      height={50}
+                    />
+                  </Grid>
+                  <Grid item xs={9} className={classes.iconuser}>
+                  <div className={classes.right}>
+                    <Link href={Routes.LOGIN} color="inherit" className={classes.nav}>{"Iniciar Sesión"}</Link>
+                    <Link href={Routes.TYPE} color="inherit" className={classes.nav}>{"Registrarse"}</Link>
+                  </div>
+                  </Grid>
+                </Grid>
+                </Toolbar>
+              </AppBar>
+            </div>
+          </>
+        }
       </div>
   );
 }

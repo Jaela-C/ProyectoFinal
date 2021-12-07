@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import { db } from '../../../firebase/initFirebase';
 import { useAuth } from '../../hocs/useAuth';
 import { Hidden } from '@material-ui/core';
+import withAuth from "../../hocs/withAuth";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -114,4 +115,4 @@ const publications = () =>{
         </div>
     );
 }
-export default publications;
+export default withAuth(publications);

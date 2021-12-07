@@ -21,6 +21,7 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import FormControl from "@material-ui/core/FormControl";
 import Avatar from '@material-ui/core/Avatar';
+import Routes from '../constants/routes';
 
 const schema = yup.object().shape({
     email: yup
@@ -122,7 +123,7 @@ const LoginForm = () => {
                     <Typography>¿No tienes una cuenta?</Typography>
                 </Grid>
                 <Grid item xs={3} style={{textAlign: "end"}}>
-                    <Link className={classes.colorLabel} href="/type" variant="body2"  value="regístrate">
+                    <Link className={classes.colorLabel} href={Routes.TYPE} variant="body2"  value="regístrate">
                         {"Regístrate"}
                     </Link>
                 </Grid>

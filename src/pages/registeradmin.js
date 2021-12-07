@@ -1,9 +1,10 @@
 import React from "react";
 import Registeradmin from "../components/Registeradmin";
+import withoutAuth from "../hocs/withoutAuth";
 
 const Admin = () => {
     return (
-            <Registeradmin/>
+        <Registeradmin/>
     );
 };
-export default Admin;
+export default withoutAuth(Admin);

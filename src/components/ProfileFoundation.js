@@ -13,6 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 import {yupResolver} from "@hookform/resolvers/yup";
 import { useAuth } from '../hocs/useAuth'
 import * as yup from "yup";
+import Routes from "../constants/routes";
 
 const schema = yup.object().shape({
     name: yup.string().required("Ingrese su nombre"),
@@ -133,7 +134,7 @@ const ProfileFoundation = () => {
                             <Typography className={classes.textField} color="primary">{dataUser.name_foundation}</Typography>
                             </Grid>
                         </Grid>
-                        <Link href={`foundations/${user.id}`}>
+                        <Link href={`${Routes.PROFILEFOUNDATION}/${user.id}`}>
                             <Button
                                 fullWidth
                                 variant="contained"
