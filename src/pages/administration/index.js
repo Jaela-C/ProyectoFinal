@@ -59,10 +59,7 @@ const administration = () =>{
                   setDataRequest(listRequest);
                 })
             };
-            if(user.role == 'SUPERADMIN'){
-                console.log("funciona")
-                getRequest();
-            }
+            getRequest();
         }
     },[user]);
 

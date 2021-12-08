@@ -111,7 +111,7 @@ const ViewRequest = (id) => {
 
     useEffect(()=>{
         viewUser()
-    },[id]);
+    },[request]);
 
     const classes = useStyles();
     return (
