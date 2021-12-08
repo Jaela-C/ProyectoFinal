@@ -205,13 +205,15 @@ const ViewRequest = (id) => {
                                     Rechazar
                                 </Button>
                             </Link>
-                            <Button
-                                onClick={() => { updateRolFoundation(id.id) }}
-                                variant="contained"
-                                className={classes.submit}
-                            >
-                                Aprobar
-                            </Button>
+                            <Link href={Routes.ADMINISTRATION}>
+                                <Button
+                                    onClick={() => { updateRolFoundation(id.id) }}
+                                    variant="contained"
+                                    className={classes.submit}
+                                >
+                                    Aprobar
+                                </Button>
+                            </Link>
                         </div>
                     </form>
                 </div>

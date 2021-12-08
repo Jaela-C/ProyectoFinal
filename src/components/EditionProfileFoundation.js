@@ -35,8 +35,6 @@ const schema = yup.object().shape({
         .string()
         .email("Ingrese un email válido"),
     name_foundation: yup.string().matches(/^[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ]+[A-Za-záéíóúáéíóúÁÉÍÓÚñÑ ]+$/, 'Ingrese un nombre nombre de fundación válido'),
-    password: yup.string().min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
-    password_confirmation: yup.string().min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -52,12 +50,12 @@ const useStyles = makeStyles((theme) => ({
         margin:'10px',
     },
     paper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(10),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginBottom: theme.spacing(5),
-        width:'80%',
+        marginBottom: theme.spacing(10),
+        width:'55%',
         backgroundColor: '#5081E5',
     },
     avatar: {
@@ -159,6 +157,10 @@ const EditionProfileFoundation = (props) => {
     const {updateFoundation: doUpdate, savePhotoFoundation, photoFoundation} = foundations();
     const [open, setOpen] = React.useState(false);
     const [updateFile, setUpdateFile] = useState(null);
+    var nameUser = "";
+    var lastnameUser = "";
+    var emailUser = "";
+    var nameFoundation = "";
 
     const handleuploadImage = async (id, file) => {
         const uploadTask = photoFoundation(id, file).put(file);
@@ -237,19 +239,38 @@ const EditionProfileFoundation = (props) => {
 
     const onSubmit = async (data) => {
         setOpen(false);
-
+        if(data.name == undefined){
+            nameUser = dataUser.name
+        } else { 
+            nameUser = data.name
+        }
+        if(data.last_name === undefined){
+            lastnameUser =dataUser.last_name
+        } else { 
+            lastnameUser = data.last_name
+        }
+        if(data.email === undefined){
+            emailUser = dataUser.email
+        } else { 
+            emailUser = data.email
+        }
+        if(data.name_foundation === undefined){
+            nameFoundation = dataUser.name_foundation
+        } else { 
+            nameFoundation = data.name_foundation
+        }
         const updateFoundation = {
-            name: data.name,
-            last_name: data.last_name,
-            email: data.email,
-            password: data.password,
-            password_confirmation: data.password_confirmation,
-            name_foundation: data.name_foundation,
+            name: nameUser,
+            last_name: lastnameUser,
+            email: emailUser,
+            name_foundation: nameFoundation,
         };
-
+        console.log(updateFoundation)
         try {
             await doUpdate(updateFoundation).then( () => {
-                handleuploadImage(props.id, updateFile)
+                if(updateFile !== null){
+                    handleuploadImage(props.id, updateFile)
+                }
             });
 
         } catch (error) {
@@ -293,11 +314,10 @@ const EditionProfileFoundation = (props) => {
                                     autoComplete="fname"
                                     name="name"
                                     variant="outlined"
-                                    required
                                     fullWidth
                                     id="name"
                                     defaultValue={dataUser.name}
-                                    {...register('name', { required: true })}
+                                    {...register('name', { required: false })}
                                     label="Nombre"
                                     autoFocus
                                     className={clsx(classes.textField)}
@@ -306,11 +326,10 @@ const EditionProfileFoundation = (props) => {
                             
                                 <TextField
                                     variant="outlined"
-                                    required
                                     fullWidth
                                     id="last_name"
                                     defaultValue={dataUser.last_name}
-                                    {...register('last_name', { required: true })}
+                                    {...register('last_name', { required: false })}
                                     label="Apellido"
                                     name="last_name"
                                     autoComplete="lname"
@@ -320,11 +339,10 @@ const EditionProfileFoundation = (props) => {
                             
                                 <TextField
                                     variant="outlined"
-                                    required
                                     fullWidth
                                     id="email"
                                     defaultValue={dataUser.email}
-                                    {...register('email', { required: true })}
+                                    {...register('email', { required: false })}
                                     label="Correo"
                                     name="email"
                                     autoComplete="email"
@@ -334,69 +352,16 @@ const EditionProfileFoundation = (props) => {
                             
                                 <TextField
                                     variant="outlined"
-                                    required
                                     fullWidth
                                     id="name_foundation"
                                     defaultValue={dataUser.name_foundation}
-                                    {...register('name_foundation', { required: true })}
+                                    {...register('name_foundation', { required: false })}
                                     label="Nombre fundación"
                                     name="name_foundation"
                                     autoComplete="name_foundation"
                                     className={clsx(classes.textField)}
                                 />
                                 <Typography color="primary">{errors.name_foundation?.message}</Typography>
-                            
-                                <FormControl className={clsx(classes.textField)} variant="outlined">
-                                    <InputLabel htmlFor="password">Contraseña *</InputLabel>
-                                    <OutlinedInput
-                                        id="password"
-                                        name="password"
-                                        {...register('password', { required: true })}
-                                        type={values.showPassword ? 'text' : 'password'}
-                                        value={values.password}
-                                        onChange={handleChange('password')}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
-                                                >
-                                                    {values.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        labelWidth={93}
-                                    />
-                                </FormControl>
-                                <Typography color="primary">{errors.password?.message}</Typography>
-                            
-                                <FormControl className={clsx(classes.textField)} variant="outlined">
-                                    <InputLabel htmlFor="password_confirmation">Confirmar Contraseña *</InputLabel>
-                                    <OutlinedInput
-                                        id="password_confirmation"
-                                        name="password_confirmation"
-                                        {...register('password_confirmation', { required: true })}
-                                        type={values.showPassword ? 'text' : 'password'}
-                                        value={values.password_confirmation}
-                                        onChange={handleChange('password_confirmation')}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
-                                                >
-                                                    {values.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        labelWidth={175}
-                                    />
-                                </FormControl>
-                                <Typography color="primary">{errors.password_confirmation?.message}</Typography>
                             
                                 <div className={classes.buttons}>
                                 <Link href={Routes.PROFILEFOUNDATION}>

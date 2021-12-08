@@ -10,16 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import { useAuth } from '../hocs/useAuth';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from "@material-ui/core/FormControl";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -34,8 +25,6 @@ const schema = yup.object().shape({
     email: yup
         .string()
         .email("Ingrese un email válido"),
-    password: yup.string().required("Ingrese su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
-    password_confirmation: yup.string().required("Confirme su contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").oneOf([yup.ref("password_confirmation")], "La contraseña debe ser la misma"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -52,12 +41,12 @@ const useStyles = makeStyles((theme) => ({
         margin:'10px',
     },
     paper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(10),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginBottom: theme.spacing(5),
-        width:'80%',
+        marginBottom: theme.spacing(10),
+        width:'55%',
         backgroundColor: '#5081E5',
     },
     avatar: {
@@ -66,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(6),
     },
     submit: {
         margin: theme.spacing(3, 0,2, 2),
@@ -159,6 +148,9 @@ const EditionProfileUser = (props) => {
     const {updateUser: doUpdate, savePhotoUser, photoUser } = users();
     const [open, setOpen] = React.useState(false);
     const [updateFile, setUpdateFile] = useState(null);
+    var nameUser = "";
+    var lastnameUser = "";
+    var emailUser = "";
 
     const handleuploadImage = async (id, file) => {
         const uploadTask = photoUser(id, file).put(file);
@@ -202,18 +194,6 @@ const EditionProfileUser = (props) => {
     const {register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(schema),
     });
-    
-    const handleChange = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
-    };
-
-    const handleClickShowPassword = () => {
-        setValues({...values, showPassword: !values.showPassword});
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
 
     const viewUser = () => {
         db.collection('users').doc(`${props.id}`).onSnapshot(function (doc) {
@@ -226,28 +206,34 @@ const EditionProfileUser = (props) => {
             setDataUser();
         };
     },[]);
-    
-    const [values, setValues] = React.useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-    });
 
     const onSubmit = async (data) => {
         setOpen(false);
-        const updateUser = {
-            name: data.name,
-            last_name: data.last_name,
-            email: data.email,
-            password: data.password,
-            password_confirmation: data.password_confirmation,
+        if(data.name == undefined){
+            nameUser = dataUser.name
+        } else { 
+            nameUser = data.name
+        }
+        if(data.last_name === undefined){
+            lastnameUser =dataUser.last_name
+        } else { 
+            lastnameUser = data.last_name
+        }
+        if(data.email === undefined){
+            emailUser = dataUser.email
+        } else { 
+            emailUser = data.email
+        }
+        var updateUser = {
+            name: nameUser,
+            last_name: lastnameUser,
+            email: emailUser,
         };
-
         try {
             await doUpdate(updateUser).then( () => {
-                handleuploadImage(props.id, updateFile)
+                if(updateFile !== null){
+                    handleuploadImage(props.id, updateFile)
+                }
             });
 
         } catch (error) {
@@ -294,11 +280,10 @@ const EditionProfileUser = (props) => {
                                         autoComplete="fname"
                                         name="name"
                                         variant="outlined"
-                                        required
                                         fullWidth
                                         id="name"
                                         defaultValue={dataUser.name}
-                                        {...register('name', { required: true })}
+                                        {...register('name', { required: false })}
                                         label="Nombre"
                                         autoFocus
                                         className={clsx(classes.textField)}
@@ -308,11 +293,10 @@ const EditionProfileUser = (props) => {
                                 
                                     <TextField
                                         variant="outlined"
-                                        required
                                         fullWidth
                                         id="last_name"
                                         defaultValue={dataUser.last_name}
-                                        {...register('last_name', { required: true })}
+                                        {...register('last_name', { required: false })}
                                         label="Apellido"
                                         name="last_name"
                                         autoComplete="lname"
@@ -322,11 +306,10 @@ const EditionProfileUser = (props) => {
                                 
                                     <TextField
                                         variant="outlined"
-                                        required
                                         fullWidth
                                         id="email"
                                         defaultValue={dataUser.email}
-                                        {...register('email', { required: true })}
+                                        {...register('email', { required: false })}
                                         label="Correo"
                                         name="email"
                                         autoComplete="email"
@@ -334,57 +317,6 @@ const EditionProfileUser = (props) => {
                                     />
                                     <Typography color="primary">{errors.email?.message}</Typography>
                             
-                                    <FormControl className={clsx(classes.textField)} variant="outlined">
-                                        <InputLabel htmlFor="password">Contraseña *</InputLabel>
-                                        <OutlinedInput
-                                            id="password"
-                                            name="password"
-                                            {...register('password', { required: true })}
-                                            type={values.showPassword ? 'text' : 'password'}
-                                            value={values.password}
-                                            onChange={handleChange('password')}
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        aria-label="toggle password visibility"
-                                                        onClick={handleClickShowPassword}
-                                                        onMouseDown={handleMouseDownPassword}
-                                                        edge="end"
-                                                    >
-                                                        {values.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
-                                            labelWidth={93}
-                                        />
-                                    </FormControl>
-                                    <Typography color="primary">{errors.password?.message}</Typography>
-                            
-                                    <FormControl className={clsx(classes.textField)} variant="outlined">
-                                        <InputLabel htmlFor="password_confirmation">Confirmar Contraseña *</InputLabel>
-                                        <OutlinedInput
-                                            id="password_confirmation"
-                                            name="password_confirmation"
-                                            {...register('password_confirmation', { required: true })}
-                                            type={values.showPassword ? 'text' : 'password'}
-                                            value={values.password_confirmation}
-                                            onChange={handleChange('password_confirmation')}
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        aria-label="toggle password visibility"
-                                                        onClick={handleClickShowPassword}
-                                                        onMouseDown={handleMouseDownPassword}
-                                                        edge="end"
-                                                    >
-                                                        {values.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
-                                            labelWidth={175}
-                                        />
-                                    </FormControl>
-                                    <Typography color="primary">{errors.password_confirmation?.message}</Typography>
                             <div className={classes.buttons}>
                                 <Link href={Routes.PROFILEUSER}>
                                     <Button

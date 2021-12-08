@@ -179,6 +179,35 @@ export default function MainMenu() {
           </Grid>
           </>
           : <>
+          <Grid container spacing={3}>
+            <Grid item xs={2}>
+              <Image
+                src="/logonav.png"
+                alt="Imagen de publicación"
+                width={100}
+                height={50}
+              />
+            </Grid>
+            <Grid item xs={7}>
+              <Link href={Routes.PROFILEFOUNDATION} color="inherit" className={classes.usernav}>
+              <IconButton color="inherit" aria-label="upload picture" component="span">
+                <PersonIcon />
+              </IconButton>{"MI PERFIL"}</Link>
+            </Grid>
+            <Grid item xs={3} className={classes.iconuser}>
+            <Link href={Routes.PROFILEFOUNDATION} color="inherit" >
+              <IconButton color="inherit" aria-label="upload picture" component="span">
+                <PersonPinIcon />
+              </IconButton>{user.name}</Link>
+            <Link onClick={() => {
+              handleLogout();
+            }} color="inherit">
+              <IconButton color="inherit" aria-label="upload picture" component="span">
+                <ExitToAppIcon />
+              </IconButton>
+            </Link>
+            </Grid>
+          </Grid>
           </>
         }
           </Toolbar>

@@ -1,7 +1,7 @@
 import React from 'react';
 import EditionPublication from "../../../../components/EditionPublication";
 import {useRouter} from "next/router";
-import withAuth from "../../hocs/withAuth";
+import withAuth from "../../../../hocs/withAuth";
 
 const PubllicationUpdate = () =>{
     

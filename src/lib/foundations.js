@@ -23,10 +23,6 @@ export const foundations = () => {
 
     const updateFoundation = async (value) => {
         try{
-            await userA.updateEmail(`${value.email}`).then(() => {
-            })
-            await userA.updatePassword(`${value.password}`).then(() => {
-            })
             await db.collection('foundations').doc(`${user.id}`).update({
                 email: value.email,
                 name: value.name,

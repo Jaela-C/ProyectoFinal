@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Users from '@/components/Users';
 import { db } from '../../../../firebase/initFirebase';
 import { useAuth } from '../../../hocs/useAuth';
-import withAuth from "../../hocs/withAuth";
+import withAuth from "../../../hocs/withAuth";
 
 const useStyles = makeStyles((theme) => ({
     root: {

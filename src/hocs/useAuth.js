@@ -83,7 +83,7 @@ function useAuthProvider() {
                 file: value.file
             })
             .then(
-                enqueueSnackbar('La fundación se ha registrado correctamente, su perfil será aprobado en un lapso de 24 horas.', {
+                enqueueSnackbar('La fundación se ha registrado correctamente, recibirá un correo de confirmación', {
                     variant: "info",
                     anchorOrigin: {
                         vertical: "top",

@@ -1,8 +1,6 @@
 import { auth, db, storage } from '../../firebase/initFirebase'
 import { useAuth } from '../hocs/useAuth'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
-import image from 'next/image'
 import translateMessage from '../utils/translateMessage';
 import { useSnackbar } from 'notistack';
 
@@ -23,11 +21,8 @@ export const users = () => {
     }
 
     const updateUser = async (value) => {
+        console.log('adasd', value)
         try{
-            await userA.updateEmail(`${value.email}`).then(() => {
-            })
-            await userA.updatePassword(`${value.password}`).then(() => {
-            })
             await db.collection('users').doc(`${user.id}`).update({
                 email: value.email,
                 name: value.name,
