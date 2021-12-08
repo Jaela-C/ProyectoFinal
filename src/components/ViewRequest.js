@@ -13,6 +13,10 @@ import { admin } from '@/lib/administration';
 import { Link } from "@material-ui/core";
 import clsx from 'clsx';
 import Routes from "../constants/routes";
+import emailjs from 'emailjs-com';
+import { padding } from "@mui/system";
+import { useRouter } from 'next/router'
+
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -87,16 +91,40 @@ const ViewRequest = (id) => {
 
     const [request, setRequest] = useState();
     const {updateRolFoundation: doUpdate} = admin();
-
+    const router = useRouter();
+    //const [demand, setDemand] = useState(true);
+    //const form = useRef();
     const viewUser = () => {
         db.collection('foundations').doc(`${id.id}`).onSnapshot(function (doc) {
             setRequest(doc.data())
         })
     }
+    
+    // const sendEmail = (e) => {
+    //     e.preventDefault();
+        
+    //         emailjs.send(`service_2nk4s9o`, `template_3ifib2n`, template_params, `user_dX4MpSBcLyTzdoGDkAudb`)
+    //           .then((result) => {
+    //               console.log(result.text);
+    //           }, (error) => {
+    //               console.log(error.text);
+    //           });
+    //   };
 
-    const updateRolFoundation = (id_foundation) => {
+    const denial = (email) =>{
+        var template_params = {
+            "user_email": email,
+        }
+        emailjs.send(`service_2nk4s9o`, `template_jymi8wv`, template_params, `user_dX4MpSBcLyTzdoGDkAudb`);
+        router.push('/administration')
+    }
+    const updateRolFoundation = (id_foundation, email) => {
+        var template_params = {
+            "user_email": email,
+        }
         try {
             doUpdate(id_foundation);
+            emailjs.send(`service_2nk4s9o`, `template_3ifib2n`, template_params, `user_dX4MpSBcLyTzdoGDkAudb`);
         } catch (error) {
             if (error.response) {
                 console.error(error.response);
@@ -112,7 +140,7 @@ const ViewRequest = (id) => {
     useEffect(()=>{
         viewUser()
     },[id]);
-
+    
     const classes = useStyles();
     return (
         <>
@@ -157,14 +185,15 @@ const ViewRequest = (id) => {
                             variant="outlined"
                             margin="normal"
                             fullWidth
-                            id="email"
+                            id="user_email"
                             className={clsx(classes.textField)}
                             disabled
                             defaultValue={request.email}
                             label="Correo electrónico"
-                            name="email"
+                            name="user_email"
                             autoComplete="text"
                             autoFocus
+                            type="email"
                         />
                         <div className={classes.root1}>
                             <TextField
@@ -198,17 +227,22 @@ const ViewRequest = (id) => {
                             autoFocus                        
                         />
                         <div className={classes.butons}>
-                            <Link href={Routes.ADMINISTRATION}>
+                            
                                 <Button
                                     className={classes.cancel}
+                                    onClick={() => {denial(request.email)}}
+                                    //href = {Routes.ADMINISTRATION}
                                 >
+                                    
                                     Rechazar
+                                   
                                 </Button>
-                            </Link>
+                            
                             <Button
-                                onClick={() => { updateRolFoundation(id.id) }}
+                                onClick={() => { updateRolFoundation(id.id, request.email) }}
                                 variant="contained"
                                 className={classes.submit}
+                                //type = "submit"
                             >
                                 Aprobar
                             </Button>
