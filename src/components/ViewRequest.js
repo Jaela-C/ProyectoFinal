@@ -205,7 +205,6 @@ const ViewRequest = (id) => {
                                     Rechazar
                                 </Button>
                             </Link>
-                            <Link href={Routes.ADMINISTRATION}>
                                 <Button
                                     onClick={() => { updateRolFoundation(id.id) }}
                                     variant="contained"
@@ -213,7 +212,7 @@ const ViewRequest = (id) => {
                                 >
                                     Aprobar
                                 </Button>
-                            </Link>
+                            
                         </div>
                     </form>
                 </div>
