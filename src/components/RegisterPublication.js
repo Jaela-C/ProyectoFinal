@@ -275,7 +275,7 @@ const RegisterPublication = () => {
                         className={clsx(classes.textField)}
                         id="phone"
                         {...register('phone', { required: true })}
-                        label="Ingrese el numero del contacto"
+                        label="Ingrese el numero del contacto sin el cero inicial"
                         name="phone"
                         type="numeric"
                         autoFocus

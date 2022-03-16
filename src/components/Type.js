@@ -102,7 +102,7 @@ const TypeUser = () => {
                     className={classes.submit}
                     href={Routes.REGISTERADMIN}
                 >
-                    Administrador
+                    Fundacion
                 </Button>
                 <Button
                     type="submit"
