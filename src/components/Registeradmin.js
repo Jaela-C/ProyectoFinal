@@ -330,7 +330,7 @@ const Registeradmin = () => {
                                 variant="outlined"
                                 disabled
                                 id="standard-disabled"
-                                defaultValue="Inserte un comprobante"
+                                defaultValue="Inserte un comprobante (pdf)"
                                 fullWidth
                                 className={clsx(classes.textField)}
                             />
